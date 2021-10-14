@@ -2,8 +2,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: nikozohrabyan@mail.ru
-    password: Ni1ko2lya34
+
     properties:
       mail:
         smtp:
@@ -12,11 +11,9 @@ spring:
             enable: true
   datasource:
     url:    jdbc:mysql://localhost:3306/hair_salon?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
-    password: root
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -25,7 +22,7 @@ spring:
       fail-on-empty-beans:  false
 
 server:
-  port: 8081
+  port: 8080
 
 file:
   upload:
