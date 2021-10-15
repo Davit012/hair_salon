@@ -7,10 +7,8 @@ import com.example.hairsalonrest.dto.userdtos.UserCreateDto;
 import com.example.hairsalonrest.dto.userdtos.UserDto;
 import com.example.hairsalonrest.security.CurrentUser;
 import com.example.hairsalonrest.service.UserService;
-import com.example.hairsalonrest.util.JwtTokenUtil;
 import com.hairsaloncommon.model.User;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +73,7 @@ public class UserEndpoint {
     public ResponseEntity<UserDto> user(@RequestBody UserCreateDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserDto userCheck = mapper.map(userService.save(mapper.map(user, User.class)), UserDto.class);
-        if (userCheck != null){
+        if (userCheck != null) {
             return ResponseEntity.ok(userCheck);
         }
         return ResponseEntity.badRequest().build();
@@ -101,9 +99,6 @@ public class UserEndpoint {
 
     @PostMapping("/active")
     public ResponseEntity<UserDto> activeUser(@AuthenticationPrincipal CurrentUser currentUser, @RequestParam("text") String text) {
-        System.out.println(currentUser.getUser().getActiveCode());
-        System.out.println(currentUser.getUser().getName());
-        System.out.println(text);
         User user = userService.verifyEmail(text, currentUser);
         if (user == null) {
             return ResponseEntity.badRequest().build();

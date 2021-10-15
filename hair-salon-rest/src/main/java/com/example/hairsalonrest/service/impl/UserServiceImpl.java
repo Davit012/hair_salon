@@ -32,14 +32,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         for (User fromDb : findAll()) {
-            if(fromDb.getEmail().equals(user.getEmail())){
+            if (fromDb.getEmail().equals(user.getEmail())) {
                 return null;
             }
         }
         user.setActiveCode(UUID.randomUUID());
         user.setUserType(UserType.valueOf("CLIENT"));
-         userRepository.save(user);
-        emailService.sendMessage(user.getEmail(),"Welcome, please verify your email","Welcome dear " + user.getName()
+        userRepository.save(user);
+        emailService.sendMessage(user.getEmail(), "Welcome, please verify your email", "Welcome dear " + user.getName()
                 + " to our hair salon your activated code is " + user.getActiveCode());
         return user;
     }
@@ -56,10 +56,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserAuthResponseDto findByEmail(UserAuthDto userAuthDto) {
-            return UserAuthResponseDto.builder()
-                    .token(jwtTokenUtil.generateToken(userAuthDto.getEmail()))
-                    .userDto(mapper.map(userAuthDto, UserDto.class))
-                    .build();
+        return UserAuthResponseDto.builder()
+                .token(jwtTokenUtil.generateToken(userAuthDto.getEmail()))
+                .userDto(mapper.map(userAuthDto, UserDto.class))
+                .build();
     }
 
     @Override
@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
         mapper.map(user, byId);
         return userRepository.save(user);
     }
+
     @Override
     public void deleteById(int id) {
         userRepository.deleteById(id);
@@ -76,8 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User verifyEmail(String activeCode, CurrentUser currentUser) {
-        System.out.println(currentUser.getUser().getActiveCode());
-        if (currentUser.getUser().getActiveCode().equals(UUID.fromString(activeCode))){
+        if (currentUser.getUser().getActiveCode().equals(UUID.fromString(activeCode))) {
             currentUser.getUser().setEmailVerified(true);
             currentUser.getUser().setActiveCode(null);
             return save(currentUser.getUser());

@@ -15,8 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-@ComponentScan({"com.hairsaloncommon.*","com.example.hairsalonrest.*"})
-@EnableJpaRepositories(basePackages = {"com.hairsaloncommon.*","com.example.hairsalonrest.*"})
+@ComponentScan({"com.hairsaloncommon.*", "com.example.hairsalonrest.*"})
+@EnableJpaRepositories(basePackages = {"com.hairsaloncommon.*", "com.example.hairsalonrest.*"})
 @EntityScan("com.hairsaloncommon.*")
 public class HairSalonRestApplication implements CommandLineRunner {
     @Autowired
@@ -44,7 +44,7 @@ public class HairSalonRestApplication implements CommandLineRunner {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
