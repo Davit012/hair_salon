@@ -1,8 +1,8 @@
 package com.example.hairsalonrest.endpoint;
 
-import com.example.hairsalonrest.dto.ServiceCreateDto;
-import com.example.hairsalonrest.dto.ServiceDto;
-import com.example.hairsalonrest.dto.ServicePutDto;
+import com.example.hairsalonrest.dto.servicedtos.ServiceCreateDto;
+import com.example.hairsalonrest.dto.servicedtos.ServiceDto;
+import com.example.hairsalonrest.dto.servicedtos.ServicePutDto;
 import com.example.hairsalonrest.service.ServiceService;
 import com.hairsaloncommon.model.Service;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.hairsalonrest.dto;
+package com.example.hairsalonrest.dto.servicedtos;
 
 import com.hairsaloncommon.model.Worker;
 import lombok.AllArgsConstructor;
@@ -14,8 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ServiceDto {
-    private int id;
+public class ServiceCreateDto {
     private String name;
     private String description;
     private double price;

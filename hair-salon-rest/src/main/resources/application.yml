@@ -2,7 +2,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-
+    username: 2021JavaForTest@gmail.com
+    password: forTest2021
     properties:
       mail:
         smtp:
@@ -22,10 +23,10 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+
 jwt:
   secret: slkdfjh3ir1@REFiw
   expiration: 6000000
-
 server:
   port: 8080
 

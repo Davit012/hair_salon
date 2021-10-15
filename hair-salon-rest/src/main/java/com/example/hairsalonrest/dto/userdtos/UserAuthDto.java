@@ -1,16 +1,16 @@
-package com.example.hairsalonrest.dto;
+package com.example.hairsalonrest.dto.userdtos;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ServicePutDto {
-    private String name;
-    private String description;
-    private double price;
+@Data
+public class UserAuthDto {
+    private String email;
+    private String password;
 }
