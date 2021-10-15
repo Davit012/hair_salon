@@ -4,6 +4,7 @@ import com.example.hairsalonrest.repository.ServiceRepository;
 import com.example.hairsalonrest.service.ServiceService;
 import com.hairsaloncommon.model.Service;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ServiceServiceImpl implements ServiceService {
     private final ServiceRepository serviceRepository;
+    private final ModelMapper mapper;
 
     @Override
     public List<Service> findAll() {
@@ -25,19 +27,15 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Optional<Service> findById(int id) {
-        Optional<Service> byId = serviceRepository.findById(id);
-        return byId;
+        return serviceRepository.findById(id);
     }
 
     @Override
-    public Service putService(int id, Service service) {
+    public Service editService(int id, Service service) {
         Service byId = serviceRepository.findById(id).get();
-
-        byId.setName(service.getName());
-        byId.setDescription(service.getDescription());
-        byId.setPrice(service.getPrice());
-
-        return byId;
+        service.setId(id);
+        mapper.map(service, byId);
+        return addService(service);
     }
 
     @Override

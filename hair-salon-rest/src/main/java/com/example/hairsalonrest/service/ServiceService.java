@@ -12,7 +12,7 @@ public interface ServiceService {
 
     Optional<Service> findById(int id);
 
-    Service putService(int id, Service service);
+    Service editService(int id, Service service);
 
     void deleteService(int id);
 }

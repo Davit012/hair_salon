@@ -18,6 +18,5 @@ public class ServiceCreateDto {
     private String name;
     private String description;
     private double price;
-    @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY)
     private List<Worker> workers;
 }

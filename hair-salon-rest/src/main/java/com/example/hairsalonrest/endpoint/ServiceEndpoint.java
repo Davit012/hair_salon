@@ -16,24 +16,26 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/services")
 public class ServiceEndpoint {
     private final ServiceService serviceService;
     private final ModelMapper mapper;
 
-    @GetMapping("/services")
-    public List<ServiceDto> getServiceService() {
+    @GetMapping
+    public ResponseEntity<List<ServiceDto>> getServiceService() {
         List<Service> all = serviceService.findAll();
         List<ServiceDto> serviceDtos = new ArrayList<>();
-        for (Service listing : all) {
-            ServiceDto serviceDto = mapper.map(listing, ServiceDto.class);
-            serviceDtos.add(serviceDto);
-
+        if (all.isEmpty()){
+            ResponseEntity.noContent().build();
         }
-
-        return serviceDtos;
+        for (Service service : all) {
+            ServiceDto serviceDto = mapper.map(service, ServiceDto.class);
+            serviceDtos.add(serviceDto);
+        }
+        return ResponseEntity.ok(serviceDtos);
     }
 
-    @PostMapping("/services")
+    @PostMapping
     public ResponseEntity<ServiceDto> addService(@RequestBody ServiceCreateDto service) {
         Service byId = serviceService.addService(mapper.map(service, Service.class));
         if (byId.getId() != 0) {
@@ -42,7 +44,7 @@ public class ServiceEndpoint {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/services/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ServiceDto> getService(@PathVariable("id") int id) {
         Optional<Service> byId = serviceService.findById(id);
         return byId.map(service ->
@@ -50,19 +52,18 @@ public class ServiceEndpoint {
                 ResponseEntity.badRequest().build());
     }
 
-    @PutMapping("/services/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ServiceDto> putService(@PathVariable(name = "id") int id, @RequestBody ServicePutDto service) {
         if (serviceService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        Service serviceFromDb = serviceService.putService(id, mapper.map(service, Service.class));
+        Service serviceFromDb = serviceService.editService(id, mapper.map(service, Service.class));
         return ResponseEntity.ok(mapper.map(serviceFromDb, ServiceDto.class));
     }
 
-    @DeleteMapping("/services/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteService(@PathVariable(name = "id") int id) {
-        ResponseEntity<ServiceDto> service = getService(id);
-        if (service.getStatusCode().is2xxSuccessful()) {
+        if (serviceService.findById(id).isPresent()){
             serviceService.deleteService(id);
             return ResponseEntity.noContent().build();
         }

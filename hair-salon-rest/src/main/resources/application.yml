@@ -10,7 +10,9 @@ spring:
           starttls:
             enable: true
   datasource:
-    url:    jdbc:mysql://localhost:3306/hair_salon?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/hair_salon?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: root
   jpa:
     hibernate:
       ddl-auto: update
@@ -19,7 +21,10 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   jackson:
     serialization:
-      fail-on-empty-beans:  false
+      fail-on-empty-beans: false
+jwt:
+  secret: slkdfjh3ir1@REFiw
+  expiration: 6000000
 
 server:
   port: 8080
@@ -27,3 +32,4 @@ server:
 file:
   upload:
     dir: D:\IdeaProjects\2021-spring\HairSalon\upload
+
