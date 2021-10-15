@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 
 @Data
@@ -28,6 +29,9 @@ public class User {
     private Gender gender;
     private String email;
     private String password;
+    private UUID activeCode;
+    private boolean isEmailVerified;
+    private UUID token;
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "enum('CLIENT','ADMIN')")
     private UserType userType;

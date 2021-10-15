@@ -23,6 +23,7 @@ public class Service {
     private String name;
     private String description;
     private double price;
+    private int duration;
     @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY)
     private List<Worker> workers;
 
