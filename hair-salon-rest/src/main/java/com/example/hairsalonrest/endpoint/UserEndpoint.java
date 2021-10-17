@@ -32,11 +32,11 @@ public class UserEndpoint {
 
     @PostMapping("/auth")
     public ResponseEntity<UserAuthResponseDto> auth(@RequestBody UserAuthDto userAuthDto) {
+        userService.createAdmin();
         UserAuthResponseDto byEmail = null;
-        Optional<User> checkPassword = userService.findByEmail(userAuthDto.getEmail());
+        Optional<User> checkPassword = userService.findUserByEmail(userAuthDto.getEmail());
         if (passwordEncoder.matches(userAuthDto.getPassword(), checkPassword.get().getPassword())) {
-            byEmail = userService.findByEmail(userAuthDto);
-            System.out.println(byEmail.getToken());
+            byEmail = userService.findUserByEmail(userAuthDto);
         }
         if (byEmail != null) {
             return ResponseEntity.ok(byEmail);
@@ -45,7 +45,7 @@ public class UserEndpoint {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> users() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> all = userService.findAll();
         List<UserDto> userDtos = new ArrayList<>();
         if (!all.isEmpty()) {
@@ -60,7 +60,7 @@ public class UserEndpoint {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") int id) {
-        Optional<User> byId = userService.findById(id);
+        Optional<User> byId = userService.findUserById(id);
         if (byId.isEmpty()) {
             return ResponseEntity
                     .notFound()
@@ -70,7 +70,7 @@ public class UserEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> user(@RequestBody UserCreateDto user) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserCreateDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserDto userCheck = mapper.map(userService.save(mapper.map(user, User.class)), UserDto.class);
         if (userCheck != null) {
@@ -80,8 +80,8 @@ public class UserEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> user(@PathVariable(name = "id") int id, @RequestBody UserCreateDto user) {
-        if (userService.findById(id).isEmpty()) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable(name = "id") int id, @RequestBody UserCreateDto user) {
+        if (userService.findUserById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         User userFromDb = userService.editUser(id, mapper.map(user, User.class));
@@ -90,15 +90,16 @@ public class UserEndpoint {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") int id) {
-        if (userService.findById(id).isPresent()) {
-            userService.deleteById(id);
+        if (userService.findUserById(id).isPresent()) {
+            userService.deleteUserById(id);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/active")
-    public ResponseEntity<UserDto> activeUser(@AuthenticationPrincipal CurrentUser currentUser, @RequestParam("text") String text) {
+    public ResponseEntity<UserDto> activeUser(@AuthenticationPrincipal CurrentUser currentUser,
+                                              @RequestParam("text") String text) {
         User user = userService.verifyEmail(text, currentUser);
         if (user == null) {
             return ResponseEntity.badRequest().build();

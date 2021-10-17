@@ -11,18 +11,21 @@ import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.UserType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@org.springframework.stereotype.Service
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper mapper;
     private final JwtTokenUtil jwtTokenUtil;
-    private final EmailService emailService;
+    private final EmailServiceImpl emailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> findAll() {
@@ -45,17 +48,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(int id) {
+    public Optional<User> findUserById(int id) {
         return userRepository.findById(id);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public UserAuthResponseDto findByEmail(UserAuthDto userAuthDto) {
+    public UserAuthResponseDto findUserByEmail(UserAuthDto userAuthDto) {
         return UserAuthResponseDto.builder()
                 .token(jwtTokenUtil.generateToken(userAuthDto.getEmail()))
                 .userDto(mapper.map(userAuthDto, UserDto.class))
@@ -71,7 +74,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteUserById(int id) {
         userRepository.deleteById(id);
     }
 
@@ -83,5 +86,18 @@ public class UserServiceImpl implements UserService {
             return save(currentUser.getUser());
         }
         return null;
+    }
+    public void createAdmin() {
+        if (!userRepository.findByEmail("admin").isPresent()) {
+
+            userRepository.save(User.builder()
+                    .email("admin")
+                    .surname("admin")
+                    .name("admin")
+                    .password(passwordEncoder.encode("admin"))
+                    .userType(UserType.valueOf("ADMIN"))
+                    .isEmailVerified(true)
+                    .build());
+        }
     }
 }

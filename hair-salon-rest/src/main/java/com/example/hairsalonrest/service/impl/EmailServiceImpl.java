@@ -1,5 +1,6 @@
 package com.example.hairsalonrest.service.impl;
 
+import com.example.hairsalonrest.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class EmailService {
+class EmailServiceImpl implements EmailService {
 
     private final MailSender mailSender;
 
