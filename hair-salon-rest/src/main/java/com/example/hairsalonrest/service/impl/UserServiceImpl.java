@@ -5,6 +5,7 @@ import com.example.hairsalonrest.dto.userdtos.UserAuthResponseDto;
 import com.example.hairsalonrest.dto.userdtos.UserDto;
 import com.example.hairsalonrest.repository.UserRepository;
 import com.example.hairsalonrest.security.CurrentUser;
+import com.example.hairsalonrest.service.EmailService;
 import com.example.hairsalonrest.service.UserService;
 import com.example.hairsalonrest.util.JwtTokenUtil;
 import com.hairsaloncommon.model.User;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper mapper;
     private final JwtTokenUtil jwtTokenUtil;
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -67,9 +68,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User editUser(int id, User user) {
-        User byId = userRepository.findById(id).get();
+        final Optional<User> byId = userRepository.findById(id);
         user.setId(id);
-        mapper.map(user, byId);
+        byId.ifPresent(value -> mapper.map(user, value));
         return userRepository.save(user);
     }
 
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
     public void createAdmin() {
-        if (!userRepository.findByEmail("admin").isPresent()) {
+        if (userRepository.findByEmail("admin").isEmpty()) {
 
             userRepository.save(User.builder()
                     .email("admin")

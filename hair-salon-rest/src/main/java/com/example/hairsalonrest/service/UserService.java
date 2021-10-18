@@ -4,7 +4,6 @@ import com.example.hairsalonrest.dto.userdtos.UserAuthDto;
 import com.example.hairsalonrest.dto.userdtos.UserAuthResponseDto;
 import com.example.hairsalonrest.security.CurrentUser;
 import com.hairsaloncommon.model.User;
-import com.hairsaloncommon.model.UserType;
 
 import java.util.List;
 import java.util.Optional;

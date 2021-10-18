@@ -35,9 +35,11 @@ public class UserEndpoint {
         userService.createAdmin();
         UserAuthResponseDto byEmail = null;
         Optional<User> checkPassword = userService.findUserByEmail(userAuthDto.getEmail());
-        if (passwordEncoder.matches(userAuthDto.getPassword(), checkPassword.get().getPassword())) {
+
+        if (checkPassword.isPresent() && passwordEncoder.matches(userAuthDto.getPassword(), checkPassword.get().getPassword())) {
             byEmail = userService.findUserByEmail(userAuthDto);
         }
+
         if (byEmail != null) {
             return ResponseEntity.ok(byEmail);
         }
