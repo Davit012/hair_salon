@@ -1,8 +1,8 @@
 package com.example.hairsalonrest.endpoint;
 
-import com.example.hairsalonrest.dto.ServiceCreateDto;
-import com.example.hairsalonrest.dto.ServiceDto;
-import com.example.hairsalonrest.dto.ServicePutDto;
+import com.example.hairsalonrest.dto.servicedtos.ServiceCreateDto;
+import com.example.hairsalonrest.dto.servicedtos.ServiceDto;
+import com.example.hairsalonrest.dto.servicedtos.ServicePutDto;
 import com.example.hairsalonrest.service.ServiceService;
 import com.hairsaloncommon.model.Service;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class ServiceEndpoint {
     private final ModelMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<ServiceDto>> getServiceService() {
+    public ResponseEntity<List<ServiceDto>> getAllServices() {
         List<Service> all = serviceService.findAll();
         List<ServiceDto> serviceDtos = new ArrayList<>();
         if (all.isEmpty()){
@@ -53,7 +53,7 @@ public class ServiceEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServiceDto> putService(@PathVariable(name = "id") int id, @RequestBody ServicePutDto service) {
+    public ResponseEntity<ServiceDto> updateService(@PathVariable(name = "id") int id, @RequestBody ServicePutDto service) {
         if (serviceService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
