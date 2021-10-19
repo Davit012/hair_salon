@@ -1,6 +1,6 @@
-package com.example.hairsalonrest.service.serviceimpl;
+package com.example.hairsalonrest.service.impl;
 
-import com.example.hairsalonrest.reposirory.PhotoRepository;
+import com.example.hairsalonrest.repository.PhotoRepository;
 import com.example.hairsalonrest.service.PhotoService;
 import com.example.hairsalonrest.service.WorkerService;
 import com.hairsaloncommon.model.Photo;

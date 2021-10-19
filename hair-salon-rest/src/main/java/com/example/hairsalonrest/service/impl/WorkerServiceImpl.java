@@ -1,6 +1,6 @@
-package com.example.hairsalonrest.service.serviceimpl;
+package com.example.hairsalonrest.service.impl;
 
-import com.example.hairsalonrest.reposirory.WorkerRepository;
+import com.example.hairsalonrest.repository.WorkerRepository;
 import com.example.hairsalonrest.service.WorkerService;
 import com.hairsaloncommon.model.Worker;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public Worker findWorkerById(int id) {
-       Optional<Worker> worker = workerRepository.findById(id);
+        Optional<Worker> worker = workerRepository.findById(id);
         return worker.orElse(null);
     }
 }

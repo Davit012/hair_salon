@@ -1,11 +1,10 @@
 package com.example.hairsalonrest.endpoint;
 
 import com.example.hairsalonrest.service.WorkerService;
-import com.example.hairsalonrest.service.serviceimpl.PhotoServiceImpl;
+import com.example.hairsalonrest.service.impl.PhotoServiceImpl;
 import com.hairsaloncommon.model.Photo;
 import com.hairsaloncommon.model.Worker;
 import lombok.RequiredArgsConstructor;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -19,7 +18,7 @@ import java.io.InputStream;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/photos")
+@RequestMapping(value = "/photos")
 public class PhotoEndpoint {
 
     private final PhotoServiceImpl photoService;
@@ -27,28 +26,31 @@ public class PhotoEndpoint {
     @Value("${file.upload.dir}")
     private String uploadDir;
 
-    @PostMapping("/photos/{id}")
-    public ResponseEntity<Photo> addImage(@RequestParam("image")MultipartFile multipartFile ,
-                                          @PathVariable(name = "id") int id)throws IOException {
+    @PostMapping("/{id}")
+    public ResponseEntity<Photo> addImage(@RequestParam("image") MultipartFile multipartFile,
+                                          @PathVariable(name = "id") int id) throws IOException {
         Worker worker = workerService.findWorkerById(id);
-        if (worker != null){
-            return ResponseEntity.ok(photoService.savePhoto(multipartFile,id));
+        if (worker != null) {
+            return ResponseEntity.ok(photoService.savePhoto(multipartFile, id));
         }
         return ResponseEntity.notFound().build();
     }
-    @GetMapping(value = "/photos",produces = MediaType.IMAGE_JPEG_VALUE)
-        public @ResponseBody byte[] getImage(@RequestParam ("imageUrl") String imageUrl){
+
+    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody
+    byte[] getImage(@RequestParam("imageUrl") String imageUrl) {
         InputStream in = null;
         try {
             in = new FileInputStream((uploadDir + imageUrl));
             return IOUtils.toByteArray(in);
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-    @DeleteMapping("/photos/{id}")
-    public void deletePhoto(@PathVariable(name = "id") int id){
+
+    @DeleteMapping("/{id}")
+    public void deletePhoto(@PathVariable(name = "id") int id) {
         photoService.deletePhoto(id);
     }
 }
