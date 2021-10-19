@@ -11,8 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class PhotoServiceImpl implements PhotoService {
             try {
                 multipartFile.transferTo(new File(uploadDir + File.separator + picUrl));
             } catch (IOException e) {
-
+                    e.printStackTrace();
             }
             return photoRepository.save(Photo.builder()
                     .value(picUrl)
@@ -39,11 +37,6 @@ public class PhotoServiceImpl implements PhotoService {
                     .build());
         }
         return null;
-    }
-
-    @Override
-    public Optional<List<Photo>> getPhotoByWorkerId(int id) {
-        return photoRepository.getAllByWorker_Id(id);
     }
 
     @Override
