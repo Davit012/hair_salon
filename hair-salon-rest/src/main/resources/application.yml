@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
 spring:
   mail:
     host: smtp.gmail.com
     port: 587
+<<<<<<< HEAD
     username: nikozohrabyan@mail.ru
     password: Ni1ko2lya34
+=======
+    username: 2021JavaForTest@gmail.com
+    password: forTest2021
+>>>>>>> develop
     properties:
       mail:
         smtp:
@@ -12,22 +20,44 @@ spring:
           starttls:
             enable: true
   datasource:
+<<<<<<< HEAD
     url:    jdbc:mysql://localhost:3306/hair_salon?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+=======
+    url: jdbc:mysql://localhost:3306/hair_salon?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+>>>>>>> develop
     username: root
     password: root
   jpa:
     hibernate:
+<<<<<<< HEAD
       ddl-auto: none
+=======
+      ddl-auto: update
+>>>>>>> develop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   jackson:
     serialization:
+<<<<<<< HEAD
       fail-on-empty-beans:  false
 
 server:
   port: 8081
+=======
+      fail-on-empty-beans: false
+
+jwt:
+  secret: slkdfjh3ir1@REFiw
+  expiration: 6000000
+server:
+  port: 8080
+>>>>>>> develop
 
 file:
   upload:
     dir: D:\IdeaProjects\2021-spring\HairSalon\upload
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop

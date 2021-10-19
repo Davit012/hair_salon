@@ -1,30 +1,21 @@
-package com.hairsaloncommon.model;
+package com.example.hairsalonrest.dto.servicedtos;
 
+import com.hairsaloncommon.model.Worker;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "service")
-
-public class Service {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ServiceDto {
     private int id;
     private String name;
     private String description;
     private double price;
-    private int duration;
-    @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY)
     private List<Worker> workers;
-
 }
