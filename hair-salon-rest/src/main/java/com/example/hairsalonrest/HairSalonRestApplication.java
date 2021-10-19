@@ -7,11 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan({"com.hairsaloncommon.*", "com.example.hairsalonrest.*"})
-@EnableJpaRepositories(basePackages = {"com.hairsaloncommon.*", "com.example.hairsalonrest.*"})
+@ComponentScan({"com.hairsaloncommon.*","com.example.hairsalonrest.*"})
+@EnableJpaRepositories(basePackages = {"com.hairsaloncommon.*","com.example.hairsalonrest.*"})
 @EntityScan("com.hairsaloncommon.*")
 public class HairSalonRestApplication {
-
 
     public static void main(String[] args) {
         SpringApplication.run(HairSalonRestApplication.class, args);
