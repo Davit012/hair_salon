@@ -10,10 +10,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping>
-          <factory-entry name="entityManagerFactory" />
-          <factory-entry name="hair-salon-rest" value="163e8a04-c8c2-457d-adc6-8a467645ef56" />
-        </datasource-mapping>
+        <datasource-mapping />
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -92,7 +89,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.10" level="project" />
-    <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:2.3.5" level="project" />
+    <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:2.3.7" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-security:2.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.5.5" level="project" />
