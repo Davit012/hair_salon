@@ -3,11 +3,14 @@ package com.example.hairsalonrest.endpoint;
 import com.example.hairsalonrest.dto.feedbackdtos.CreateFeedbackDto;
 import com.example.hairsalonrest.dto.feedbackdtos.FeedbackDto;
 import com.example.hairsalonrest.dto.feedbackdtos.FeedbackPutDto;
+import com.example.hairsalonrest.security.CurrentUser;
 import com.example.hairsalonrest.service.FeedbackService;
+import com.example.hairsalonrest.service.WorkerService;
 import com.hairsaloncommon.model.Feedback;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import java.util.Optional;
 @RequestMapping(value = "/feedbacks")
 public class FeedbackEndpoint {
     private final FeedbackService feedbackService;
+    private final WorkerService workerService;
     private final ModelMapper mapper;
 
     @GetMapping
@@ -35,8 +39,10 @@ public class FeedbackEndpoint {
         return ResponseEntity.ok(feedbackDtos);
     }
 
-    @PostMapping
-    public ResponseEntity<FeedbackDto> addFeedback(@RequestBody CreateFeedbackDto feedback) {
+    @PostMapping("/{id}")
+    public ResponseEntity<FeedbackDto> addFeedback(@PathVariable(name = "id") int id, @RequestBody CreateFeedbackDto feedback, @AuthenticationPrincipal CurrentUser currentUser) {
+        feedback.setUser(currentUser.getUser());
+        feedback.setWorker(workerService.findWorkerById(id));
         Feedback byId = feedbackService.addFeedback(mapper.map(feedback, Feedback.class));
         if (byId.getId() != 0) {
             return ResponseEntity.ok(mapper.map(byId, FeedbackDto.class));
