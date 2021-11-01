@@ -1,12 +1,13 @@
-package com.hairsaloncommon.model;
+package com.example.hairsalonrest.dto.orderdtos;
 
-
+import com.hairsaloncommon.model.Service;
+import com.hairsaloncommon.model.User;
+import com.hairsaloncommon.model.Worker;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,21 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "ordering")
-public class Order {
+public class OrderCreateDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private LocalDateTime startDatetime;
     private LocalDateTime endDatetime;
-    @OneToMany
     private List<Service> services;
-    @ManyToOne
     private User user;
-    private Boolean isDeleted;
-    @ManyToOne
     private Worker worker;
 
 }

@@ -6,7 +6,6 @@ import com.example.hairsalonrest.dto.workerdtos.WorkerDto;
 import com.example.hairsalonrest.dto.workerdtos.WorkerPutDto;
 import com.example.hairsalonrest.service.ServiceService;
 import com.example.hairsalonrest.service.WorkerService;
-import com.hairsaloncommon.model.Service;
 import com.hairsaloncommon.model.Worker;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,13 +51,6 @@ public class WorkerEndpoint {
 
     @PostMapping
     public ResponseEntity<WorkerDto> createWorker(@RequestBody WorkerCreateDto worker) {
-        mapper.map(worker.getServices(), Service.class);
-        for (Service serviceId : worker.getServices()) {
-            Optional<Service> serviceFromDb = serviceService.findById(serviceId.getId());
-            if (serviceFromDb.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
-        }
         WorkerDto workerCheck = mapper.map(workerService.save(mapper.map(worker, Worker.class)), WorkerDto.class);
         if (workerCheck != null) {
             return ResponseEntity.ok(workerCheck);
