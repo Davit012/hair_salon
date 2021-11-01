@@ -35,7 +35,7 @@ public class PhotoServiceTest {
     PhotoServiceImpl photoService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -46,8 +46,8 @@ public class PhotoServiceTest {
     }
 
     @Test
-    public void deletePhotoTest {
+    public void deletePhotoTest() {
         photoService.deletePhoto(anyInt());
-        verify(photoRepository, times(1)).delete(anyInt());
+        verify(photoRepository, times(1)).deleteById(anyInt());
     }
 }
