@@ -9,12 +9,12 @@ public interface OrderService {
 
     List<Order> findAll(CurrentUser currentUser);
 
-    Order addOrder(Order order, int id);
+    Order addOrder(Order order, int id, List<Integer> services);
 
     Order findById(int id);
 
     void deleteOrder(int id);
 
-    Order editOrder(int id, Order order);
+    Order editOrder(int id, Order order,List<Integer> services,CurrentUser currentUser);
 
 }

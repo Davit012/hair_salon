@@ -24,6 +24,6 @@ public class Worker {
     private String surname;
     private String phoneNumber;
     @OneToMany
-    private List<Order> order;
+    private List<Service> services;
 
 }

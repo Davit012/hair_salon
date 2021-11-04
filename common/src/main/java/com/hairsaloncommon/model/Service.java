@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +23,6 @@ public class Service {
     private String description;
     private double price;
     private int duration;
-    @OneToMany
-    private List<Worker> workers;
+
 
 }

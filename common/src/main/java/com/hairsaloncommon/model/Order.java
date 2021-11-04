@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,12 +22,10 @@ public class Order {
     private int id;
     private LocalDateTime startDatetime;
     private LocalDateTime endDatetime;
-    @OneToMany
-    private List<Service> services;
+    @ManyToOne
+    private Worker worker;
     @ManyToOne
     private User user;
     private Boolean isDeleted;
-    @ManyToOne
-    private Worker worker;
 
 }

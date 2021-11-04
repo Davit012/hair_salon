@@ -45,26 +45,26 @@ public class OrderEndpoint {
     @PostMapping()
     public ResponseEntity<OrderDto> addOrder(@RequestBody OrderCreateDto orderCreateDto, @AuthenticationPrincipal CurrentUser currentUser) {
         int id = orderCreateDto.getWorker().getId();
-
         Worker workerById = workerService.findWorkerById(id);
-        for (int i = 0; i < orderCreateDto.getServices().size(); i++) {
-            for (int j = i+1; j < orderCreateDto.getServices().size(); j++) {
-                if (orderCreateDto.getServices().get(i) == orderCreateDto.getServices().get(j)){
+        List<Integer> services = new ArrayList<>();
+        for (int i = 0; i < orderCreateDto.getWorker().getServices().size(); i++) {
+            services.add(orderCreateDto.getWorker().getServices().get(i).getId());
+            for (int j = i + 1; j < orderCreateDto.getWorker().getServices().size(); j++) {
+                if (orderCreateDto.getWorker().getServices().get(i) == orderCreateDto.getWorker().getServices().get(j)) {
                     return ResponseEntity.badRequest().build();
                 }
             }
         }
+        orderCreateDto.setUser(currentUser.getUser());
         if (workerById == null) {
             return ResponseEntity.notFound().build();
         }
-        Order byId = orderService.addOrder(mapper.map(orderCreateDto, Order.class), id);
-        workerById.getOrder().add(byId);
-        orderCreateDto.setUser(currentUser.getUser());
-        if (byId.getId() != 0) {
-            workerService.save(workerById);
-            return ResponseEntity.ok(mapper.map(byId, OrderDto.class));
+        Order orderFromService = orderService.addOrder(mapper.map(orderCreateDto, Order.class),
+                id, services);
+        if (orderFromService == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(mapper.map(orderFromService, OrderDto.class));
     }
 
     @GetMapping("/{id}")
@@ -76,19 +76,28 @@ public class OrderEndpoint {
         return ResponseEntity.ok(mapper.map(byId, OrderDto.class));
     }
 
-    @PutMapping()
-    public ResponseEntity<OrderDto> editOrder(@RequestBody OrderPutDto order) {
-        int id = order.getWorker().getId();
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDto> editOrder(@PathVariable("id") int id, @RequestBody OrderPutDto order, @AuthenticationPrincipal CurrentUser currentUser) {
+        List<Integer> services = new ArrayList<>();
+        for (int i = 0; i < order.getWorker().getServices().size(); i++) {
+            services.add(order.getWorker().getServices().get(i).getId());
+            for (int j = i + 1; j < order.getWorker().getServices().size(); j++) {
+                if (order.getWorker().getServices().get(i) == order.getWorker().getServices().get(j)) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+        }
+        int workerId = order.getWorker().getId();
         if (orderService.findById(id) == null) {
             return ResponseEntity.notFound().build();
         }
-        Order orderFromBd = orderService.editOrder(id, mapper.map(order, Order.class));
+        Order orderFromBd = orderService.editOrder(workerId, mapper.map(order, Order.class), services, currentUser);
         return ResponseEntity.ok(mapper.map(orderFromBd, OrderDto.class));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable(name = "id") int id) {
-        if (orderService.findById(id) == null) {
+        if (orderService.findById(id) != null) {
             orderService.deleteOrder(id);
             return ResponseEntity.noContent().build();
         }
