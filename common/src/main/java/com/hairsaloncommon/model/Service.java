@@ -1,13 +1,11 @@
 package com.hairsaloncommon.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,8 +23,6 @@ public class Service {
     private String description;
     private double price;
     private int duration;
-    @JsonIgnore
-    @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY)
-    private List<Worker> workers;
+
 
 }

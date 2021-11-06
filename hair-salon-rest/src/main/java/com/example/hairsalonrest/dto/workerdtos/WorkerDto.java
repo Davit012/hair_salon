@@ -18,4 +18,5 @@ public class WorkerDto {
     private String surname;
     private String phoneNumber;
     private List<Service> services;
+
 }

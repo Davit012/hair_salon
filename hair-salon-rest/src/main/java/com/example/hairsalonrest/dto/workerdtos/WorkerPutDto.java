@@ -1,6 +1,6 @@
 package com.example.hairsalonrest.dto.workerdtos;
 
-import com.hairsaloncommon.model.Service;
+import com.example.hairsalonrest.dto.servicedtos.ServiceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +16,6 @@ public class WorkerPutDto {
     private String name;
     private String surname;
     private String phoneNumber;
-    private List<Service> services;
+    private List<ServiceDto> servicesDtos;
+
 }

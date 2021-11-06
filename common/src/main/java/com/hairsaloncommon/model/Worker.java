@@ -23,13 +23,7 @@ public class Worker {
     private String name;
     private String surname;
     private String phoneNumber;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "worker_service",
-            joinColumns = {
-                    @JoinColumn(name = "worker_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "service_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)})
+    @OneToMany
     private List<Service> services;
+
 }
