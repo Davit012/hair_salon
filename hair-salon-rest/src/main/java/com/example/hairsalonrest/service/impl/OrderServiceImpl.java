@@ -51,13 +51,15 @@ public class OrderServiceImpl implements OrderService {
 
         order.setEndDatetime(order.getStartDatetime().plusMinutes(duration));
         List<Order> allByWorker = orderRepository.findAllByWorker(workerService.findWorkerById(id));
+        order.setIsDeleted(false);
         for (Order order1 : allByWorker) {
-            if (order1.getIsDeleted() ||
-                    order.getStartDatetime().isAfter(order1.getStartDatetime()) &&
+            if (order1.getIsDeleted()) {
+                continue;
+            }
+            if (order.getStartDatetime().isAfter(order1.getStartDatetime()) &&
                     order.getStartDatetime().isBefore(order1.getEndDatetime()) ||
                     order.getEndDatetime().isBefore(order1.getEndDatetime()) &&
-                    order.getEndDatetime().isAfter(order1.getStartDatetime())
-            ) {
+                            order.getEndDatetime().isAfter(order1.getStartDatetime())) {
                 return null;
             }
         }
