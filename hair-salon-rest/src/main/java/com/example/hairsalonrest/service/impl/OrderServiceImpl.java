@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @org.springframework.stereotype.Service
@@ -35,8 +36,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order addOrder(Order order, int id, List<Integer> servicesId) {
-        order.setIsDeleted(false);
+    public Order addOrder(Order order, int id, Set<Integer> servicesId) {
         List<Service> services = new ArrayList<>();
 
         for (Integer serviceId : servicesId) {
@@ -44,16 +44,19 @@ public class OrderServiceImpl implements OrderService {
                 services.add(serviceService.findById(serviceId).get());
             }
         }
+        int duration = 0;
         for (Service service : services) {
-            order.setEndDatetime(order.getStartDatetime().plusMinutes(service.getDuration()));
+            duration += service.getDuration();
         }
+
+        order.setEndDatetime(order.getStartDatetime().plusMinutes(duration));
         List<Order> allByWorker = orderRepository.findAllByWorker(workerService.findWorkerById(id));
         for (Order order1 : allByWorker) {
             if (order1.getIsDeleted() ||
                     order.getStartDatetime().isAfter(order1.getStartDatetime()) &&
-                            order.getStartDatetime().isBefore(order1.getEndDatetime()) ||
+                    order.getStartDatetime().isBefore(order1.getEndDatetime()) ||
                     order.getEndDatetime().isBefore(order1.getEndDatetime()) &&
-                            order.getEndDatetime().isAfter(order1.getStartDatetime())
+                    order.getEndDatetime().isAfter(order1.getStartDatetime())
             ) {
                 return null;
             }
@@ -77,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order editOrder(int id, Order order, List<Integer> servicesId, CurrentUser currentUser) {
+    public Order editOrder(int id, Order order, Set<Integer> servicesId, CurrentUser currentUser) {
         order.setUser(currentUser.getUser());
         Order byId = findById(id);
         order.setId(id);
@@ -104,4 +107,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return order;
     }
+
+
 }

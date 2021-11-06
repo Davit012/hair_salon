@@ -15,8 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,14 +45,9 @@ public class OrderEndpoint {
     public ResponseEntity<OrderDto> addOrder(@RequestBody OrderCreateDto orderCreateDto, @AuthenticationPrincipal CurrentUser currentUser) {
         int id = orderCreateDto.getWorker().getId();
         Worker workerById = workerService.findWorkerById(id);
-        List<Integer> services = new ArrayList<>();
+        Set<Integer> services = new HashSet<>();
         for (int i = 0; i < orderCreateDto.getWorker().getServices().size(); i++) {
             services.add(orderCreateDto.getWorker().getServices().get(i).getId());
-            for (int j = i + 1; j < orderCreateDto.getWorker().getServices().size(); j++) {
-                if (orderCreateDto.getWorker().getServices().get(i) == orderCreateDto.getWorker().getServices().get(j)) {
-                    return ResponseEntity.badRequest().build();
-                }
-            }
         }
         orderCreateDto.setUser(currentUser.getUser());
         if (workerById == null) {
@@ -78,14 +72,9 @@ public class OrderEndpoint {
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderDto> editOrder(@PathVariable("id") int id, @RequestBody OrderPutDto order, @AuthenticationPrincipal CurrentUser currentUser) {
-        List<Integer> services = new ArrayList<>();
+        Set<Integer> services = new HashSet<>();
         for (int i = 0; i < order.getWorker().getServices().size(); i++) {
             services.add(order.getWorker().getServices().get(i).getId());
-            for (int j = i + 1; j < order.getWorker().getServices().size(); j++) {
-                if (order.getWorker().getServices().get(i) == order.getWorker().getServices().get(j)) {
-                    return ResponseEntity.badRequest().build();
-                }
-            }
         }
         int workerId = order.getWorker().getId();
         if (orderService.findById(id) == null) {
