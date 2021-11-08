@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +17,9 @@ import lombok.NoArgsConstructor;
 public class CreatePhotoDto {
 
 
+    @NotEmpty(message = "photo is required")
     private String value;
+    @NotNull
     private Worker worker;
 
 }

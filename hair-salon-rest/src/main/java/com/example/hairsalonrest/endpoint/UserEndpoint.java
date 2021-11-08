@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class UserEndpoint {
 
 
     @PostMapping("/auth")
-    public ResponseEntity<UserAuthResponseDto> auth(@RequestBody UserAuthDto userAuthDto) {
+    public ResponseEntity<UserAuthResponseDto> auth(@RequestBody @Valid UserAuthDto userAuthDto) {
         userService.createAdmin();
         UserAuthResponseDto byEmail = null;
         Optional<User> checkPassword = userService.findUserByEmail(userAuthDto.getEmail());
@@ -72,7 +73,7 @@ public class UserEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserCreateDto user) {
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserCreateDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserDto userCheck = mapper.map(userService.save(mapper.map(user, User.class)), UserDto.class);
         if (userCheck != null) {
@@ -82,7 +83,7 @@ public class UserEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable(name = "id") int id, @RequestBody UserCreateDto user) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable(name = "id") int id, @RequestBody @Valid UserCreateDto user) {
         if (userService.findUserById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }

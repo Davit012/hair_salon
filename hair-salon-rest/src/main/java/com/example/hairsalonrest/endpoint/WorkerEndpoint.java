@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class WorkerEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<WorkerDto> createWorker(@RequestBody WorkerCreateDto worker) {
+    public ResponseEntity<WorkerDto> createWorker(@RequestBody @Valid WorkerCreateDto worker) {
         WorkerDto workerCheck = mapper.map(workerService.save(mapper.map(worker, Worker.class)), WorkerDto.class);
         if (workerCheck != null) {
             return ResponseEntity.ok(workerCheck);
@@ -60,7 +61,7 @@ public class WorkerEndpoint {
 
     @PutMapping("/{id}")
     public ResponseEntity<WorkerDto> updateWorker(@PathVariable(name = "id") int id,
-                                                  @RequestBody WorkerPutDto worker) {
+                                                  @RequestBody @Valid WorkerPutDto worker) {
         if (workerService.findWorkerById(id) == null) {
             return ResponseEntity.notFound().build();
         }

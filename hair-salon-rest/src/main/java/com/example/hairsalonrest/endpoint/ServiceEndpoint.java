@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class ServiceEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<ServiceDto> addService(@RequestBody ServiceCreateDto service) {
+    public ResponseEntity<ServiceDto> addService(@RequestBody @Valid ServiceCreateDto service) {
         Service byId = serviceService.addService(mapper.map(service, Service.class));
         if (byId.getId() != 0) {
             return ResponseEntity.ok(mapper.map(byId, ServiceDto.class));
@@ -53,7 +54,7 @@ public class ServiceEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServiceDto> updateService(@PathVariable(name = "id") int id, @RequestBody ServicePutDto service) {
+    public ResponseEntity<ServiceDto> updateService(@PathVariable(name = "id") int id, @RequestBody @Valid ServicePutDto service) {
         if (serviceService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
