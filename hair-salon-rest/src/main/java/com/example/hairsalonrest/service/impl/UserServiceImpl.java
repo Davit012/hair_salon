@@ -3,6 +3,7 @@ package com.example.hairsalonrest.service.impl;
 import com.example.hairsalonrest.dto.userdtos.UserAuthDto;
 import com.example.hairsalonrest.dto.userdtos.UserAuthResponseDto;
 import com.example.hairsalonrest.dto.userdtos.UserDto;
+import com.example.hairsalonrest.dto.userdtos.UserResetPasswordDto;
 import com.example.hairsalonrest.repository.UserRepository;
 import com.example.hairsalonrest.security.CurrentUser;
 import com.example.hairsalonrest.service.EmailService;
@@ -12,6 +13,7 @@ import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.UserType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -81,10 +83,45 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User verifyEmail(String activeCode, CurrentUser currentUser) {
-        if (currentUser.getUser().getActiveCode().equals(UUID.fromString(activeCode))) {
-            currentUser.getUser().setEmailVerified(true);
-            currentUser.getUser().setActiveCode(null);
-            return save(currentUser.getUser());
+        Optional<User> userByEmail = findUserByEmail(currentUser.getUser().getEmail());
+        if (userByEmail.isEmpty()) {
+            return null;
+        }
+        User user = userByEmail.get();
+        if (user.getActiveCode().equals(UUID.fromString(activeCode))) {
+            user.setEmailVerified(true);
+            user.setActiveCode(null);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    @Override
+    public User resetPassword(User user, UserResetPasswordDto userReset) {
+        if (passwordEncoder.matches(userReset.getPassword(), user.getPassword()) &&
+                user.getActiveCode().equals(UUID.fromString((userReset.getToken())))) {
+            String newPassword = passwordEncoder.encode(userReset.getNewPassword());
+            user.setActiveCode(null);
+            user.setPassword(newPassword);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    @Override
+    public User sendToken(String email) {
+        Optional<User> userByEmail = findUserByEmail(email);
+        if (userByEmail.isEmpty()) {
+            return null;
+        }
+        User user = userByEmail.get();
+        if (user.isEmailVerified()) {
+            UUID token = UUID.randomUUID();
+            emailService.sendMessage(user.getEmail(), "Reset your Password",
+                    "Dear " + user.getName() + " your token is " + token);
+            user.setActiveCode(token);
+            userRepository.save(user);
+            return userRepository.save(user);
         }
         return null;
     }
