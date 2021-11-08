@@ -1,10 +1,7 @@
 package com.example.hairsalonrest.endpoint;
 
 
-import com.example.hairsalonrest.dto.userdtos.UserAuthDto;
-import com.example.hairsalonrest.dto.userdtos.UserAuthResponseDto;
-import com.example.hairsalonrest.dto.userdtos.UserCreateDto;
-import com.example.hairsalonrest.dto.userdtos.UserDto;
+import com.example.hairsalonrest.dto.userdtos.*;
 import com.example.hairsalonrest.security.CurrentUser;
 import com.example.hairsalonrest.service.UserService;
 import com.hairsaloncommon.model.User;
@@ -16,7 +13,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,11 +74,12 @@ public class UserEndpoint {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserCreateDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        UserDto userCheck = mapper.map(userService.save(mapper.map(user, User.class)), UserDto.class);
+        User userCheck = userService.save(mapper.map(user, User.class));
         if (userCheck != null) {
-            return ResponseEntity.ok(userCheck);
+            return ResponseEntity.ok(mapper.map(userCheck, UserDto.class));
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body("User with email " + user.getEmail() +
+                " already is present, we can reset your password if you forgot it");
     }
 
     @PutMapping("/{id}")
@@ -100,12 +100,40 @@ public class UserEndpoint {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/active")
-    public ResponseEntity<UserDto> activeUser(@AuthenticationPrincipal CurrentUser currentUser,
-                                              @RequestParam("text") String text) {
+    @GetMapping("/email")
+    public ResponseEntity<?> sendTokenForReset(HttpServletRequest httpServletRequest) {
+        String email = httpServletRequest.getHeader("mail");
+        if (email == null) {
+            return ResponseEntity.badRequest().body("Please Input your email");
+        }
+        User user = userService.sendToken(email);
+        if (user != null) {
+            return ResponseEntity.ok("Your token was sent to your email");
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> resetPassword(HttpServletRequest httpServletRequest, @RequestBody UserResetPasswordDto userPassword) {
+        String email = httpServletRequest.getHeader("mail");
+        Optional<User> userByEmail = userService.findUserByEmail(email);
+        if (userByEmail.isPresent() &&
+                userPassword.getRepeatNewPassword().equals(userPassword.getNewPassword())) {
+            User user = userByEmail.get();
+            User updatedUser = userService.resetPassword(user, userPassword);
+            if (updatedUser != null) {
+                return ResponseEntity.ok("Your password is restored");
+            }
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<?> activeUser(@AuthenticationPrincipal CurrentUser currentUser,
+                                        @RequestParam("text") String text) {
         User user = userService.verifyEmail(text, currentUser);
         if (user == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("please log in for active your account");
         }
         return ResponseEntity.noContent().build();
     }
