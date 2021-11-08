@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class FeedbackEndpoint {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<FeedbackDto> addFeedback(@PathVariable(name = "id") int id, @RequestBody CreateFeedbackDto feedback, @AuthenticationPrincipal CurrentUser currentUser) {
+    public ResponseEntity<FeedbackDto> addFeedback(@PathVariable(name = "id") int id, @RequestBody @Valid CreateFeedbackDto feedback, @AuthenticationPrincipal CurrentUser currentUser) {
         feedback.setUser(currentUser.getUser());
         feedback.setWorker(workerService.findWorkerById(id));
         Feedback byId = feedbackService.addFeedback(mapper.map(feedback, Feedback.class));
@@ -59,7 +60,7 @@ public class FeedbackEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FeedbackDto> updateFeedback(@PathVariable(name = "id") int id, @RequestBody FeedbackPutDto feedback) {
+    public ResponseEntity<FeedbackDto> updateFeedback(@PathVariable(name = "id") int id, @RequestBody @Valid FeedbackPutDto feedback) {
         if (feedbackService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }

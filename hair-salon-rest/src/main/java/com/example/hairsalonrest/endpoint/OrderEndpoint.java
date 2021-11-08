@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @RestController
@@ -42,7 +43,7 @@ public class OrderEndpoint {
     }
 
     @PostMapping()
-    public ResponseEntity<OrderDto> addOrder(@RequestBody OrderCreateDto orderCreateDto, @AuthenticationPrincipal CurrentUser currentUser) {
+    public ResponseEntity<OrderDto> addOrder(@RequestBody @Valid OrderCreateDto orderCreateDto, @AuthenticationPrincipal CurrentUser currentUser) {
         int id = orderCreateDto.getWorker().getId();
         Worker workerById = workerService.findWorkerById(id);
         Set<Integer> services = new HashSet<>();
@@ -71,7 +72,7 @@ public class OrderEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDto> editOrder(@PathVariable("id") int id, @RequestBody OrderPutDto order, @AuthenticationPrincipal CurrentUser currentUser) {
+    public ResponseEntity<OrderDto> editOrder(@PathVariable("id") int id, @RequestBody @Valid OrderPutDto order, @AuthenticationPrincipal CurrentUser currentUser) {
         Set<Integer> services = new HashSet<>();
         for (int i = 0; i < order.getWorker().getServices().size(); i++) {
             services.add(order.getWorker().getServices().get(i).getId());

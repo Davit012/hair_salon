@@ -13,6 +13,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+
+import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +72,7 @@ public class UserEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserCreateDto user) {
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserCreateDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userCheck = userService.save(mapper.map(user, User.class));
         if (userCheck != null) {
@@ -81,7 +83,7 @@ public class UserEndpoint {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable(name = "id") int id, @RequestBody UserCreateDto user) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable(name = "id") int id, @RequestBody @Valid UserCreateDto user) {
         if (userService.findUserById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
