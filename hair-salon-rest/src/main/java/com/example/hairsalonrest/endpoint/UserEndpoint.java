@@ -32,7 +32,7 @@ public class UserEndpoint {
 
 
     @PostMapping("/auth")
-    public ResponseEntity<UserAuthResponseDto> auth(@RequestBody @Valid UserAuthDto userAuthDto) {
+    public ResponseEntity<UserAuthResponseDto> auth(@RequestBody UserAuthDto userAuthDto) {
         userService.createAdmin();
         UserAuthResponseDto byEmail = null;
         Optional<User> checkPassword = userService.findUserByEmail(userAuthDto.getEmail());
