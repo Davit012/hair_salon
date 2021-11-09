@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,6 @@ public class ServicePutDto {
     private String name;
     @NotEmpty(message = "description is required")
     private String description;
-    @NotNull
-    @Min(0)
+    @DecimalMin(value = "0.0")
     private double price;
 }

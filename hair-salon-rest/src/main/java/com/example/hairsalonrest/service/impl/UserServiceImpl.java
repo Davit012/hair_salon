@@ -13,7 +13,6 @@ import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.UserType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -124,18 +123,5 @@ public class UserServiceImpl implements UserService {
             return userRepository.save(user);
         }
         return null;
-    }
-    public void createAdmin() {
-        if (userRepository.findByEmail("admin").isEmpty()) {
-
-            userRepository.save(User.builder()
-                    .email("admin")
-                    .surname("admin")
-                    .name("admin")
-                    .password(passwordEncoder.encode("admin"))
-                    .userType(UserType.valueOf("ADMIN"))
-                    .isEmailVerified(true)
-                    .build());
-        }
     }
 }

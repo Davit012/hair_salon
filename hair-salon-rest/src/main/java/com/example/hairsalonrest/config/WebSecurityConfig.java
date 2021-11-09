@@ -37,26 +37,60 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .authorizeRequests()
+                //user
                 .antMatchers(HttpMethod.GET, "/users").authenticated()
+                .antMatchers(HttpMethod.GET, "/users/email").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/users/{id}").hasAnyAuthority("ADMIN")
                 .antMatchers("/users/auth").permitAll()
-                .antMatchers(HttpMethod.POST, "/users").permitAll();
+                .antMatchers(HttpMethod.POST, "/users").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/users/active").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/users").permitAll()
+                //feedback
+                .antMatchers(HttpMethod.GET, "/feedbacks").permitAll()
+                .antMatchers(HttpMethod.GET, "/feedbacks/id").permitAll()
+                .antMatchers(HttpMethod.POST, "/feedbacks").authenticated()
+                .antMatchers(HttpMethod.POST, "/feedbacks/*").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/feedbacks").authenticated()
+                .antMatchers(HttpMethod.PUT, "/feedbacks/*").authenticated()
+                //order
+                .antMatchers(HttpMethod.GET, "/orders").permitAll()
+                .antMatchers(HttpMethod.GET, "/orders/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/orders").authenticated()
+                .antMatchers(HttpMethod.PUT, "/orders/*").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/orders/*").authenticated()
+                //photo
+                .antMatchers(HttpMethod.GET, "/photos").permitAll()
+                .antMatchers(HttpMethod.POST, "/photos/*").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/photos/*").authenticated()
+                //Service
+                .antMatchers(HttpMethod.GET, "/services").permitAll()
+                .antMatchers(HttpMethod.POST, "/services").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/services/*").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/services/*").hasAnyAuthority("ADMIN")
+                //Worker
+                .antMatchers(HttpMethod.GET, "/workers").permitAll()
+                .antMatchers(HttpMethod.GET, "/workers/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/workers").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/workers/*").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/workers/*").hasAnyAuthority("ADMIN");
+
 
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-
         http.headers().cacheControl();
 
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth.userDetailsService(userDetailsService)
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
     }
+
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public JWTAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
         return new JWTAuthenticationTokenFilter();

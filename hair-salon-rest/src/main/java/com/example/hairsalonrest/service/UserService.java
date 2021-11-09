@@ -28,6 +28,6 @@ public interface UserService {
     User verifyEmail(String activeCode, CurrentUser currentUser);
 
     User resetPassword(User user, UserResetPasswordDto userReset);
+
     User sendToken(String email);
-    void createAdmin();
 }

@@ -4,6 +4,7 @@ package com.example.hairsalonrest.endpoint;
 import com.example.hairsalonrest.dto.userdtos.*;
 import com.example.hairsalonrest.security.CurrentUser;
 import com.example.hairsalonrest.service.UserService;
+import com.example.hairsalonrest.util.CreateAdmin;
 import com.hairsaloncommon.model.User;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -13,9 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,11 +28,12 @@ public class UserEndpoint {
     private final UserService userService;
     private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
+    private final CreateAdmin createAdmin;
 
 
     @PostMapping("/auth")
     public ResponseEntity<UserAuthResponseDto> auth(@RequestBody UserAuthDto userAuthDto) {
-        userService.createAdmin();
+        createAdmin.createAdmin();
         UserAuthResponseDto byEmail = null;
         Optional<User> checkPassword = userService.findUserByEmail(userAuthDto.getEmail());
 
@@ -72,7 +73,7 @@ public class UserEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserCreateDto user) {
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreateDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userCheck = userService.save(mapper.map(user, User.class));
         if (userCheck != null) {
@@ -110,7 +111,7 @@ public class UserEndpoint {
         if (user != null) {
             return ResponseEntity.ok("Your token was sent to your email");
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body("Your email does not verified");
     }
 
     @PatchMapping
