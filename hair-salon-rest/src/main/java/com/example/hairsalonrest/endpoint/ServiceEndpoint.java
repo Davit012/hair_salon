@@ -1,10 +1,10 @@
 package com.example.hairsalonrest.endpoint;
 
-import com.example.hairsalonrest.dto.servicedtos.ServiceCreateDto;
-import com.example.hairsalonrest.dto.servicedtos.ServiceDto;
-import com.example.hairsalonrest.dto.servicedtos.ServicePutDto;
-import com.example.hairsalonrest.service.ServiceService;
+import com.hairsaloncommon.dto.servicedtos.ServiceCreateDto;
+import com.hairsaloncommon.dto.servicedtos.ServiceDto;
+import com.hairsaloncommon.dto.servicedtos.ServicePutDto;
 import com.hairsaloncommon.model.Service;
+import com.hairsaloncommon.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class ServiceEndpoint {
     public ResponseEntity<List<ServiceDto>> getAllServices() {
         List<Service> all = serviceService.findAll();
         List<ServiceDto> serviceDtos = new ArrayList<>();
-        if (all.isEmpty()){
+        if (all.isEmpty()) {
             ResponseEntity.noContent().build();
         }
         for (Service service : all) {
@@ -64,7 +64,7 @@ public class ServiceEndpoint {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteService(@PathVariable(name = "id") int id) {
-        if (serviceService.findById(id).isPresent()){
+        if (serviceService.findById(id).isPresent()) {
             serviceService.deleteService(id);
             return ResponseEntity.noContent().build();
         }

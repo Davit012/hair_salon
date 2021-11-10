@@ -1,6 +1,6 @@
 package com.example.hairsalonrest.security;
 
-import com.example.hairsalonrest.util.JwtTokenUtil;
+import com.hairsaloncommon.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,9 +1,9 @@
 package com.example.hairsalonrest.endpoint;
 
-import com.example.hairsalonrest.service.WorkerService;
-import com.example.hairsalonrest.service.impl.PhotoServiceImpl;
 import com.hairsaloncommon.model.Photo;
 import com.hairsaloncommon.model.Worker;
+import com.hairsaloncommon.service.PhotoService;
+import com.hairsaloncommon.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ import java.io.InputStream;
 @RequestMapping(value = "/photos")
 public class PhotoEndpoint {
 
-    private final PhotoServiceImpl photoService;
+    private final PhotoService photoService;
     private final WorkerService workerService;
     @Value("${file.upload.dir}")
     private String uploadDir;

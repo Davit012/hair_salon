@@ -1,12 +1,12 @@
 package com.example.hairsalonrest.endpoint;
 
-import com.example.hairsalonrest.dto.feedbackdtos.CreateFeedbackDto;
-import com.example.hairsalonrest.dto.feedbackdtos.FeedbackDto;
-import com.example.hairsalonrest.dto.feedbackdtos.FeedbackPutDto;
+import com.hairsaloncommon.dto.feedbackdtos.CreateFeedbackDto;
+import com.hairsaloncommon.dto.feedbackdtos.FeedbackDto;
+import com.hairsaloncommon.dto.feedbackdtos.FeedbackPutDto;
 import com.example.hairsalonrest.security.CurrentUser;
-import com.example.hairsalonrest.service.FeedbackService;
-import com.example.hairsalonrest.service.WorkerService;
 import com.hairsaloncommon.model.Feedback;
+import com.hairsaloncommon.service.FeedbackService;
+import com.hairsaloncommon.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,11 @@
 package com.example.hairsalonrest.endpoint;
 
 
-import com.example.hairsalonrest.dto.userdtos.*;
 import com.example.hairsalonrest.security.CurrentUser;
-import com.example.hairsalonrest.service.UserService;
 import com.example.hairsalonrest.util.CreateAdmin;
+import com.hairsaloncommon.dto.userdtos.*;
 import com.hairsaloncommon.model.User;
+import com.hairsaloncommon.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -132,7 +132,7 @@ public class UserEndpoint {
     @GetMapping("/active")
     public ResponseEntity<?> activeUser(@AuthenticationPrincipal CurrentUser currentUser,
                                         @RequestParam("text") String text) {
-        User user = userService.verifyEmail(text, currentUser);
+        User user = userService.verifyEmail(text, currentUser.getUser());
         if (user == null) {
             return ResponseEntity.badRequest().body("please log in for active your account");
         }

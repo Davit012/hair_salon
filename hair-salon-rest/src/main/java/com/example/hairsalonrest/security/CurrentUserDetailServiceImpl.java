@@ -1,7 +1,7 @@
 package com.example.hairsalonrest.security;
 
-import com.example.hairsalonrest.service.UserService;
 import com.hairsaloncommon.model.User;
+import com.hairsaloncommon.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
