@@ -1,32 +1,33 @@
 package com.example.hairsalonrest.service;
 
+import com.example.hairsalonrest.HairSalonRestApplication;
 import com.example.hairsalonrest.repository.FeedbackRepository;
 import com.hairsaloncommon.model.Feedback;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertEquals;
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = HairSalonRestApplication.class)
 public class FeedbackServiceTest {
 
-    @Mock
+    @MockBean
     private FeedbackRepository feedbackRepository;
 
-    @InjectMocks
+    @Autowired
     private FeedbackService feedbackService;
 
 
@@ -39,7 +40,7 @@ public class FeedbackServiceTest {
                 .message("Feedback")
                 .build();
 
-        when(feedbackRepository.save(Mockito.any())).thenReturn(feedback);
+        when(feedbackRepository.findAll()).thenReturn(Arrays.asList(feedback));
         List<Feedback> all = feedbackService.findAll();
         assertThat(all.size()).isEqualTo(1);
 
@@ -54,10 +55,11 @@ public class FeedbackServiceTest {
                 .build();
 
         when(feedbackRepository.save(Mockito.any())).thenReturn(feedback);
+        when(feedbackRepository.findAll()).thenReturn(Arrays.asList(feedback));
         Feedback addFeedback = feedbackService.addFeedback(feedback);
 
-        assertThat(addFeedback.getId() == feedback.getId());
-        //assertEquals(1, feedbackRepository.findAll().size());
+        assertEquals(addFeedback.getId(), feedback.getId());
+        assertEquals(1, feedbackRepository.findAll().size());
     }
 
     @Test
@@ -68,10 +70,9 @@ public class FeedbackServiceTest {
                 .message("Feedback")
                 .build();
 
-        when(feedbackRepository.save(Mockito.any())).thenReturn(feedback);
-        Feedback save = feedbackRepository.save(feedback);
+        when(feedbackRepository.findById(feedback.getId())).thenReturn(Optional.of(feedback));
         Optional<Feedback> foundFeedback = feedbackService.findById(feedback.getId());
-        assertEquals(foundFeedback.get().getId(), save.getId());
+        assertEquals(foundFeedback.get().getId(), feedback.getId());
     }
 
     @Test
@@ -82,11 +83,12 @@ public class FeedbackServiceTest {
                 .message("Feedback")
                 .build();
 
+        when(feedbackRepository.findById(feedback.getId())).thenReturn(Optional.of(feedback));
         when(feedbackRepository.save(Mockito.any())).thenReturn(feedback);
         Feedback save = feedbackRepository.save(feedback);
         save.setMessage("newFirstName");
-        Feedback editFeedback = feedbackService.editFeedback(save.getId(), save);
-        assertEquals(editFeedback.getMessage(), is("newFirstName"));
+        Feedback editFeedback = feedbackService.editFeedback(feedback.getId(), save);
+        assertEquals(editFeedback.getMessage(), "newFirstName");
     }
 
     @Test
