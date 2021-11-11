@@ -1,12 +1,12 @@
 package com.example.hairsalonrest.endpoint;
 
 
-import com.example.hairsalonrest.dto.workerdtos.WorkerCreateDto;
-import com.example.hairsalonrest.dto.workerdtos.WorkerDto;
-import com.example.hairsalonrest.dto.workerdtos.WorkerPutDto;
-import com.example.hairsalonrest.service.ServiceService;
-import com.example.hairsalonrest.service.WorkerService;
+import com.hairsaloncommon.dto.workerdtos.WorkerCreateDto;
+import com.hairsaloncommon.dto.workerdtos.WorkerDto;
+import com.hairsaloncommon.dto.workerdtos.WorkerPutDto;
 import com.hairsaloncommon.model.Worker;
+import com.hairsaloncommon.service.ServiceService;
+import com.hairsaloncommon.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;

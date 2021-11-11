@@ -1,14 +1,14 @@
 package com.example.hairsalonrest.endpoint;
 
 
-import com.example.hairsalonrest.dto.orderdtos.OrderCreateDto;
-import com.example.hairsalonrest.dto.orderdtos.OrderDto;
-import com.example.hairsalonrest.dto.orderdtos.OrderPutDto;
+import com.hairsaloncommon.dto.orderdtos.OrderCreateDto;
+import com.hairsaloncommon.dto.orderdtos.OrderDto;
+import com.hairsaloncommon.dto.orderdtos.OrderPutDto;
 import com.example.hairsalonrest.security.CurrentUser;
-import com.example.hairsalonrest.service.OrderService;
-import com.example.hairsalonrest.service.WorkerService;
 import com.hairsaloncommon.model.Order;
 import com.hairsaloncommon.model.Worker;
+import com.hairsaloncommon.service.OrderService;
+import com.hairsaloncommon.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +33,7 @@ public class OrderEndpoint {
 
     @GetMapping
     public ResponseEntity<List<OrderDto>> getAllOrders(@AuthenticationPrincipal CurrentUser currentUser) {
-        List<Order> all = orderService.findAll(currentUser);
+        List<Order> all = orderService.findAll(currentUser.getUser());
         List<OrderDto> orderDtos = new ArrayList<>();
         if (all.isEmpty()) {
             ResponseEntity.noContent().build();
@@ -81,7 +84,7 @@ public class OrderEndpoint {
         if (orderService.findById(id) == null) {
             return ResponseEntity.notFound().build();
         }
-        Order orderFromBd = orderService.editOrder(workerId, mapper.map(order, Order.class), services, currentUser);
+        Order orderFromBd = orderService.editOrder(workerId, mapper.map(order, Order.class), services, currentUser.getUser());
         return ResponseEntity.ok(mapper.map(orderFromBd, OrderDto.class));
     }
 

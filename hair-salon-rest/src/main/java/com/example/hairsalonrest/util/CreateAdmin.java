@@ -1,8 +1,8 @@
 package com.example.hairsalonrest.util;
 
-import com.example.hairsalonrest.repository.UserRepository;
 import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.UserType;
+import com.hairsaloncommon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
