@@ -5,12 +5,13 @@ import com.example.hairsalonrest.repository.ServiceRepository;
 import com.hairsaloncommon.model.Service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +26,10 @@ import static org.mockito.Mockito.when;
 public class ServiceServiceTest {
 
 
-    @Mock
+    @MockBean
     private ServiceRepository serviceRepository;
 
-    @InjectMocks
+    @Autowired
     private ServiceService serviceService;
 
     @Test
@@ -38,61 +39,67 @@ public class ServiceServiceTest {
                 .id(5)
                 .name("Test")
                 .description("test")
+                .price(50)
                 .duration(50)
                 .build();
 
-        when(serviceRepository.save(Mockito.any())).thenReturn(service);
-        List<Service> allServices = serviceService.findAll();
-        assertThat(allServices.size()).isEqualTo(1);
+        when(serviceRepository.findAll()).thenReturn(Arrays.asList(service));
+        List<Service> all = serviceService.findAll();
+        assertThat(all.size()).isEqualTo(1);
 
     }
 
     @Test
     public void addServiceTest() {
         Service service = Service.builder()
-                .id(1)
-                .name("Service")
-                .price(11)
-                .duration(15)
+                .id(5)
+                .name("Test")
+                .description("test")
+                .price(50)
+                .duration(50)
                 .build();
 
         when(serviceRepository.save(Mockito.any())).thenReturn(service);
+        when(serviceRepository.findAll()).thenReturn(Arrays.asList(service));
         Service addService = serviceService.addService(service);
 
-        assertThat(addService.getName()).isEqualTo(service.getName());
+        assertEquals(addService.getId(), service.getId());
+        assertEquals(1, serviceRepository.findAll().size());
     }
 
 
     @Test
     public void findById() {
         Service service = Service.builder()
-                .id(1)
-                .name("Service")
-                .price(11)
-                .duration(15)
+                .id(5)
+                .name("Test")
+                .description("test")
+                .price(50)
+                .duration(50)
                 .build();
 
-        when(serviceRepository.save(Mockito.any())).thenReturn(service);
-        Service save = serviceRepository.save(service);
+        when(serviceRepository.findById(service.getId())).thenReturn(Optional.of(service));
         Optional<Service> foundService = serviceService.findById(service.getId());
-        assertEquals(foundService.get().getId(), save.getId());
+        assertEquals(foundService.get().getId(), service.getId());
     }
 
     @Test
     public void editService() {
         Service service = Service.builder()
-                .id(1)
-                .name("Service")
-                .price(11)
-                .duration(15)
+                .id(5)
+                .name("Test")
+                .description("test")
+                .price(50)
+                .duration(50)
                 .build();
 
-
+        when(serviceRepository.findById(service.getId())).thenReturn(Optional.of(service));
         when(serviceRepository.save(Mockito.any())).thenReturn(service);
         Service save = serviceRepository.save(service);
         save.setName("newServiceName");
-        Service editService = serviceService.editService(save.getId(), save);
-        assertEquals(editService.getName(), is("newServiceName"));
+        Service editService = serviceService.editService(service.getId(), save);
+        assertEquals(editService.getName(), ("newServiceName"));
+
     }
 
     @Test
@@ -100,12 +107,13 @@ public class ServiceServiceTest {
         int id = 5;
         Service service = Service.builder()
                 .id(id)
-                .name("Service")
-                .price(11)
-                .duration(15)
+                .name("Test")
+                .description("test")
+                .price(50)
+                .duration(50)
                 .build();
 
-        when(serviceRepository.save(Mockito.any())).thenReturn(service);
+        when(serviceRepository.findById(id)).thenReturn(Optional.of(service));
         serviceService.deleteService(id);
         verify(serviceRepository).deleteById(id);
     }

@@ -8,17 +8,14 @@ import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.UserType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -28,11 +25,14 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = HairSalonRestApplication.class)
 public class UserServiceTest {
 
-    @Mock
+    @MockBean
     private UserRepository userRepository;
 
-    @InjectMocks
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
 
     @Test
@@ -45,9 +45,9 @@ public class UserServiceTest {
                 .userType(UserType.CLIENT)
                 .build();
 
-        when(userRepository.save(Mockito.any())).thenReturn(user);
-        List<User> users = userService.findAll();
-        assertThat(users.size()).isEqualTo(1);
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user));
+        List<User> all = userService.findAll();
+        assertThat(all.size()).isEqualTo(1);
     }
 
     @Test
@@ -57,64 +57,63 @@ public class UserServiceTest {
                 .name("test")
                 .email("test@gmail.com")
                 .password("test")
-                .userType(UserType.CLIENT)
+                .userType(UserType.valueOf("CLIENT"))
                 .build();
-
+        user.setActiveCode(UUID.randomUUID());
         when(userRepository.save(Mockito.any())).thenReturn(user);
-        User save = userService.save(user);
-
-        assertThat(save.getName()).isEqualTo(user.getName());
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user));
+        assertEquals(1, userRepository.findAll().size());
     }
 
     @Test
     public void findUserById() {
-        int id = 4;
         User user = User.builder()
-                .id(id)
+                .id(4)
                 .name("test")
                 .email("test@gmail.com")
                 .password("test")
-                .userType(UserType.CLIENT)
+                .userType(UserType.valueOf("CLIENT"))
                 .build();
 
-        when(userRepository.save(Mockito.any())).thenReturn(user);
-        User save = userService.save(user);
-        Optional<User> found = userService.findUserById(id);
-        assertEquals(found.get().getId(), save.getId());
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        Optional<User> foundUser = userService.findUserById(user.getId());
+        assertEquals(foundUser.get().getId(), user.getId());
     }
 
     @Test
     public void findUserByEmail() {
-        String email = "test@gmail.com";
-        User user = User.builder()
-                .id(4)
-                .name("test")
-                .email(email)
-                .password("test")
-                .userType(UserType.CLIENT)
-                .build();
-
-        when(userRepository.save(Mockito.any())).thenReturn(user);
-        User save = userService.save(user);
-        Optional<User> found = userService.findUserByEmail(email);
-        assertEquals(found.get().getEmail(), save.getEmail());
-    }
-
-    @Test
-    public void editExistUserTest() {
         User user = User.builder()
                 .id(4)
                 .name("test")
                 .email("test@gmail.com")
                 .password("test")
-                .userType(UserType.CLIENT)
+                .activeCode(UUID.randomUUID())
+                .token(UUID.randomUUID())
+                .userType(UserType.valueOf("CLIENT"))
+                .isEmailVerified(true)
+                .build();
+        when(userService.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        Optional<User> found = userService.findUserByEmail(user.getEmail());
+        assertEquals(found.get().getEmail(), user.getEmail());
+    }
+
+    @Test
+    public void editUserTest() {
+        User user = User.builder()
+                .id(4)
+                .name("test")
+                .email("test@gmail.com")
+                .password("test")
+                .userType(UserType.valueOf("CLIENT"))
+                .isEmailVerified(true)
                 .build();
 
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userRepository.save(Mockito.any())).thenReturn(user);
-        User save = userService.save(user);
-        save.setName("RealName");
-        User editUser = userService.editUser(user.getId(), user);
-        assertEquals(editUser.getName(), is("RealName"));
+        User save = userRepository.save(user);
+        save.setName("newFirstName");
+        User editUser = userService.editUser(user.getId(), save);
+        assertEquals(editUser.getName(), "newFirstName");
     }
 
     @Test
@@ -125,10 +124,11 @@ public class UserServiceTest {
                 .name("test")
                 .email("test@gmail.com")
                 .password("test")
-                .userType(UserType.CLIENT)
+                .userType(UserType.valueOf("CLIENT"))
+                .isEmailVerified(true)
                 .build();
 
-        when(userRepository.save(Mockito.any())).thenReturn(user);
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
         userService.deleteUserById(id);
         verify(userRepository).deleteById(id);
     }
@@ -159,9 +159,14 @@ public class UserServiceTest {
                 .userType(UserType.CLIENT)
                 .build();
 
+        UserResetPasswordDto userResetPasswordDto = UserResetPasswordDto.builder()
+                .password(user.getPassword())
+                .newPassword("newPassword")
+                .repeatNewPassword("newPassword")
+                .build();
         when(userRepository.save(Mockito.any())).thenReturn(user);
-        User resetPassword = userService.resetPassword(user, UserResetPasswordDto.builder().build());
-        assertThat(user.getPassword().equals(resetPassword));
+        userService.resetPassword(user, userResetPasswordDto);
+        assertThat(user.getPassword().equals("newPassword"));
     }
 
     @Test
@@ -175,8 +180,13 @@ public class UserServiceTest {
                 .build();
 
         when(userRepository.save(Mockito.any())).thenReturn(user);
-        User sendToken = userService.sendToken(user.getEmail());
-        assertThat(sendToken.getEmail().equals(user.getEmail()));
+        //UUID token = UUID.randomUUID();
+        //userService.sendToken(user.getEmail());
+        //emailService.sendMessage(user.getEmail(), "token", String.valueOf(token));
+        //user.setActiveCode(token);
+        //when(userService.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        userService.sendToken(user.getEmail());
+        verify(userService).sendToken(user.getEmail());
     }
 
     @Test
@@ -186,6 +196,7 @@ public class UserServiceTest {
                 .name("test")
                 .email("test@gmail.com")
                 .password("test")
+                .isEmailVerified(true)
                 .userType(UserType.ADMIN)
                 .build();
 

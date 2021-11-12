@@ -2,16 +2,19 @@ package com.example.hairsalonrest.service;
 
 import com.example.hairsalonrest.HairSalonRestApplication;
 import com.example.hairsalonrest.repository.WorkerRepository;
+import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.Worker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -23,10 +26,10 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = HairSalonRestApplication.class)
 public class WorkerServiceTest {
 
-    @Mock
+    @MockBean
     private WorkerRepository workerRepository;
 
-    @InjectMocks
+    @Autowired
     private WorkerService workerService;
 
     @Test
@@ -35,12 +38,12 @@ public class WorkerServiceTest {
                 .id(4)
                 .name("test")
                 .surname("test")
-                .phoneNumber("099999999")
+                .phoneNumber("test")
                 .build();
 
-        when(workerRepository.save(Mockito.any())).thenReturn(worker);
-        List<Worker> allWorkers = workerService.findAll();
-        assertThat(allWorkers.size()).isEqualTo(1);
+        when(workerRepository.findAll()).thenReturn(Arrays.asList(worker));
+        List<Worker> all = workerService.findAll();
+        assertThat(all.size()).isEqualTo(1);
 
     }
 
@@ -54,9 +57,8 @@ public class WorkerServiceTest {
                 .build();
 
         when(workerRepository.save(Mockito.any())).thenReturn(worker);
-        Worker addedWorker = workerService.save(worker);
-
-        assertThat(addedWorker.getName()).isEqualTo(worker.getName());
+        when(workerRepository.findAll()).thenReturn(Arrays.asList(worker));
+        assertEquals(1, workerRepository.findAll().size());
     }
 
 
@@ -70,10 +72,9 @@ public class WorkerServiceTest {
                 .phoneNumber("099999999")
                 .build();
 
-        when(workerRepository.save(Mockito.any())).thenReturn(worker);
-        Worker save = workerService.save(worker);
-        Worker foundWorker = workerService.findWorkerById(id);
-        assertEquals(foundWorker.getId(), save.getId());
+        when(workerRepository.findById(worker.getId())).thenReturn(Optional.of(worker));
+        Worker foundWorker = workerService.findWorkerById(worker.getId());
+        assertEquals(foundWorker.getId(), worker.getId());
     }
 
 
@@ -86,11 +87,12 @@ public class WorkerServiceTest {
                 .phoneNumber("099999999")
                 .build();
 
+        when(workerRepository.findById(worker.getId())).thenReturn(Optional.of(worker));
         when(workerRepository.save(Mockito.any())).thenReturn(worker);
-        Worker save = workerService.save(worker);
+        Worker save = workerRepository.save(worker);
         save.setName("newFirstName");
-        Worker editWorker = workerService.editWorker(1, worker);
-        assertEquals(editWorker.getName(), is("newFirstName"));
+        Worker editWorker = workerService.editWorker(worker.getId(), save);
+        assertEquals(editWorker.getName(), "newFirstName");
 
     }
 
@@ -105,7 +107,7 @@ public class WorkerServiceTest {
                 .phoneNumber("099999999")
                 .build();
 
-        when(workerRepository.save(Mockito.any())).thenReturn(worker);
+        when(workerRepository.findById(id)).thenReturn(Optional.of(worker));
         workerService.deleteWorkerById(id);
         verify(workerRepository).deleteById(id);
 
