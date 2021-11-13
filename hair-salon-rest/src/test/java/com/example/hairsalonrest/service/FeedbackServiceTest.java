@@ -1,8 +1,9 @@
 package com.example.hairsalonrest.service;
 
 import com.example.hairsalonrest.HairSalonRestApplication;
-import com.example.hairsalonrest.repository.FeedbackRepository;
 import com.hairsaloncommon.model.Feedback;
+import com.hairsaloncommon.repository.FeedbackRepository;
+import com.hairsaloncommon.service.FeedbackService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -72,6 +74,7 @@ public class FeedbackServiceTest {
 
         when(feedbackRepository.findById(feedback.getId())).thenReturn(Optional.of(feedback));
         Optional<Feedback> foundFeedback = feedbackService.findById(feedback.getId());
+        assertTrue(foundFeedback.isPresent());
         assertEquals(foundFeedback.get().getId(), feedback.getId());
     }
 

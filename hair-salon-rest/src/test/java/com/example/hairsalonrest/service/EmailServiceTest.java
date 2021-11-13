@@ -1,6 +1,7 @@
 package com.example.hairsalonrest.service;
 
 import com.example.hairsalonrest.HairSalonRestApplication;
+import com.hairsaloncommon.service.EmailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package com.example.hairsalonrest.service;
 
 import com.example.hairsalonrest.HairSalonRestApplication;
-import com.example.hairsalonrest.repository.WorkerRepository;
-import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.Worker;
+import com.hairsaloncommon.repository.WorkerRepository;
+import com.hairsaloncommon.service.WorkerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;

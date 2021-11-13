@@ -1,9 +1,12 @@
 package com.example.hairsalonrest.service;
 
 import com.example.hairsalonrest.HairSalonRestApplication;
-import com.example.hairsalonrest.repository.OrderRepository;
 import com.example.hairsalonrest.security.CurrentUser;
 import com.hairsaloncommon.model.*;
+import com.hairsaloncommon.repository.OrderRepository;
+import com.hairsaloncommon.service.OrderService;
+import com.hairsaloncommon.service.ServiceService;
+import com.hairsaloncommon.service.WorkerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +55,7 @@ public class OrderServiceTest {
                 .build();
 
         when(orderRepository.getAllByUser_Id(currentUser.getUser().getId())).thenReturn(Arrays.asList(order));
-        List<Order> all = orderService.findAll(currentUser);
+        List<Order> all = orderService.findAll(currentUser.getUser());
         assertThat(all.size()).isEqualTo(1);
 
     }
@@ -161,7 +164,7 @@ public class OrderServiceTest {
 
         Order save = orderRepository.save(order);
         save.setWorker(new Worker(2, "John", "Smith", "0000", null));
-        Order editOrder = orderService.editOrder(order.getId(), save, services, currentUser);
+        Order editOrder = orderService.editOrder(order.getId(), save, services, currentUser.getUser());
         assertEquals(editOrder.getWorker().getName(), "John");
     }
 

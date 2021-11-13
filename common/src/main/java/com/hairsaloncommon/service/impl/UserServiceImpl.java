@@ -10,8 +10,9 @@ import com.hairsaloncommon.repository.UserRepository;
 import com.hairsaloncommon.service.EmailService;
 import com.hairsaloncommon.service.UserService;
 import com.hairsaloncommon.util.JwtTokenUtil;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Lazy))
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper mapper;

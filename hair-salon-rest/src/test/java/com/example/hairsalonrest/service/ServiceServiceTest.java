@@ -1,8 +1,9 @@
 package com.example.hairsalonrest.service;
 
 import com.example.hairsalonrest.HairSalonRestApplication;
-import com.example.hairsalonrest.repository.ServiceRepository;
 import com.hairsaloncommon.model.Service;
+import com.hairsaloncommon.repository.ServiceRepository;
+import com.hairsaloncommon.service.ServiceService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -15,9 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,6 +81,7 @@ public class ServiceServiceTest {
 
         when(serviceRepository.findById(service.getId())).thenReturn(Optional.of(service));
         Optional<Service> foundService = serviceService.findById(service.getId());
+        assertTrue(foundService.isPresent());
         assertEquals(foundService.get().getId(), service.getId());
     }
 

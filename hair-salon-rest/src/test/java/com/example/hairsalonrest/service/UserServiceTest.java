@@ -1,11 +1,12 @@
 package com.example.hairsalonrest.service;
 
 import com.example.hairsalonrest.HairSalonRestApplication;
-import com.example.hairsalonrest.dto.userdtos.UserResetPasswordDto;
-import com.example.hairsalonrest.repository.UserRepository;
 import com.example.hairsalonrest.security.CurrentUser;
+import com.hairsaloncommon.dto.userdtos.UserResetPasswordDto;
 import com.hairsaloncommon.model.User;
 import com.hairsaloncommon.model.UserType;
+import com.hairsaloncommon.repository.UserRepository;
+import com.hairsaloncommon.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -14,10 +15,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,10 +35,6 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private EmailService emailService;
-
 
     @Test
     public void findAllUsers() {
@@ -77,6 +78,7 @@ public class UserServiceTest {
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         Optional<User> foundUser = userService.findUserById(user.getId());
+        assertTrue(foundUser.isPresent());
         assertEquals(foundUser.get().getId(), user.getId());
     }
 
@@ -94,6 +96,7 @@ public class UserServiceTest {
                 .build();
         when(userService.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Optional<User> found = userService.findUserByEmail(user.getEmail());
+        assertTrue(found.isPresent());
         assertEquals(found.get().getEmail(), user.getEmail());
     }
 
@@ -167,26 +170,6 @@ public class UserServiceTest {
         when(userRepository.save(Mockito.any())).thenReturn(user);
         userService.resetPassword(user, userResetPasswordDto);
         assertThat(user.getPassword().equals("newPassword"));
-    }
-
-    @Test
-    public void sendToken() {
-        User user = User.builder()
-                .id(4)
-                .name("test")
-                .email("test@gmail.com")
-                .password("test")
-                .userType(UserType.CLIENT)
-                .build();
-
-        when(userRepository.save(Mockito.any())).thenReturn(user);
-        //UUID token = UUID.randomUUID();
-        //userService.sendToken(user.getEmail());
-        //emailService.sendMessage(user.getEmail(), "token", String.valueOf(token));
-        //user.setActiveCode(token);
-        //when(userService.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        userService.sendToken(user.getEmail());
-        verify(userService).sendToken(user.getEmail());
     }
 
     @Test
