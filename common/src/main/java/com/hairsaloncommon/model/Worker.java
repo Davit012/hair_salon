@@ -1,6 +1,4 @@
 package com.hairsaloncommon.model;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +22,6 @@ public class Worker {
     private String name;
     private String surname;
     private String phoneNumber;
-    private String gallery;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "worker_service",
             joinColumns = {

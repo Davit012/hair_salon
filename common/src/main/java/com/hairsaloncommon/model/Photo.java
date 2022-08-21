@@ -7,26 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "ordering")
-public class Order {
-
+@Table(name = "photo")
+public class Photo {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private LocalDateTime startDatetime;
-    private LocalDateTime endDatetime;
+    private String value;
     @ManyToOne
-    private WorkerService workerService;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
-
+    private Worker worker;
 }
