@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="student/fragments/student-fragments :: header"></div>
+    <title>Student Dashboard</title>
+    <link href="/student/css/quiz-add-menu.css" rel="stylesheet" id="quiz-add-menu">
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="student/fragments/student-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="student/fragments/student-fragments :: topNavbar"></div>
+            <div>
+                <a href="/student/course">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor"
+                         class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                </a> Back to Course
+            </div>
+            <form th:action="@{'/student/course/lesson/'+ ${quiz.lesson.id} + '/quiz'}" method="post">
+                <input type="text" name="question" th:value="${quiz.questions.get(0).id}" style="display: none">
+                <div class="card mb-3" id="customersTable"
+                     data-list='{"valueNames":["name","type","createdDate"],"page":10,"pagination":true}'>
+                    <div class="card-body p-4">
+                        <div class="table-responsive scrollbar">
+                            <div class="mb-1 d-flex">
+                                <img src="/student/img/logos/angular.png" style="height: fit-content">
+                                <div style="margin-left: 1rem">
+                                    <h4 style="color: #1da1f2" class="mb-1">BASIC INFORMATION</h4>
+                                    <h5 th:text="${quiz.user.name + ' ' + quiz.user.surname}"
+                                        style="display: inline-block"></h5>
+                                    <p th:if="${quiz.user.teacher.currentPosition != null}"
+                                       th:text="${quiz.user.teacher.currentPosition}"
+                                       style="display: inline-block; margin-left: inherit;"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card-body p-4" style="background-color: #1da1f2">
+                            <div class="table-responsive scrollbar">
+                                <div>
+                                    <h3 class="text-200"
+                                        th:text="'Question ' + ${questionIndex} + ' of ' + ${questionsCount}">
+                                        Question</h3>
+                                    <p th:text="${quiz.questions.get(0).text}"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex" style="margin-top: 2em;">
+                            <p style="margin-left: 2rem;">Choose the correct answer below:</p>
+                            <div style="margin-left: auto; display: flex">
+                                <p style="margin-left: -22%; padding: 0.5em; width: max-content;border: solid; border-radius: 0.5em;">
+                                    <a th:href="@{'/student/course/lesson'}"
+                                       style="color: gray; text-decoration: none; ">SKIP QUIZ</a></p>
+                                <button style=" height: min-content; background-color: red; color: white; margin-left: 6%; padding: 0.619em; cursor: pointer;border-radius: 0.5em;"
+                                        th:if="${questionsCount} != ${questionIndex}"
+                                >NEXT
+                                    QUESTION<img src="/student/img/icons/vector2.png"
+                                                 style="margin-left: 0.6em;margin-top: -0.1em;">
+                                </button>
+                                <button style=" height: min-content; background-color: red; color: white; margin-left: 6%; padding: 0.619em; cursor: pointer;border-radius: 0.5em;"
+                                        th:if="${questionsCount} == ${questionIndex}"
+                                >FINISH
+                                    QUESTION<img src="/student/img/icons/vector2.png"
+                                                 style="margin-left: 0.6em;margin-top: -0.1em;">
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card-body p-4">
+                            <div class="table-responsive scrollbar">
+                                <h4>YOUR ANSWER</h4>
+                                <th th:each="questionOptions: ${quiz.questions.get(0).questionOptions}"
+                                    th:if="${questionOptions.question.id.toString().equalsIgnoreCase(quiz.questions.get(0).id.toString())}">
+                                    <div class="form-check fs-0 mb-0 d-flex" style="margin-left: 1em">
+                                        <div th:if="${quiz.questions.get(0).answerType.toString().equalsIgnoreCase('single_choice')}">
+                                            <input th:value="${questionOptions.id}" class="form-check-input"
+                                                   id="checkbox-bulk-customers-select" name="questionOptions[]"
+                                                   type="radio"/>
+                                            <p th:text="${questionOptions.option}"></p>
+                                        </div>
+                                        <div th:if="${quiz.questions.get(0).answerType.toString().equalsIgnoreCase('multi_choice')}">
+                                            <input th:value="${questionOptions.id}" class="form-check-input"
+                                                   id="checkbox-bulk-customers-select" name="questionOptions[]"
+                                                   type="checkbox"/>
+                                            <p th:text="${questionOptions.option}">
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <div th:if="${quiz.questions.get(0).answerType.toString().equalsIgnoreCase('multi_choice')}">
+                                    <p style="margin-left: 1.93em;color: lightgray;">Note: There can be multiple correct
+                                        answers to this
+                                        question.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <div th:replace="student/fragments/student-fragments :: footer"></div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="student/fragments/student-fragments :: js"></div>
+
+</body>
+</html>

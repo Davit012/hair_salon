@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="student/fragments/student-fragments :: header"></div>
+    <title>Student Page</title>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2196F3;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+        <div th:replace="student/fragments/student-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="student/fragments/student-fragments :: topNavbar"></div>
+
+            <h3 style="position: absolute;width: 135px;height: 18px;top: 80px;font-family: 'Poppins';font-style: normal;font-weight: 500;font-size: 24px;line-height: 18px;color: #2C7BE5;">
+                Dashboard</h3>
+
+            <div style="display: flex">
+                <div class="col-sm-12" style="display: inline-block;margin-right: 2%">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6 col-xxl-3" style="width:19.5% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0" style="margin-top: 1em">
+                                    <img src="/student/img/crm/book.png" style="margin-top: -0.5rem;">
+                                    <h5 class="content-name"
+                                        style="display:inline-block;color: #5E6E82; margin-left: 1em">Courses</h5>
+                                    <br>
+                                    <h2 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 49px;color: #5E6E82;" th:text="${coursesCount}">
+                                    </h2>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5>Courses completed</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-3" style="width:19.5% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0" style="margin-top: 1em">
+                                    <img src="/student/img/crm/book.png" style="margin-top: -0.5rem;">
+                                    <h5 class="content-name"
+                                        style="display:inline-block;color: #5E6E82; margin-left: 1em">Courses</h5>
+                                    <br>
+                                    <h2 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 49px;color: #5E6E82;" th:text="${coursesCount}">
+                                    </h2>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5>Courses in progress</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-3" style="width:19.5% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0" style="margin-top: 1em">
+                                    <img src="/student/img/crm/certificate.png" style="margin-top: -0.5rem;">
+                                    <h5 class="content-name"
+                                        style="display:inline-block;color: #5E6E82; margin-left: 1em">Certificates</h5>
+                                    <br>
+                                    <h2 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 49px;color: #5E6E82;" th:text="${coursesCount}">
+                                    </h2>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5>Courses in progress</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-3" style="width:41.5% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0" style="margin-top: 1em">
+                                    <h5 class="content-name"
+                                        style="display:inline-block;color: dodgerblue;">Recent Course</h5>
+                                    <br>
+
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; margin-top: 3em">
+                <div class="col-sm-7 card h-md-100"
+                     style="display: inline-flex;top: -40px; max-width: 59% !important;">
+                    <div class="col-sm-12" style="height: 448px;overflow-y: auto;">
+                        <div class="col-sm-12">
+                            <h5 style="display: inline-block;color: #5E6E82;
+                        margin-left: 3%;margin-top:20px;">My Courses</h5>
+                            <div class="col-sm-11" style="text-align: right">
+                                <h5 style="display: inline-block;color: #5E6E82;
+                        margin-left: 3%;margin-top:20px;">All</h5>
+                                <h5 style="display: inline-block;color: #5E6E82;
+                        margin-left: 3%;margin-top:20px;">In Progress</h5>
+                            </div>
+                        </div>
+
+                        <div style="max-height:450px;">
+                            <div style="top:10%;position:relative;overflow-y:scroll;height:88%;display:block;">
+                                <hr>
+                                <div th:each="item: ${courses}"
+                                     style="border-radius:5px; display: inline-block; width: 49% ;">
+                                    <div class="avatar avatar-xl rounded-circle"
+                                         style="background: #00365f;width:4rem;height:4rem;color:white;text-align: center;margin-left:25px;
+                                        top:10px;"><img th:src="${item.photo}">
+                                    </div>
+                                    <div style="display: inline-block; margin-left: 0.6em;">
+                                        <h5 style="display:inline-block;" th:text="${item.name}"></h5>
+                                        <p th:text="${item.sales} + ' ' + 'sales'"></p>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 card h-md-100"
+                     style="display: inline-flex;max-height: 448px;top: -40px; left: 0.85rem; max-width: 41% !important;">
+                    <div>
+                        <h5 style="display: inline-block;color: #5E6E82;
+                        margin-left: 3%;margin-top: 3%">My Quizzes</h5>
+                        <br>
+                        <p style="display: inline-block;
+                        margin-left: 3%;">Score</p>
+                        <br>
+                        <div style="height:450px;max-height:450px;margin-top:-48px;">
+                            <div style="top:6%;position:relative;overflow-y:scroll;height:82%;display:block; margin-left: 1em">
+                                <br>
+                                <div class="col-sm-12" th:each="item: ${quiz}"
+                                     style="border-radius:5px;">
+                                    <img src="/student/img/crm/lesson.png">
+                                    <div style="display: inline-block;margin-left: 0.5em;">
+                                        <h5 style="display:inline-block;" th:if="${item != null}"
+                                            th:text="${item.lesson.name}"></h5>
+                                    </div>
+                                    <div class="col-sm-9" style="display: inline-block; text-align: end"
+                                         th:each="question: ${item.questions}">
+                                        <div th:if="${question.points >= 8}"
+                                             style="display: -webkit-inline-box">
+                                            <p style="background-color: springgreen;color: white;border: solid;border-color: springgreen;"> Great</p>
+                                            <p style="margin-left: 1em" th:text="${question.points}"></p>
+                                        </div>
+                                        <div th:if="${question.points <= 7} and ${question.points >= 5} "
+                                             style="display: -webkit-inline-box">
+                                            <p style="background-color: orange;color: white;border: solid;border-color: orange;"> Good</p>
+                                            <p style="margin-left: 1em" th:text="${question.points}"></p>
+                                        </div>
+                                        <div th:if="${question.points <= 5}"
+                                             style="display: -webkit-inline-box">
+                                            <p style="background-color: red;color: white;border: solid;border-color: red;"> Failed</p>
+                                            <p style="margin-left: 1em" th:text="${question.points}"></p>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; margin-top: 1.5em;">
+                <div class="col-sm-12" style="height: 530px;display: inline-flex;margin-right: 2%">
+                    <div class="col-sm-12 card h-md-100"
+                         style="display:inline-flex;top: -40px;position: relative;height:589px;">
+                        <div class="col-sm-12" id="new-students"
+                             style="height:100%;border-radius: 6px;display:block;">
+                            <div style="padding-top:2%">
+                                <h5 style="display:inline-block;color: #5E6E82;margin-left:1.5%">Mentor
+                                    Notifications</h5>
+                            </div>
+                            <div class="row g-3 mb-3" role="tabpanel"
+                                 aria-labelledby="tab-dom-60521a66-d0a3-4761-987b-2b8853ac5c1f">
+                                <div class="table-responsive">
+                                    <div style="height:530px;max-height:530px;margin-top:-48px;">
+                                        <div style="top:10%;position:relative;overflow-y:scroll;height:86%;display:block;">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th class="sort pe-1 align-middle white-space-nowrap">Name</th>
+                                                    <th class="sort pe-1 align-middle white-space-nowrap">Module</th>
+                                                    <th class="sort pe-1 align-middle white-space-nowrap">Comment</th>
+                                                    <th class="sort pe-1 align-middle white-space-nowrap">Action</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="student/fragments/student-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="student/fragments/student-fragments :: js"></div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="admin/fragments/admin-fragments :: header"></div>
+    <title>Edit Admin</title>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="admin/fragments/admin-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="admin/fragments/admin-fragments :: topNavbar"></div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row flex-between-end">
+                        <div class="col-auto align-self-center">
+                            <h5 class="mb-0" data-anchor="data-anchor">Edit Homework</h5>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="nav nav-pills nav-pills-falcon flex-grow-1" role="tablist">
+                                <a href="/admin/homeworks">
+                                    <button class="btn btn-sm" type="button">Homeworks</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body bg-light">
+                    <div class="tab-content">
+                        <div class="tab-pane preview-tab-pane active" role="tabpanel">
+                            <form method="post" action="/admin/homeworks/edit">
+                                <div class="mb-3"><label class="form-label" for="title">Title
+                                </label><input class="form-control" id="title" th:value="${homework.title}" type="text"
+                                               name="title"/></div>
+
+                                <div class="mb-3"><label class="form-label" for="text">Text
+                                </label><input class="form-control" id="text" th:value="${homework.text}" type="text"
+                                               name="text"/></div>
+
+                                <div class="mb-3"><label class="form-label">User<br>
+                                    <select class="input" name="authorId">
+                                        <option th:each="user:${users}" th:text="${user.name}"
+                                                th:value="${user.id}"></option>
+                                    </select><br>
+                                </label></div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Lesson<br>
+                                        <select class="input" name="lessonId">
+                                            <option th:each="lesson:${lessons}" th:text="${lesson.name}"
+                                                    th:value="${lesson.id}"></option>
+                                        </select>
+                                    </label><br>
+                                </div>
+                                <input type="hidden" th:value="${homework.id}" name="id">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="admin/fragments/admin-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="admin/fragments/admin-fragments :: js"></div>
+
+</body>
+</html>

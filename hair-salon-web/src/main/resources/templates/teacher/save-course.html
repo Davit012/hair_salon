@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+    <div th:replace="teacher/fragments/teacher-fragments :: header"></div>
+    <title>Save Quiz</title>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2196F3;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="teacher/fragments/teacher-fragments :: mainNavbar"></div>
+
+        <div class="content card">
+
+            <div th:replace="teacher/fragments/teacher-fragments :: topNavbar"></div>
+            <div style="padding-left: 2%;padding-top: 2%">
+                <h5 style="color:#2c7be5;display:inline-block">Create Course</h5>
+                <div class="col-sm-7" style="display: flex">
+                    <div class="col-sm-3" style="display:inline-block">
+                        <p style="display:inline-block;">Basic Information</p>
+                    </div>
+                    <div class="col-sm-9" style="display:inline-block;">
+                        <hr style="margin-top: 13px;">
+                    </div>
+                </div>
+                <form action="/teacher/courses/save" method="post" id="courseForm" enctype="multipart/form-data">
+                    <input type="hidden" value="PUBLIC" name="status" id="status">
+                    <label class="form-label" for="exampleFormControlInput1">Course
+                        Title</label>
+                    <div class="col-sm-12" style="display: flex">
+                        <div class="tab-pane preview-tab-pane active col-sm-7" role="tabpanel"
+                             aria-labelledby="tab-dom-2c4fbe1d-229b-413b-81fd-dd4d474154a9"
+                             id="dom-2c4fbe1d-229b-413b-81fd-dd4d474154a9">
+                            <div class="mb-3"><input class="form-control" id="exampleFormControlInput1" type="text"
+                                                     placeholder="Java" name="name"></div>
+                            <div class="mb-3"><label style="color:#2c7be5;" class="form-label"
+                                                     for="exampleFormControlTextarea1">Description</label><textarea
+                                    class="form-control" id="exampleFormControlTextarea1"
+                                    style="resize:none" rows="3" name="description"></textarea>
+                                <p style="display:flex;font-size:10px;">Shortly describe this course</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" style="margin-left:2%;height:99%">
+                            <div style="display: flex">
+                                <div class="col-sm-2" style="display:inline-block">
+                                    <p style="display:inline-block;">Video</p>
+                                </div>
+                                <div class="col-sm-10" style="display:inline-block;">
+                                    <hr style="margin-top: 13px;">
+                                </div>
+                            </div>
+                            <div>
+                                <input type="file" class="form-control" name="introVideo">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-7" style="display: inline-block">
+                            <div class="form-control mb-3 " tabindex="0">
+                                <div>
+                                    <p style="color:#5E6E82">
+                                        Module
+                                    </p>
+                                    </h2>
+                                    <div>
+                                        <div id="accordion-body-parent">
+                                            <div class="accordion-body" id="choosen-modules">
+
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right;margin-right: 4%;">
+                                            <label id="add-module" data-bs-toggle="modal"
+                                                   data-bs-target="#add-existing-module-modal"
+                                                   style="width: 13%;text-align: center"><p
+                                                    style="border: 1px solid #2C7BE5;color:#2C7BE5;">Add Module</p>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="display: flex">
+                        <div class="col-sm-7" style="display: inline-block">
+                            <div class="col-sm-12 form-control">
+                                <div class="col-sm-12">
+                                    <p style="color:#2c7be5;margin-top:1%;">Course Photo</p>
+                                    <hr>
+                                </div>
+                                <div style="display: inline-block;margin-bottom:3%;">
+                                    <div class=" card-body d-flex flex-center flex-column"
+                                         style="border:1px dotted gray;margin: 2%;height: 12vw;width: 18vw">
+                                        <img id="selected_image" src="/teacher/img/icons/camera.png"
+                                             alt="Click For Zoom"
+                                             style="max-width:100%">
+                                    </div>
+                                </div>
+                                <div style="display: inline-block;margin:5%">
+                                    <input type="file" id="imageInput" style="display: none"
+                                           onchange="PreviewImage();" name="photo">
+                                    <label for="imageInput"><p style="border: 1px solid gray;padding: 3px;">Choose
+                                        File</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" style="display: inline-block;margin-left: 2%">
+                            <div style="display: flex">
+                                <div class="col-sm-2" style="display:inline-block">
+                                    <p style="display:inline-block;">Options</p>
+                                </div>
+                                <div class="col-sm-10" style="display:inline-block;">
+                                    <hr style="margin-top: 13px;">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="col-sm-12" style="margin-top:5%">
+                                    <p>Category</p>
+                                    <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                         id="dom-3dce3b56-e71d-4c8c-9410-5105efaba2c2">
+                                        <select class="form-select" name="category">
+                                            <option selected hidden>Select Course Category</option>
+                                            <option th:each="category:${categories}" th:text="${category.name}"
+                                                    th:value="${category.id}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="margin-top: 1%;">
+                                    <p>Duration</p>
+                                    <div class="col-sm-12 tab-pane preview-tab-pane active" role="tabpanel"
+                                         id="dom-3dce3b56-e71d-4c8c-9410-5105efaba2c2"
+                                         style="border:1px solid lightgray">
+                                        <div style="display:inline-block">
+                                            <input name="duration" class="form-control" type="text" placeholder=""
+                                                   style="display:inline-block;border:none;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="margin-top: 1%;">
+                                    <p>Price</p>
+                                    <div class="col-sm-12 tab-pane preview-tab-pane active" role="tabpanel"
+                                         id="dom-3dce3b56-e71d-4c8c-9410-5105efaba2c2"
+                                         style="border:1px solid lightgray">
+                                        <div class="col-sm-2" style="display:inline-block">
+                                            <select style="border:none;-webkit-appearance: none;-moz-appearance: none;appearance: none;padding-left: 17%;padding-right: 1%;"
+                                                    class="form-select" name="currency">
+                                                <option value="USD" selected>$</option>
+                                                <option value="AMD">֏</option>
+                                                <option value="RUR">₽</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-9" style="display:inline-block">
+                                            <input name="price" class="form-control" type="text" placeholder=""
+                                                   style="display:inline-block;border:none;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-sm-3 px-md-5 col-sm-12" style="text-align: center;margin-top:2%;">
+                        <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                            <li class="next">
+                                <button class="btn btn-primary px-5 px-sm-6" type="submit">
+                                    Create<span
+                                        class="fas fa-chevron-right ms-2"> </span></button>
+                            </li>
+                            <li>
+                                <a href="/teacher/courses">
+                                    <button type="button" class="btn btn-outline-danger"
+                                            id="delete_course" data-mdb-ripple-color="dark" style="margin-left:10%">
+                                        Delete
+                                    </button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="inputsList">
+
+                    </div>
+                </form>
+                <div class="modal fade" id="add-existing-module-modal" tabindex="-1"
+                     role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document"
+                         style="max-width: 500px">
+                        <div class="modal-content position-relative">
+                            <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-0">
+                                <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                                    <h4 class="mb-1" id="modalExampleDemoLabel" style="color:#2C7BE5">Add Module</h4>
+                                </div>
+                                <div class="p-4 pb-0" style="overflow-y:scroll;max-height:25rem">
+                                    <div class="mb-3 col-sm-12" th:each="module: ${modules}"
+                                         style="display: inline-block;padding:1%;">
+                                        <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                             aria-labelledby="tab-dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da"
+                                             id="dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da">
+                                            <div class="table-responsive scrollbar">
+                                                <table class="table table-hover">
+                                                    <tbody>
+                                                    <tr class="hover-actions-trigger" th:id="module + ${module.id}">
+                                                        <td class="align-middle text-nowrap">
+                                                            <div class="d-flex align-items-center"
+                                                                 th:id="forDelete + ${module.id}">
+                                                                <div class="ms-2" th:text="${module.name}"
+                                                                     th:value="${module.id}">name
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="align-middle text-nowrap">50 min</td>
+                                                        <td class="align-middle text-nowrap addModule"
+                                                            style="color:#2C7BE5;cursor: pointer" th:id="${module.id}"
+                                                            th:name="${module.name}">
+                                                            <div class="ms-2">Add
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="teacher/fragments/teacher-fragments :: js"></div>
+
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+<script>
+    function PreviewImage() {
+        var image = document.getElementById("selected_image");
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("imageInput").files[0]);
+        if (document.getElementById("imageInput").files[0].size >= 1048576) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Maximum size of image can be 1mb!'
+            })
+            document.getElementById("imageInput").value = null;
+            return;
+        }
+        oFReader.onload = function (oFREvent) {
+            image.src = oFREvent.target.result;
+            image.setAttribute("onclick", 'style = "transform:scale(0.5);margin-left:100%;"')
+            image.setAttribute("onmouseout", 'style = "transform:scale(1);max-width:100%;"')
+            image.setAttribute("title", "click for zoom")
+        };
+    };
+</script>
+<script src="/teacher/js/moduleActions.js"></script>

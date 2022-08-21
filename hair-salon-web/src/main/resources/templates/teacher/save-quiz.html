@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="teacher/fragments/teacher-fragments :: header"></div>
+    <link href="/vendors/choices/choices.min.css" rel="stylesheet"/>
+    <link href="/teacher/css/quiz-add-menu.css" rel="stylesheet" id="quiz-add-menu">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+    <title>Save Quiz</title>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="teacher/fragments/teacher-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="teacher/fragments/teacher-fragments :: topNavbar"></div>
+
+            <form action="/teacher/quiz/questions/add" method="post" enctype="multipart/form-data"
+                  onsubmit="return validFunction()">
+                <input type="text" name="quizId" th:if="${quiz} != null" th:value="${quiz.id}" style="display:none">
+                <div class="card p-2 my-2">
+                    <div class="col-sm-11" id="create_quiz">
+                        <h5 style="color:#5E6E82">Create Quiz</h5>
+                        <input name="quizName" list="quizzes" class="form-control" id="quizName" type="text"
+                               style="display:inline-block;" th:if="${quiz} == null" autocomplete="off">
+                        <input name="quizName" list="quizzes" class="form-control" id="dbQuizName" type="text"
+                               style="display:inline-block;" th:if="${quiz} != null" autocomplete="off"
+                               th:value="${quiz.name}">
+                        <datalist id="quizzes" class="col-sm-11">
+                            <option th:name="${quiz.name}" th:each="quiz:${quizzes}" th:text="${quiz.name}"
+                                    th:id="${quiz.id}"></option>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="card p-2 my-2">
+                    <div class="col-sm-11">
+                        <div class="col-sm-12" id="createQuestion">
+                            <h5 style="color:#5E6E82">Create Question</h5>
+                            <div class="mt-4">
+                                <p>New Question</p>
+                                <input name="text" class="form-control" id="question"
+                                       type="text"
+                                       style="display:inline-block;">
+                                <label for="questionImage">
+                                    <img src="/teacher/img/icons/ant-design_picture-outlined.png" width="20px">
+                                </label>
+                                <input type="file" name="image" id="questionImage" style="display:none"
+                                       accept="image/*">
+                            </div>
+                            <div class="col-sm-12 mt-3" id="editAnswer">
+                                <div class="col-sm-12 mt-3" id="addAnswer">
+                                    <p>Question Type</p>
+                                    <select id="select_answer_type"
+                                            name="answerType" class="form-control">
+                                        <option value="SINGLE_CHOICE">Single Choice
+                                        </option>
+                                        <option value="MULTI_CHOICE">Multi Choice
+                                        </option>
+                                        <option value="SHORT_ANSWER">Short Answer
+                                        </option>
+                                        <option value="TEXT_ANSWER">Text Answer
+                                        </option>
+                                        <option selected hidden>Answer type
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div id="single" class="blocked col-sm-12">
+                                        <div id="single_choice_block" class="col-sm-12">
+                                            <div class="col-sm-12 single_answer_row" style="border:none !important">
+                                                <div style="display:inline">
+                                                    <img src="/teacher/img/icons/trash.svg"
+                                                         class="deleteSingleAnswer">
+                                                    <div class="col-sm-10 d-inline-block">
+                                                        <input class="single_answer_text form-control"
+                                                               name="singleAnswers[]"
+                                                               type="text"/>
+                                                    </div>
+                                                </div>
+                                                <div class="check_right_answer col-sm-2">
+                                                    <input type="radio"
+                                                           class="check_input"
+                                                           name="singleRightAnswer"
+                                                           value="0">
+                                                    <p style="display:inline">Right
+                                                        Answer</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 single_answer_row"
+                                                 style="border:none !important">
+                                                <div style="display:inline">
+                                                    <img src="/teacher/img/icons/trash.svg"
+                                                         class="deleteSingleAnswer">
+                                                    <div class="col-sm-10 d-inline-block">
+                                                        <input class="single_answer_text form-control"
+                                                               name="singleAnswers[]"
+                                                               type="text"/>
+                                                    </div>
+                                                </div>
+                                                <div class="check_right_answer col-sm-2">
+                                                    <input type="radio"
+                                                           class="check_input"
+                                                           name="singleRightAnswer"
+                                                           value="1">
+                                                    <p style="display:inline">Right
+                                                        Answer</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="multi" class="blocked col-sm-12">
+                                        <div id="multi_choice_block" class="col-sm-12">
+                                            <div class="col-sm-12 multi_answer_row"
+                                                 style="border:none !important">
+                                                <div style="display: inline">
+                                                    <img src="/teacher/img/icons/trash.svg"
+                                                         class="deleteSingleAnswer">
+                                                    <div class="col-sm-10 d-inline-block">
+                                                        <input class="multi_answer_text form-control"
+                                                               name="multiAnswers[]"
+                                                               type="text"/>
+                                                    </div>
+                                                </div>
+                                                <div class="check_right_answer col-sm-2">
+                                                    <input type="checkbox"
+                                                           class="checkbox_input"
+                                                           name="multiRightAnswers[]"
+                                                           value="0">
+                                                    <p style="display:inline">Right
+                                                        Answer</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 multi_answer_row"
+                                                 style="border:none !important">
+                                                <div style="display: inline">
+                                                    <img src="/teacher/img/icons/trash.svg"
+                                                         class="deleteSingleAnswer">
+                                                    <div class="col-sm-10 d-inline-block">
+                                                        <input class="multi_answer_text form-control"
+                                                               name="multiAnswers[]"
+                                                               type="text"/>
+                                                    </div>
+                                                </div>
+                                                <div class="check_right_answer col-sm-2">
+                                                    <input type="checkbox"
+                                                           class="checkbox_input"
+                                                           name="multiRightAnswers[]"
+                                                           value="1">
+                                                    <p style="display:inline">Right
+                                                        Answer</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="blocked" id="short_answer">
+                                        <p>This type is not get any answers, the student
+                                            answer will sent to you</p>
+                                    </div>
+                                    <div class="blocked" id="text_answer">
+                                        <p>This type is not get any answers, the student
+                                            answer will sent to you</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" id="forAnswers">
+                                    <div class="col-sm-9 mt-3">
+                                        <div class="col-sm-12">
+                                            <p>Completion Points</p>
+                                            <div class="col-sm-3 d-inline-block">
+                                                <input name="points" class="form-control" id="points"
+                                                       type="number"
+                                                       style="display:inline-block;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="col-sm-2 py-2 mt-2 newAnswerButton"
+                                       id="create_new_single_answer"
+                                       style="background:#4DCA88;color:white;cursor:pointer;text-align:center"
+                                       onclick="createNewAnswers('radio', 'single_choice_block');">
+                                        New Answer</p>
+                                    <div class="col-sm-2" style="text-align:right">
+                                        <button class="col-sm-12 py-2 newAnswerButton"
+                                                id="createQuestionButton"
+                                                style="background:#4DCA88;color:white;cursor:pointer;border:none;">
+                                            Save Question
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="forQuizDeletedElements" style="display: none">
+                    <input id="editedQuestion" type="text">
+                </div>
+            </form>
+            <div class="col-sm-12 card my-2" id="answerDiv" th:each="question:${questions}">
+                <div class="col-sm-12" th:if="${question.quiz.id.equals(quiz.id)}">
+                    <div class="bg-200 px-3">
+                        <div class="col-sm-9 d-inline-block" style="text-align:left">
+                            <img src="/teacher/img/icons/lines.png" class="d-inline-block">
+                            <h5 th:text="${question.text}" class="d-inline-block mx-2"
+                                th:id="'question' + ${question.id}"></h5>
+                            <div class="col-sm-3">
+                                <th:block th:each="image:${images}"
+                                          th:if="${image}!=null">
+                                    <img th:if="${image.question.id.equals(question.id)}" th:src="${image.value}"
+                                         style="max-width: 100%"
+                                         th:id="'img' + ${question.id}">
+                                </th:block>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 d-inline-block" style="text-align:right">
+                            <div class="col-sm-12 mt-3"
+                                 style="text-align:right;display: inline-block">
+                                <img src="/teacher/img/icons/edit.png" th:id="'editQuestion' + ${question.id}"
+                                     style="cursor:pointer" onclick="editQuestion(this);"/>
+                                <ul class="pager wizard list-inline mb-0 px-3" id="questionDelete"
+                                    style="display:inline-flex">
+                                    <li>
+                                        <p class="btn btn-outline-danger"
+                                           th:id="'deleteQuestion' + ${question.id}" data-mdb-ripple-color="dark"
+                                           style="margin-left:10%;padding:.1rem .5rem;vertical-align:unset"
+                                           onclick="deleteQuizQuestion(this);">
+                                            Delete
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 my-2 mx-2">
+                        <div th:each="questionOption:${questionOptions}"
+                             th:if="${questionOption.question.id.equals(question.id)}" class="mx-3">
+                            <div class="col-sm-11 d-inline-block" style="text-align:left">
+                                <img src="/teacher/img/icons/lines.png" class="d-inline-block">
+                                <div class="col-sm-11 d-inline-block">
+                                    <input th:class="'form-control ' + 'questionOption' + ${question.id}"
+                                           type="text" th:value="${questionOption.option}" readonly/>
+                                </div>
+                            </div>
+                            <div class="d-inline-block">
+                                <div class="d-inline-block"
+                                     th:if="${question.answerType.toString().equalsIgnoreCase('single_choice')}">
+                                    <input type="radio" th:if="${questionOption.rightAnswer == true}"
+                                           th:class="'questionRadio' + ${question.id}"
+                                           checked disabled>
+                                    <input type="radio" th:if="${questionOption.rightAnswer == false}"
+                                           th:class="'questionRadio' + ${question.id}" disabled>
+                                </div>
+                                <div class="d-inline-block"
+                                     th:if="${question.answerType.toString().equalsIgnoreCase('multi_choice')}">
+                                    <input type="checkbox" th:if="${questionOption.rightAnswer == true}"
+                                           th:class="'questionCheckbox' + ${question.id}"
+                                           checked disabled>
+                                    <input type="checkbox" th:if="${questionOption.rightAnswer == false}"
+                                           th:class="'questionCheckbox' + ${question.id}" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form th:action="@{'/teacher/quiz/get'}"
+                  method="get" id="quizEditForm" style="display: none">
+                <input type="text" id="quizIdForEditQuiz" name="quizId">
+            </form>
+            <form th:if="${quiz} == null" action="/teacher/quiz" method="get">
+                <div class="px-sm-3 px-md-5 col-sm-12" style="text-align: center;margin-top:2%;">
+                    <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                        <li class="next">
+                            <button class="btn btn-primary px-5 px-sm-6" type="submit"
+                                    id="submitForTeacherQuiz">
+                                Create<span
+                                    class="fas fa-chevron-right ms-2"> </span></button>
+                        </li>
+                        <li>
+                            <a href="'/teacher/quiz'">
+                                <button type="button" class="btn btn-outline-danger"
+                                        data-mdb-ripple-color="dark"
+                                        style="margin-left:10%">
+                                    Delete
+                                </button>
+                            </a>
+                    </ul>
+                </div>
+            </form>
+            <form th:if="${quiz} != null" action="/teacher/quiz" method="get">
+                <div class="px-sm-3 px-md-5 col-sm-12" style="text-align: center;margin-top:2%;">
+                    <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                        <li class="next">
+                            <button class="btn btn-primary px-5 px-sm-6" type="submit"
+                                    id="submitForTeacherQuiz">
+                                Create<span
+                                    class="fas fa-chevron-right ms-2"> </span></button>
+                        </li>
+                        <li>
+                            <a th:href="@{'/teacher/quiz/delete/' + ${quiz.id}}">
+                                <button type="button" class="btn btn-outline-danger"
+                                        data-mdb-ripple-color="dark"
+                                        style="margin-left:10%">
+                                    Delete
+                                </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</main>
+<div th:replace="teacher/fragments/teacher-fragments :: js"></div>
+</body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+<script src="/teacher/js/imageUtil.js"></script>
+<script src="/teacher/js/deleteAnswer.js"></script>
+<script src="/teacher/js/createQuestion.js"></script>
+<script src="/teacher/js/validateQuestionForm.js"></script>
+<script>
+    document.getElementById('questionImage').addEventListener("change", function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Done',
+            text: 'image is added successfully'
+        })
+    })
+</script>

@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="init_schema" author="kgasparyan">
+        <sql>
+            create table if not exists "user"
+            (
+            id               uuid         default uuid_generate_v4()    not null
+            constraint user_pk
+            primary key,
+            name             varchar                                    not null,
+            surname          varchar                                    not null,
+            email            varchar                                    not null,
+            password         varchar                                    not null,
+            date_of_birthday date,
+            register_date    timestamp                                  not null,
+            active           boolean      default false                 not null,
+            email_verified   boolean      default false                 not null,
+            user_type        text
+            constraint user_user_type_check
+            check (user_type = ANY (ARRAY ['ADMIN'::text, 'TEACHER'::text, 'MENTOR'::text, 'STUDENT'::text])),
+            phone_number     varchar(255) default ''::character varying not null,
+            country          varchar(255)                               not null,
+            city             varchar(255)                               not null,
+            address          varchar(255),
+            description      text,
+            profile_pic      text,
+            experience       text,
+            current_position text
+            );
+
+            create unique index if not exists user_id_uindex
+            on "user" (id);
+
+            create table if not exists resource
+            (
+            id                uuid default uuid_generate_v4() not null
+            constraint resource_pk
+            primary key,
+            name              varchar,
+            resource_type     text
+            constraint resource_resource_type_check
+            check (resource_type = ANY
+            (ARRAY ['VIDEO'::text, 'IMAGE'::text, 'LINK'::text, 'TEXT'::text, 'FILE'::text])),
+            value             text,
+            created_timestamp timestamp                       not null,
+            author_id         uuid                            not null
+            constraint resource_user_id_fk
+            references "user"
+            );
+
+            create table if not exists module
+            (
+            id             uuid         default uuid_generate_v4() not null
+            constraint module_pk
+            primary key,
+            name           varchar                                 not null,
+            author_id      uuid                                    not null
+            constraint module_user_id_fk
+            references "user",
+            description    text,
+            module_picture varchar(255) default 'modulePic'::character varying
+            );
+
+            create table if not exists lesson
+            (
+            id          uuid    default uuid_generate_v4() not null
+            constraint lesson_pk
+            primary key,
+            name        varchar                            not null,
+            description text,
+            author_id   uuid                               not null
+            constraint lesson_user_id_fk
+            references "user",
+            text        text,
+            position    integer default 0,
+            module_id   uuid
+            constraint lesson_module_id_fk
+            references module
+            );
+
+            create table if not exists lesson_resource
+            (
+            lesson_id   uuid default uuid_generate_v4() not null
+            constraint lesson_resource_lesson_id_fk
+            references lesson,
+            resource_id uuid                            not null
+            constraint lesson_resource_resource_id_fk
+            references resource
+            );
+
+            create table if not exists quiz
+            (
+            id             uuid         default uuid_generate_v4() not null
+            constraint quiz_pk
+            primary key,
+            name           varchar                                 not null,
+            description    text,
+            user_id        uuid                                    not null
+            constraint user_quiz_id_fk
+            references "user",
+            created_date   timestamp,
+            quiz_type      text
+            constraint quiz_quiz_type_check
+            check (quiz_type = ANY (ARRAY ['LESSON_QUIZ'::text, 'MODULE_QUIZ'::text])),
+            lesson_id      uuid
+            constraint quiz_lesson_id_fk
+            references lesson,
+            module_id      uuid
+            constraint quiz_module_id_fk
+            references module,
+            display_by_one boolean      default false,
+            status         varchar(255) default 'DRAFT'::character varying
+            constraint check_status
+            check (((status)::text = 'DRAFT'::text) OR ((status)::text = 'PUBLIC'::text) OR
+            ((status)::text = 'PRIVATE'::text))
+            );
+
+            create table if not exists question
+            (
+            id           uuid         default uuid_generate_v4()                 not null
+            constraint question_pk
+            primary key,
+            created_date timestamp                                               not null,
+            author_id    uuid                                                    not null
+            constraint question_user_id_fk
+            references "user",
+            input_answer text,
+            text         text,
+            quiz_id      uuid                                                    not null
+            constraint question_quiz_id_fk
+            references quiz,
+            position     integer      default 0,
+            answer_type  varchar(255) default 'SINGLE_CHOICE'::character varying not null
+            constraint check_answer_type
+            check (((answer_type)::text = 'SINGLE_CHOICE'::text) OR ((answer_type)::text = 'MULTI_CHOICE'::text) OR
+            ((answer_type)::text = 'SHORT_ANSWER'::text) OR ((answer_type)::text = 'TEXT_ANSWER'::text) OR
+            ((answer_type)::text = 'IMAGE_ANSWER'::text))
+            );
+
+            create unique index if not exists question_id_uindex
+            on question (id);
+
+            create table if not exists question_option
+            (
+            id           uuid    default uuid_generate_v4() not null
+            constraint question_option_pk
+            primary key,
+            question_id  uuid                               not null
+            constraint question_answer_question_id_fk
+            references question,
+            option       text                               not null,
+            right_answer boolean default false              not null,
+            created_date timestamp                          not null,
+            is_image     boolean default false              not null,
+            position     integer default 0                  not null
+            );
+
+            create unique index if not exists question_option_id_uindex
+            on question_option (id);
+
+            create table if not exists lesson_question
+            (
+            lesson_id   uuid default uuid_generate_v4() not null
+            constraint lesson_question_lesson_id_fk
+            references lesson,
+            question_id uuid                            not null
+            constraint lesson_question_question_id_fk
+            references question
+            );
+
+            create table if not exists question_answer
+            (
+            id           uuid default uuid_generate_v4() not null
+            constraint question_answer_pk
+            primary key,
+            question_id  uuid                            not null
+            constraint question_answer_question_id_fk
+            references question,
+            author_id    uuid                            not null
+            constraint question_answer_user_id_fk
+            references "user",
+            created_date timestamp                       not null
+            );
+
+            create unique index if not exists question_answer_id_uindex
+            on question_answer (id);
+
+            create table if not exists homework
+            (
+            id           uuid default uuid_generate_v4() not null
+            constraint homework_pk
+            primary key,
+            title        varchar                         not null,
+            text         text                            not null,
+            author_id    uuid                            not null
+            constraint homework_user_id_fk
+            references "user",
+            created_date timestamp                       not null,
+            lesson_id    uuid                            not null
+            constraint homework_lesson_id_fk
+            references lesson
+            );
+
+            create unique index if not exists homework_id_uindex
+            on homework (id);
+
+            create table if not exists homework_answer
+            (
+            id           uuid default uuid_generate_v4() not null
+            constraint homework_answer_pk
+            primary key,
+            homework_id  uuid                            not null
+            constraint homework_answer_homework_id_fk
+            references homework,
+            author_id    uuid                            not null
+            constraint homework_answer_user_id_fk
+            references "user",
+            text         text,
+            github_url   text,
+            created_date timestamp                       not null,
+            status       text
+            );
+
+            create unique index if not exists homework_answer_id_uindex
+            on homework_answer (id);
+
+            create table if not exists teacher_profile
+            (
+            id               uuid default uuid_generate_v4() not null
+            constraint teacher_profile_pk
+            primary key,
+            user_id          uuid                            not null
+            constraint teacher_profile_user_id_fk
+            references "user",
+            experience       text,
+            current_position text
+            );
+
+            create unique index if not exists teacher_profile_id_uindex
+            on teacher_profile (id);
+
+            create table if not exists mentor_profile
+            (
+            id                  uuid default uuid_generate_v4() not null
+            constraint mentor_profile_pk
+            primary key,
+            user_id             uuid                            not null
+            constraint mentor_profile_user_id_fk
+            references "user",
+            years_of_experience varchar                         not null,
+            current_position    varchar                         not null,
+            current_office      varchar                         not null
+            );
+
+            create table if not exists student_profile
+            (
+            id         uuid default uuid_generate_v4() not null
+            constraint student_profile_pk
+            primary key,
+            user_id    uuid                            not null
+            constraint student_profile_user_id_fk
+            references "user",
+            mentor_id  uuid
+            constraint student_profile_mentor_profile_id_fk
+            references mentor_profile,
+            teacher_id uuid
+            constraint student_profile_teacher_profile_id_fk
+            references teacher_profile
+            );
+
+            create unique index if not exists student_profile_id_uindex
+            on student_profile (id);
+
+            create unique index if not exists mentor_profile_id_uindex
+            on mentor_profile (id);
+
+            create table if not exists question_answer_question_option
+            (
+            question_answer_id uuid not null
+            constraint question_answer_id_fk
+            references question_answer,
+            question_option_id uuid not null
+            constraint question_option_id_fk
+            references question_option
+            );
+
+            create table if not exists mentor_profile_modules
+            (
+            mentor_id  uuid default uuid_generate_v4() not null
+            constraint mentor_profile_module_mentor_profile_id_fk
+            references mentor_profile,
+            modules_id uuid                            not null
+            constraint mentor_profile_module_module_id_fk
+            references module
+            );
+
+            create table if not exists quiz_image
+            (
+            id                 uuid default uuid_generate_v4() not null
+            constraint quiz_image_pk
+            primary key,
+            value              varchar                         not null,
+            question_id        uuid
+            constraint quiz_image_question_id_fk
+            references question,
+            question_option_id uuid
+            constraint quiz_image_question_option_id_fk
+            references question_option
+            );
+
+            create table if not exists module_student_progress
+            (
+            id            uuid default uuid_generate_v4() not null
+            constraint module_student_progress_pk
+            primary key,
+            student_id    uuid                            not null
+            constraint module_student_progress_student_profile_id_fk
+            references student_profile,
+            module_id     uuid                            not null
+            constraint module_student_progress_module_id_fk
+            references module,
+            is_finished   boolean                         not null,
+            finished_date timestamp                       not null
+            );
+
+            create table if not exists lesson_student_progress
+            (
+            id            uuid default uuid_generate_v4() not null
+            constraint lesson_student_progress_pk
+            primary key,
+            student_id    uuid                            not null
+            constraint lesson_student_progress_student_profile_id_fk
+            references student_profile,
+            lesson_id     uuid                            not null
+            constraint lesson_student_progress_lesson_id_fk
+            references lesson,
+            is_finished   boolean                         not null,
+            finished_date timestamp                       not null
+            );
+
+            create table if not exists course_category
+            (
+            id           uuid default uuid_generate_v4() not null
+            constraint course_category_pk
+            primary key,
+            name         varchar                         not null,
+            created_date timestamp                       not null
+            );
+
+            create table if not exists course
+            (
+            id           uuid             default uuid_generate_v4() not null
+            constraint course_pk
+            primary key,
+            name         varchar                                     not null,
+            description  text,
+            author_id    uuid                                        not null
+            constraint course_user_id_fk
+            references "user",
+            created_date timestamp                                   not null,
+            category_id  uuid
+            constraint course_course_category_id_fk
+            references course_category,
+            currency     varchar(255)     default 'USD'::character varying
+            constraint check_currency
+            check (((currency)::text = 'USD'::text) OR ((currency)::text = 'AMD'::text) OR
+            ((currency)::text = 'RUR'::text)),
+            price        double precision default 0.0                not null,
+            photo        varchar(255),
+            intro_video  varchar(255),
+            status       varchar(255)     default 'DRAFT'::character varying
+            constraint check_status
+            check (((status)::text = 'PUBLIC'::text) OR ((status)::text = 'DRAFT'::text)),
+            duration     integer          default 0
+            );
+
+            create unique index if not exists course_id_uindex
+            on course (id);
+
+            create table if not exists course_modules
+            (
+            courses_id uuid default uuid_generate_v4() not null
+            constraint course_module_course_id_fk
+            references course,
+            modules_id uuid                            not null
+            constraint course_module_module_id_fk
+            references module
+            );
+
+            create table if not exists student_course
+            (
+            student_id   uuid default uuid_generate_v4()
+            constraint student_course_student_profile_id_fk
+            references student_profile,
+            course_id    uuid      not null
+            constraint student_course_course_id_fk
+            references course,
+            created_date timestamp not null
+            );
+
+            create table if not exists user_order
+            (
+            id         uuid default uuid_generate_v4() not null
+            constraint user_order_pk
+            primary key,
+            user_id    uuid                            not null
+            constraint user_order_user_id_fk
+            references "user",
+            course_id  uuid                            not null
+            constraint user_order_course_id_fk
+            references course,
+            order_date timestamp                       not null,
+            price      double precision                not null,
+            currency   text
+            constraint check_currency
+            check ((currency = 'USD'::text) OR (currency = 'AMD'::text) OR (currency = 'RUR'::text))
+            );
+
+            create table if not exists quiz_result
+            (
+            id         uuid default uuid_generate_v4() not null
+            constraint quiz_result_pk
+            primary key,
+            student_id uuid                            not null
+            constraint quiz_result_user_id_fk
+            references "user",
+            quiz_id    uuid                            not null
+            constraint quiz_result_quiz_id_fk
+            references quiz,
+            grad       double precision,
+            max_grad   double precision
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="drop_lesson_resource" author="nzohrabyan">
+        <dropTable tableName="lesson_resource"></dropTable>
+    </changeSet>
+    <changeSet id="add_lesson_id_resource" author="nzohrabyan">
+        <addColumn tableName="resource">
+            <column name="lesson_id" type="UUID">
+            </column>
+        </addColumn>
+        <sql>ALTER TABLE "resource"
+            ADD CONSTRAINT resource_lesson_id_fk
+                FOREIGN KEY (lesson_id)
+                    REFERENCES lesson;
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_mentor" author="rmeliqyan">
+        <addColumn tableName="course">
+            <column name="mentor_id" type="uuid">
+            </column>
+        </addColumn>
+        <sql>
+            ALTER TABLE course
+            ADD CONSTRAINT course_mentor_id_fk
+            FOREIGN KEY (mentor_id)
+            REFERENCES mentor_profile;
+        </sql>
+    </changeSet>
+
+    <changeSet id="change-lesson_some_properties" author="dkarapetyan">
+        <dropColumn tableName="lesson" columnName="text"/>
+
+        <addColumn tableName="lesson">
+            <column name="picture" type="varchar(255)" defaultValue="lessonPic">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="lesson">
+            <column name="video" type="varchar(255)" defaultValue="lessonVideo">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_column_homework_image" author="dkarapetyan">
+        <addColumn tableName="homework">
+            <column name="picture" type="varchar(255)" defaultValue="homeworkImg">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_points_for_question" author="dkarapetyan">
+        <addColumn tableName="question">
+            <column name="points" type="float" defaultValue="0"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="change_file_types" author="dkarapetyan">
+        <sql>
+            ALTER TABLE "resource"
+            DROP CONSTRAINT resource_resource_type_check,
+            ADD CONSTRAINT resource_resource_type_check
+            check (resource_type = ANY
+            (ARRAY ['VIDEO'::text, 'YOUTUBE_VIDEO'::text, 'IMAGE'::text, 'LINK'::text, 'TEXT'::text, 'FILE'::text]))
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_checked" author="rmeliqyan">
+        <addColumn tableName="homework">
+            <column name="checked" type="boolean" defaultValue="false">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_passed" author="rmeliqyan">
+        <addColumn tableName="homework">
+            <column name="passed" type="text">
+                <constraints checkConstraint="(passed = ANY (ARRAY ['FAIL'::text, 'SUCCESS'::text]))"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_student" author="rmeliqyan">
+        <addColumn tableName="homework">
+            <column name="student_id" type="uuid">
+            </column>
+        </addColumn>
+        <sql>
+            ALTER TABLE homework
+            ADD CONSTRAINT homework_student_id_fk
+            FOREIGN KEY (student_id)
+            REFERENCES student_profile;
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_column_point" author="nzohrabyan">
+        <addColumn tableName="question">
+            <column name="point" type="float">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_lesson_duration" author="rmeliqyan">
+        <addColumn tableName="lesson">
+            <column name="duration" type="integer">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_module_duration" author="rmeliqyan">
+        <addColumn tableName="module">
+            <column name="duration" type="integer">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="drop_column_point" author="nzohrabyan">
+        <dropColumn tableName="question">
+            <column name="point" type="float">
+            </column>
+        </dropColumn>
+    </changeSet>
+    <changeSet id="create_module_category" author="dkarapetyan">
+        <sql>
+            create table if not exists module_category
+            (
+                id uuid DEFAULT uuid_generate_v4 ()
+                constraint module_category_pk
+                primary key,
+                name varchar not null,
+                created_date timestamp not null
+                );
+        </sql>
+    </changeSet>
+    <changeSet id="add_module_category_column" author="dkarapetyan">
+        <addColumn tableName="module">
+            <column name="category_id" type="UUID">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <sql>ALTER TABLE "module"
+            ADD CONSTRAINT module_category_id_fk
+                FOREIGN KEY (category_id)
+                    REFERENCES module_category;
+        </sql>
+    </changeSet>
+    <changeSet id="add_is_public_column" author="dkarapetyan">
+        <addColumn tableName="module">
+            <column name="is_public" type="boolean" defaultValue="false">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="addBlogTable" author="dkarapetyan">
+        <sql>
+            create table if not exists blog
+            (
+                id uuid DEFAULT uuid_generate_v4 ()
+                constraint blog_pk
+                primary key,
+                title   varchar     not null,
+                description   varchar     not null,
+                image   varchar     not null,
+                created_date timestamp not null,
+                post    varchar     not null,
+                author_id    uuid   not null
+                constraint blog_user_id_fk
+                references "user");
+        </sql>
+    </changeSet>
+</databaseChangeLog>

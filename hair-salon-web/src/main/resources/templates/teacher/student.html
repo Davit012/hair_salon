@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="teacher/fragments/teacher-fragments :: header"></div>
+    <title>Student page</title>
+</head>
+<body>
+
+<main class="main" id="top">
+
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="teacher/fragments/teacher-fragments :: mainNavbar">
+        </div>
+
+        <div class="content">
+
+            <div th:replace="teacher/fragments/teacher-fragments :: topNavbar">
+            </div>
+
+            <div style="display: flex; width: auto">
+                <div class="card mb-3 col-sm-3" style="display: inline-block; ">
+                    <div class="card-header">
+                        <div class="row flex-between-end">
+                            <div class="student-block test">
+                                <div class="col-sm-12 align-self-center" style="display: flex">
+                                    <div class="d-flex align-items-center" style="margin-top: -1em">
+                                        <div class="avatar avatar-xl me-2" style="width: 4rem;height: 4rem">
+                                            <div class="avatar-name rounded-circle">
+                                                <img th:src="${student.user.profilePic}" class="avatar-name rounded-circle"
+                                                     style="width: 4rem;height: 4rem">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-10" style="text-align: center;padding-right: 9%; margin-top: 1em">
+                                        <h4 style="color: gray"
+                                            th:text="${student.user.name} + ' ' +${student.user.surname}"></h4>
+                                        <p th:if="${student.user.isActive == true}" style="color:#006dff">Active</p>
+                                        <p th:if="${student.user.isActive == false}" style="color:red">Waiting</p>
+                                    </div>
+
+                                </div>
+                                <div>
+                                    <div class="d-flex mb-1">
+                                        <svg style="margin-top: 0.2rem;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                             class="bi bi-person-fill" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        </svg>
+                                        <p style="margin-left: 2%">Student Since</p>
+                                    </div>
+                                    <div class="d-flex mb-3" style="margin-top: -1.2rem;">
+                                        <svg style="margin-top: 0.2rem;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                             class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                        </svg>
+                                        <p style="color: gray; margin-left: 2%"
+                                           th:text="${student.user.country} + ' , ' + ${student.user.city}"></p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <div class="py-2" style="display: flex">
+                                    <img src="/teacher/img/icons/book.png" width="15em" height="15em"
+                                         style=" margin-top: 2%;">
+                                    <p style="margin-left: 2%">Managed Courses</p>
+                                    <div style="margin-left: auto">
+                                        <p th:text="${courseCount}"></p>
+                                    </div>
+                                </div>
+                                <img src="/teacher/img/icons/Line11.png" style=" width: inherit">
+
+
+                                <div style="display: flex">
+                                    <img src="/teacher/img/icons/heart.png" width="15em" height="15em"
+                                         style=" margin-top: 2%;">
+                                    <p style="margin-left: 2%">Favorite</p>
+                                    <div style="margin-left: auto">
+                                        <p th:text="${courseCount}"></p>
+                                    </div>
+                                </div>
+                                <img src="/teacher/img/icons/Line11.png" style=" width: inherit">
+
+                                <div style="display: flex">
+                                    <img src="/teacher/img/icons/payment.png" width="15em" height="15em"
+                                         style=" margin-top: 2%;">
+                                    <p style="margin-left: 2%">Payments</p>
+                                    <div style="margin-left: auto">
+                                        <p th:text="${courseCount}"></p>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card mb-3" style="display: inline-flex; width: -webkit-fill-available; margin-left: 1em;">
+                    <div class="card-header">
+                        <div class="row flex-between-end">
+                            <div class="col-auto align-self-center">
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <h5 class="mb-0" style="color: #006dff;">Personal Information</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <hr style="color: gray">
+                            </div>
+                            <div class="mb-3" style="margin-left: 1em;margin-top: 1em; display: flex">
+
+                                <div class="mb-3" style="display:inline-block;">
+                                    <div class="mb-2">Name:</div>
+                                    <div class="mb-2">Surname:</div>
+                                    <div class="mb-2">Phone:</div>
+                                    <div class="mb-2">Email:</div>
+                                    <div class="mb-2">City:</div>
+                                    <div class="mb-2">Country:</div>
+                                    <div class="mb-2">Birth of Date:</div>
+                                </div>
+
+                                <div class="mb-3" style="display:inline-block;margin-left: 4.5em;">
+
+                                    <div class="mb-2" th:text="${student.user.name}"></div>
+                                    <div class="mb-2" th:text="${student.user.surname}"></div>
+                                    <div class="mb-2" th:text="${student.user.phoneNumber}"></div>
+                                    <div class="mb-2" th:text="${student.user.email}"></div>
+                                    <div class="mb-2" th:text="${student.user.city}"></div>
+                                    <div class="mb-2" th:text="${student.user.country}"></div>
+                                    <div class="mb-2"
+                                         th:text="${T(academy.itspace.util.DateUtil).formatDateToString(student.user.dateOfBirthday)}"></div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="teacher/fragments/teacher-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="teacher/fragments/teacher-fragments :: js"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.modal-delete-open').on('click', function () {
+            let id = $(this).attr('id');
+            $('#modal-delete-href').attr('href', '/admin/students/delete/' + id);
+        });
+    })
+</script>
+
+</body>
+</html>

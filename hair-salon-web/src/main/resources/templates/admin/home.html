@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="admin/fragments/admin-fragments :: header"></div>
+    <title>Admin Dashboard</title>
+    <link href="/admin/css/quiz-add-menu.css" rel="stylesheet" id="quiz-add-menu">
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2196F3;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="admin/fragments/admin-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="admin/fragments/admin-fragments :: topNavbar"></div>
+            <div style="display: flex">
+                <div class="col-sm-8" style="display: inline-block;margin-right: 2%">
+                    <div class="row g-1 mb-3" style="width:134%">
+                        <div class="col-md-6 col-xxl-3" style="width:25% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0">
+                                    <h3 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 18px;color: #5E6E82;" th:text="${teachersCount}">
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="content-name" style="display:inline-block;color: #5E6E82;">Total
+                                                Teachers</h5>
+                                            <img src="/admin/img/icons/community.png"
+                                                 style="margin-left: 47px; display:inline-block"><br>
+                                            <span
+                                                    class="badge badge-soft-success rounded-pill fs--2"
+                                                    th:if="${newTeachersCount > 0}"
+                                                    th:text="'+' +  ${newTeachersCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-warning rounded-pill ms-2"
+                                                    th:if="${newTeachersCount < 0}"
+                                                    th:text="${newTeachersCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-info rounded-pill ms-2"
+                                                    th:if="${newTeachersCount == 0}"
+                                                    th:text="${newTeachersCount} + '%'"></span> Than
+                                            last month
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-3" style="width:25% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0">
+                                    <h3 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 18px;color: #5E6E82;" th:text="${studentsCount}">
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="content-name" style="display:inline-block;color: #5E6E82;">Total
+                                                Students</h5>
+                                            <img src="/admin/img/icons/community.png"
+                                                 style="margin-left: 47px; display:inline-block"><br>
+                                            <span
+                                                    class="badge badge-soft-success rounded-pill fs--2"
+                                                    th:if="${newStudentsCount > 0}"
+                                                    th:text="'+' +  ${newStudentsCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-warning rounded-pill ms-2"
+                                                    th:if="${newStudentsCount < 0}"
+                                                    th:text="${newStudentsCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-info rounded-pill ms-2"
+                                                    th:if="${newStudentsCount == 0}"
+                                                    th:text="${newStudentsCount} + '%'"></span> Than
+                                            last month
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-3" style="width:25% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0">
+                                    <h3 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 18px;color: #5E6E82;" th:text="${courses.size()}">
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="content-name" style="color: #5E6E82;">Course</h5>
+                                            <img src="/admin/img/icons/book.png"
+                                                 style="margin-left: 47px; display:inline-block"><br>
+                                            <span
+                                                    class="badge badge-soft-success rounded-pill fs--2"
+                                                    th:if="${newCoursesCount > 0}"
+                                                    th:text="'+' +  ${newCoursesCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-warning rounded-pill ms-2"
+                                                    th:if="${newCoursesCount < 0}"
+                                                    th:text="${newCoursesCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-info rounded-pill ms-2"
+                                                    th:if="${newCoursesCount == 0}"
+                                                    th:text="${newCoursesCount} + '%'"></span> Than
+                                            last month
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-1 mb-3" style="width:134%">
+                        <div class="col-md-6 col-xxl-3" style="width:25% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0">
+                                    <h3 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 18px;color: #5E6E82;" th:text="${mentorsCount}">
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="content-name" style="display:inline-block;color: #5E6E82;">Total
+                                                Mentors</h5>
+                                            <img src="/admin/img/icons/community.png"
+                                                 style="margin-left: 47px; display:inline-block"><br>
+                                            <span
+                                                    class="badge badge-soft-success rounded-pill fs--2"
+                                                    th:if="${newMentorsCount > 0}"
+                                                    th:text="'+' +  ${newMentorsCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-warning rounded-pill ms-2"
+                                                    th:if="${newMentorsCount < 0}"
+                                                    th:text="${newMentorsCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-info rounded-pill ms-2"
+                                                    th:if="${newMentorsCount == 0}"
+                                                    th:text="${newMentorsCount} + '%'"></span> Than
+                                            last month
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-3" style="width:25% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0">
+                                    <h3 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 18px;color: #5E6E82;" th:text="${newStudents}">
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="content-name" style="display:inline-block;color: #5E6E82;">New
+                                                Students</h5>
+                                            <img src="/admin/img/icons/community.png"
+                                                 style="margin-left: 47px; display:inline-block"><br>
+                                            <span
+                                                    class="badge badge-soft-success rounded-pill fs--2"
+                                                    th:if="${newStudentsCount > 0}"
+                                                    th:text="'+' +  ${newStudentsCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-warning rounded-pill ms-2"
+                                                    th:if="${newStudentsCount < 0}"
+                                                    th:text="${newStudentsCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-info rounded-pill ms-2"
+                                                    th:if="${newStudentsCount == 0}"
+                                                    th:text="${newStudentsCount} + '%'"></span> Than
+                                            last month
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xxl-3" style="width:25% !important;">
+                            <div class="card h-md-100 ecommerce-card-min-width">
+                                <div class="card-header pb-0">
+                                    <h3 class="mb-0 mt-2 d-flex align-items-center" style="font-family: 'Poppins';font-style: normal;
+                            line-height: 18px;color: #5E6E82;" th:text="${videos}">
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-end">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="content-name" style="color: #5E6E82;">Video</h5>
+                                            <img src="/admin/img/icons/youtube.png"
+                                                 style="margin-left: 47px; display:inline-block"><br>
+                                            <span
+                                                    class="badge badge-soft-success rounded-pill fs--2"
+                                                    th:if="${newVideosCount > 0}"
+                                                    th:text="'+' +  ${newVideosCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-warning rounded-pill ms-2"
+                                                    th:if="${newVideosCount < 0}"
+                                                    th:text="${newVideosCount} + '%'"></span>
+                                            <span
+                                                    class="badge badge-soft-info rounded-pill ms-2"
+                                                    th:if="${newVideosCount == 0}"
+                                                    th:text="${newVideosCount} + '%'"></span> Than
+                                            last month
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 card h-md-100 ecommerce-card-min-width"
+                     style="height: 272px;display: inline-block;top:1px">
+                    <p style="color:red;font-weight: 600;margin-left:18px;margin-top:14px;margin-bottom: 0px;">Fees
+                        Colection</p>
+                    <select id="select-income-period" class="form-select"
+                            style="border:none;color:#5E6E82;display:inline-block; margin-left:18px;margin-top: 10px;width:41%;">
+                        <option selected value="0">Monthly</option>
+                        <option value="1">Weekly</option>
+                    </select>
+                    <h5 class="content-name" id="monthly_income"
+                        style="display: inline-block;margin-left:28%;width:60px;"
+                        th:text="${incomeMonthly} + '$'"></h5>
+                    <h5 id="weekly_income" class="content-name" style="display: none;margin-left:28%;width:60px;"
+                        th:text="${incomeWeekly} + '$'"></h5>
+                    <button class="col-sm-11" style="background-color: #2196F3;border-radius: 3px;display: block;margin-top:21%;margin-left:18px;
+                color:white;margin-bottom: 50px;"><a href="/admin/orders" style="text-decoration: none;color:white">Purchase</a>
+                    </button>
+                    <div>
+                        <p style="margin-left: 18px;display:inline-block">Courses</p>
+                        <p id="courses-monthly" style="display:inline-block;margin-left: 62%;"
+                           th:text="${coursesMonthly.size()}">8</p>
+                        <p id="courses-weekly" style="display:none;margin-left: 62%;" th:text="${coursesWeekly.size()}">
+                            8</p>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;margin-top: 4%;">
+                <div class="col-sm-7" style="height: 530px;display: inline-flex;margin-right: 2%">
+                    <div class="col-sm-12 card h-md-100"
+                         style="display:inline-flex;top: -40px;position: relative;height:589px;">
+                        <div class="col-sm-12" id="new-teachers"
+                             style="height:100%;border-radius: 6px;display:block;">
+                            <div style="padding-top:2%">
+                                <h4 style="cursor: pointer; display:inline-block;color: #2196F3;margin-left:4%">New
+                                    Teachers</h4>
+                                <h4 style="cursor: pointer; display:inline-block;color: #5E6E82; margin-left: 10%"
+                                    id="show-mentors">New Mentors</h4>
+                            </div>
+                            <div class="row g-3 mb-3" role="tabpanel"
+                                 aria-labelledby="tab-dom-60521a66-d0a3-4761-987b-2b8853ac5c1f"
+                                 id="dom-60521a66-d0a3-4761-987b-2b8853ac5c1f">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Phone Number</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Date Of Admit</th>
+                                            <th scope="col">Edit</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="align-middle text-nowrap" th:each="item:${teachers.content}">
+                                            <td class="name align-middle white-space-nowrap py-2">
+                                                <a href="customer-details.html">
+                                                    <div class="d-flex d-flex align-items-center">
+                                                        <div class="avatar avatar-xl me-2">
+                                                            <div class="avatar-name rounded-circle"><span
+                                                                    th:text="${item.getUser().name.toUpperCase().charAt(0) +''+ item.getUser().surname.toUpperCase().charAt(0)}">KG</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <h5 class="mb-0 fs--1"
+                                                                th:text="${item.getUser().name + ' ' + item.getUser().surname}">
+                                                                Ricky
+                                                                Antony</h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td class="text-nowrap" th:text="${item.user.phoneNumber}"></td>
+                                            <td class="text-nowrap" th:if="${item.user.active == true}"><p
+                                                    style="background:#4DCA88;color:white;padding-left:7px;margin-top:4px;margin-bottom: 0px;width:60px;border-radius: 10px;">
+                                                Active</p></td>
+                                            <td class="text-nowrap" th:if="${item.user.active == false}">
+                                                <p style="background:#ff0000;color:white;padding-left:7px;margin-top:4px;margin-bottom: 0px;width:70px;border-radius: 10px;">
+                                                    Waiting</p>
+                                            </td>
+                                            <td class="text-nowrap" th:text="${item.user.registerDate.toLocalDate()}">
+                                                1997.01.01
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <a th:href="@{'/admin/teachers/edit/' + ${item.id}}">
+                                                    <svg onmouseover="this.style.color='green';"
+                                                         onmouseout="this.style.color='';"
+                                                         xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         fill="currentColor"
+                                                         class="bi bi-pencil-fill edit" viewBox="0 0 16 16">
+                                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                                    </svg>
+                                                </a>
+                                                <a class="dropdown-item text-danger modal-delete-open"
+                                                   style="display: inline-block;padding: 0px;"
+                                                   th:id="${item.id}" type="button" data-bs-toggle="modal"
+                                                   data-bs-target="#delete-modal">
+                                                    <svg style="margin-left: 5px;" onmouseover="this.style.color='red';"
+                                                         onmouseout="this.style.color='';"
+                                                         xmlns="http://www.w3.org/2000/svg"
+                                                         width="16"
+                                                         height="16" fill="currentColor" class="bi bi-trash-fill trash"
+                                                         viewBox="0 0 16 16">
+                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                                    </svg>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="card-footer d-flex align-items-center justify-content-center" style="text-align: center  ">
+                                        <div th:if="${teachers.totalPages > 1}" class="pagination"
+                                             th:each="pageNumber:${teacherPageNumbers}"
+                                             style="display:inline-block;color:white;background-color:#2196F3;width:20px;text-align: center">
+                                            <a th:href="@{/admin/home(size=${teachers.size},page=${pageNumber})}"
+                                               th:text="${pageNumber}"
+                                               th:class="${pageNumber==teachers.number +1}" style="color:white"
+                                               onmouseover="this.style.color='gray';"
+                                               onmouseout="this.style.color='white';"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" id="new-mentors" style="height:100%;
+                border-radius: 6px;display:none;">
+                            <div style="padding-top:2%">
+                                <h4 style="cursor: pointer; display:inline-block;color: #5E6E82;margin-left:4%"
+                                    id="show-teachers">
+                                    New Teachers</h4>
+                                <h4 style="cursor: pointer; display:inline-block;color: #2196F3; margin-left: 10%">New
+                                    Mentors</h4>
+                            </div>
+                            <div class="row g-3 mb-3" role="tabpanel"
+                                 aria-labelledby="tab-dom-60521a66-d0a3-4761-987b-2b8853ac5c1f"
+                                 id="dom-60521a66-d0a3-4761-987b-2b8853ac5c1f">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Phone Number</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Date Of Admit</th>
+                                            <th scope="col">Edit</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="align-middle text-nowrap" th:each="item:${mentors.content}">
+                                            <td class="name align-middle white-space-nowrap py-2">
+                                                <a href="customer-details.html">
+                                                    <div class="d-flex d-flex align-items-center">
+                                                        <div class="avatar avatar-xl me-2">
+                                                            <div class="avatar-name rounded-circle"><span
+                                                                    th:text="${item.getUser().name.toUpperCase().charAt(0) +''+ item.getUser().surname.toUpperCase().charAt(0)}">KG</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <h5 class="mb-0 fs--1"
+                                                                th:text="${item.getUser().name + ' ' + item.getUser().surname}">
+                                                                Ricky
+                                                                Antony</h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td class="text-nowrap" th:text="${item.user.phoneNumber}"></td>
+                                            <td class="text-nowrap" th:if="${item.user.active == true}"><p
+                                                    style="background:#4DCA88;color:white;padding-left:7px;margin-top:4px;margin-bottom: 0px;width:60px;border-radius: 10px;">
+                                                Active</p></td>
+                                            <td class="text-nowrap" th:if="${item.user.active == false}">
+                                                <p style="background:#ff0000;color:white;padding-left:7px;margin-top:4px;margin-bottom: 0px;width:70px;border-radius: 10px;">
+                                                    Waiting</p>
+                                            </td>
+                                            <td class="text-nowrap" th:text="${item.user.registerDate.toLocalDate()}">
+                                                1997.01.01
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <a th:href="@{'/admin/mentors/edit/' + ${item.id}}">
+                                                    <svg onmouseover="this.style.color='green';"
+                                                         onmouseout="this.style.color='';"
+                                                         xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         fill="currentColor"
+                                                         class="bi bi-pencil-fill edit" viewBox="0 0 16 16">
+                                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                                    </svg>
+                                                </a>
+                                                <a class="dropdown-item text-danger modal-delete-open"
+                                                   style="display: inline-block;padding: 0px;"
+                                                   th:id="${item.id}" type="button" data-bs-toggle="modal"
+                                                   data-bs-target="#delete-modal">
+                                                    <svg style="margin-left: 5px;" onmouseover="this.style.color='red';"
+                                                         onmouseout="this.style.color='';"
+                                                         xmlns="http://www.w3.org/2000/svg"
+                                                         width="16"
+                                                         height="16" fill="currentColor" class="bi bi-trash-fill trash"
+                                                         viewBox="0 0 16 16">
+                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                                    </svg>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="row g-3 mb-3" style="text-align: center">
+                                        <div th:if="${mentors.totalPages > 1}" class="pagination"
+                                             th:each="pageNumber:${teacherPageNumbers}"
+                                             style="display:inline-block;color:white;background-color:#2196F3;width:20px;text-align: center">
+                                            <a th:href="@{/admin/home(size=${mentors.size},page=${pageNumber})}"
+                                               th:text="${pageNumber}"
+                                               th:class="${pageNumber==mentors.number +1}" style="color:white"
+                                               onmouseover="this.style.color='gray';"
+                                               onmouseout="this.style.color='white';"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 card h-md-100"
+                     style="display: inline-flex;max-height: 530px;top: -40px;">
+                    <div id="models-menu">
+                        <h4 style="cursor: pointer;display: inline-block;color: #5E6E82;
+                        margin-left: 5%;margin-top:20px;">Modules</h4>
+                        <div style="display:inline-block;margin-left: 2%;">
+                            <input style="margin-left:10px;" type="radio" id="monthly-modules" name="module-type"
+                                   onclick="showMonthlyModules();"
+                                   checked>
+                            <h6 class="content-name" style="display:inline-block;width:65px;">Monthly</h6>
+                        </div>
+                        <div style="display:inline-block;margin-left: 2%;">
+                            <input type="radio" id="weekly-modules" name="module-type"
+                                   onclick="showWeeklyModules();">
+                            <h6 class="content-name" style="display:inline-block;width:60px;">Weekly</h6>
+                        </div>
+                        <br>
+                        <div style="height:530px;max-height:530px;margin-top:-48px;">
+                            <div id="weekly-finished-modules"
+                                 style="top:10%;position:relative;overflow:scroll;height:88%;display:none;">
+                                <div id="module-item" th:each="item,iter:${weeklyFinishedModules}"
+                                     style="border-radius:5px;">
+                                    <div class="avatar avatar-xl rounded-circle"
+                                         style="background: #2196F3;width:4rem;height:4rem;color:white;text-align: center;margin-left:25px;
+                                        top:10px;">
+                                        <p style="margin-top:13px;font-size:25px;display:inline-block;"
+                                           th:text="${item.getValue()}">155</p>
+                                    </div>
+                                    <div style="margin-bottom: 2rem;top: 20px;display: inline-block;padding-top: 0%;position: relative;
+                                    margin-left: 35px;">
+                                        <h5 style="display:inline-block;" th:text="${item.getKey().name}"></h5>
+                                        <p th:text="${item.getKey().description}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="monthly-finished-modules"
+                                 style="top:10%;position:relative;overflow-y:scroll;height:88%;display:block;">
+                                <div id="module-item" th:each="item,iter:${monthlyFinishedModules}"
+
+                                     style="border-radius:5px;">
+                                    <div class="avatar avatar-xl rounded-circle"
+                                         style="background: #2196F3;width:4rem;height:4rem;color:white;text-align: center;margin-left:25px;
+                                        top:10px;">
+                                        <p style="margin-top:13px;font-size:25px;display:inline-block;"
+                                           th:text="${item.getValue()}">155</p>
+                                    </div>
+                                    <div style="margin-bottom: 2rem;top: 20px;display: inline-block;padding-top: 0%;position: relative;
+                                    margin-left: 35px;">
+                                        <h5 style="display:inline-block;" th:text="${item.getKey().name}"></h5>
+                                        <p th:text="${item.getKey().description}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true"
+                         style="padding-left: 0px;">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 300px">
+                            <div class="modal-content position-relative">
+                                <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-0">
+                                    <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                                        <h4 class="mb-1" id="modalExampleDemoLabel">Are you sure? </h4>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="width: 235px">
+                                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
+                                    <a class="btn btn-primary" id="teacher-modal-delete-href" href="#"
+                                       type="button">Yes </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="admin/fragments/admin-fragments :: footer"></div>
+        </div>
+
+    </div>
+</main>
+<div th:replace="admin/fragments/admin-fragments :: js"></div>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+<script>
+    var mentorsButton = document.getElementById("show-mentors");
+    var teachersButton = document.getElementById("show-teachers");
+    var newTeachers = document.getElementById("new-teachers");
+    var newMentors = document.getElementById("new-mentors");
+    mentorsButton.addEventListener("click", function () {
+        newTeachers.style.display = "none";
+        newMentors.style.display = "block";
+
+    })
+    teachersButton.addEventListener("click", function () {
+        newTeachers.style.display = "block";
+        newMentors.style.display = "none";
+
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        $('.modal-delete-open').on('click', function () {
+            let id = $(this).attr('id');
+            $('#teacher-modal-delete-href').on('click', function () {
+                if (newTeachers.style.display == "block" || newTeachers.style.display == "") {
+                    $.ajax({
+                        method: "GET",
+                        url: '/admin/teachers/delete/' + id,
+                        success: function () {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Teacher`s account is deleted!',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                            location.reload();
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        method: "GET",
+                        url: '/admin/mentors/delete/' + id,
+                        success: function () {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Mentor`s account is deleted!',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        })
+    });
+</script>
+<script>
+    var selectedPeriod = document.getElementById("select-income-period");
+    var monthlyIncome = document.getElementById("monthly_income");
+    var weeklyIncome = document.getElementById("weekly_income");
+    var monthlyCourses = document.getElementById("courses-monthly");
+    var weeklyCourses = document.getElementById("courses-weekly");
+    selectedPeriod.addEventListener("click", function () {
+        switch (selectedPeriod.selectedIndex) {
+            case 0:
+                monthlyIncome.style.display = "inline-block";
+                weeklyIncome.style.display = "none";
+                monthlyCourses.style.display = "inline-block"
+                weeklyCourses.style.display = "none"
+                break;
+            case 1:
+                weeklyIncome.style.display = "inline-block";
+                monthlyIncome.style.display = "none";
+                monthlyCourses.style.display = "none"
+                weeklyCourses.style.display = "inline-block"
+                break;
+        }
+    })
+</script>
+<script>
+    var weeklyModules = document.getElementById("weekly-finished-modules");
+    var monthlyModules = document.getElementById("monthly-finished-modules");
+
+    function showWeeklyModules() {
+        weeklyModules.style.display = "block";
+        monthlyModules.style.display = "none";
+    }
+
+    function showMonthlyModules() {
+        weeklyModules.style.display = "none";
+        monthlyModules.style.display = "block";
+    }
+</script>

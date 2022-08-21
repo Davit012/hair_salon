@@ -1,0 +1,399 @@
+.curse-hero {
+  background: var(--bg-image) no-repeat center;
+  background-size: cover;
+  color: var(--seccondary-color);
+  padding: 108px 25px 20px;
+  font-size: 1.25rem;
+  margin-top: 40px;
+}
+
+.curse-hero__title {
+  font-size: 2rem;
+  line-height: 48px;
+  margin: 0 0 16px;
+}
+
+.curse-hero__description {
+  font-size: 1.125rem;
+  line-height: 28px;
+  margin-bottom: 30px;
+}
+
+.curse-hero__item:not(:last-child) {
+  margin-bottom: 13px;
+}
+
+.curse-hero__item {
+  font-weight: var(--font-regular);
+}
+
+.curse-hero__author {
+  font-size: 1rem;
+  font-weight: var(--font-normal);
+  margin-left: 22px;
+}
+
+.curse-hero__author::after {
+  content: '';
+  display: block;
+  width: 100%;
+  position: absolute;
+  border-bottom: 1px solid var(--brand-primary-color);
+  bottom: 2px;
+}
+
+.curse-card__preview {
+  color: var(--seccondary-color);
+  font-weight: var(--font-regular);
+  bottom: 16px;
+  font-size: 12px;
+}
+
+.curse-hero__articel,
+.learn-info__container {
+  width: calc(100% - 527px);
+  padding-right: 140px;
+}
+
+@media all and (max-width: 1400px) {
+  .curse-hero__articel,
+  .learn-info__container {
+    width: calc(100% - 450px);
+    padding-right: 50px;
+  }
+}
+
+/*card*/
+.curse-card {
+  background: var(--seccondary-color);
+  box-shadow: 0 4px 8px rgba(212, 220, 238, 0.5);
+  padding: 7px 8px 27px;
+  width: 527px;
+  max-width: 100%;
+  position: absolute;
+  z-index: 10;
+  right: 25px;
+  top: 52px;
+  color: var(--brand-secondary-color);
+}
+
+.curse-card__body {
+  padding: 0 33px;
+}
+
+.curse-card__figure {
+  background: linear-gradient(180deg, var(--brand-primary-color) 0%, rgba(96, 217, 255, 0.94) 100%);
+  border: 1px solid rgba(72, 72, 72, 0.5);
+  border-radius: 3px;
+  height: 308px;
+  margin-bottom: 20px;
+}
+
+.curse-card__name {
+  font-weight: var(--font-regular);
+  font-size: 8rem;
+  line-height: 125px;
+  color: var(--primary-color);
+  margin-bottom: 0;
+}
+
+.curse-card__price {
+  font-size: 2rem;
+  line-height: 48px;
+  margin-bottom: 17px;
+}
+
+.curse-card .curse-card__button {
+  padding: 12px 118px;
+  margin-bottom: 22px;
+}
+
+.curse-card__infoTitle {
+  font-size: 1.25rem;
+  line-height: 28px;
+  margin-bottom: 16px;
+}
+
+@media all and (max-width: 1400px) {
+  .curse-card {
+    width: 450px;
+  }
+
+  .curse-card .curse-card__button {
+    padding: 12px 90px;
+  }
+}
+
+@media all and (max-width: 991.99px) {
+  .curse-hero {
+    padding: 0;
+    background: none;
+    margin-top: 10px;
+    color: var(--brand-secondary-color)
+  }
+
+  .curse-card__figure {
+    border-radius: 0;
+  }
+
+  .curse-card {
+    position: static;
+    box-shadow: none;
+    width: 100%;
+    padding: 0 0 30px;
+  }
+
+  .curse-hero-container {
+    padding: 0;
+  }
+
+  .curse-card__price {
+    margin-bottom: 21px;
+    margin-top: 20px;
+  }
+
+  .curse-card .curse-card__button {
+    padding: 12px 10px;
+    width: 100%;
+  }
+
+  .curse-card__body {
+    padding: 0 12px;
+  }
+
+  .curse-hero__title {
+    font-size: 1.5rem;
+    line-height: 123%;
+    margin: 0 0 9px;
+  }
+
+  .curse-hero__description {
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 18px;
+  }
+
+  .curse-hero__item:not(:last-child) {
+    margin-bottom: 7px;
+  }
+
+  .curse-hero__articel,
+  .learn-info__container {
+    width: 100%;
+    padding: 0;
+  }
+
+  .curse-card__name {
+    font-size: 6rem;
+    line-height: 125px;
+  }
+}
+
+.learn-info__title {
+  font-size: 2.375rem;
+  line-height: 48px;
+  margin-bottom: 26px;
+}
+
+.learn-info {
+  background: var(--bg-color);
+  padding-top: 30px;
+  padding-bottom: 40px;
+  font-size: 1.25rem;;
+  line-height: 28px;
+}
+
+.check-list__item:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.check-list__icon {
+  margin-right: 10px;
+}
+
+@media all and (max-width: 1199.99px) {
+  .learn-info__title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .learn-info {
+    padding-bottom: 30px;
+    font-size: 14px;
+    line-height: 28px;
+  }
+
+  .check-list__item:not(:last-child) {
+    margin-bottom: 16px;
+  }
+
+  .check-list__icon {
+    position: relative;
+    top: 2px;
+  }
+}
+.course-content{
+  padding-bottom: 60px;
+}
+.course-content_title {
+  font-size: 2.375rem;
+  line-height: 48px;
+  margin: 40px 0 32px;
+}
+
+.course-total {
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: var(--font-light);
+  gap: 32px
+}
+
+/*acordeon*/
+.custom-accordion__item:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.custom-accordion__item {
+  border: 1px solid var(--brand-primary-color);
+  border-radius: 3px;
+  background: var(--seccondary-color);
+  padding-bottom: 15px;
+}
+
+.custom-accordion__icon {
+  transition: all 500ms ease
+}
+
+.custom-accordion__button:not(.collapsed) .custom-accordion__module {
+  color: var(--brand-primary-color)
+}
+
+.custom-accordion__button:not(.collapsed) .custom-accordion__icon {
+  transform: rotate(180deg)
+}
+
+.custom-accordion__button {
+  padding: 15px 20px 0;
+  font-size: 1rem;
+  line-height: 20px;
+  grid-template-columns: 22px 80px 1fr 200px;
+}
+
+.custom-accordion__intro {
+  padding: 0 20px;
+}
+
+.custom-accordion__name {
+  font-weight: var(--font-regular);
+  font-size: 1.25rem;;
+  line-height: 28px;
+  padding: 0 20px;
+}
+
+.custom-accordion__body {
+  border-top: 1px solid rgba(94, 110, 130, 0.3);
+  margin-top: 4px;
+  padding: 16px 20px 0;
+}
+
+.custom-accordion__content {
+  font-size: 1rem;
+  font-weight: var(--font-light);
+  padding: 0 0 0 22px;
+  grid-template-columns: 80px 1fr 200px;
+}
+
+.custom-accordion__play {
+  margin-right: 6px;
+}
+
+.custom-accordion__content:not(:first-child) {
+  margin-top: 24px;
+}
+
+@media all and (max-width: 991.99px) {
+  .course-content {
+    padding-bottom: 30px;
+  }
+  .course-content_title {
+    font-size: 1.75rem;
+    line-height: 48px;
+    margin: 30px 0 24px;
+  }
+
+  .course-total {
+    font-size: 14px;
+    gap: 15px
+  }
+
+  .custom-accordion__item {
+    padding-bottom: 20px;
+  }
+
+  .custom-accordion__button {
+    padding: 8px 12px 0;
+    font-size: 12px;
+    grid-template-columns: 15px 80px 1fr 130px;
+  }
+
+  .custom-accordion__button .custom-accordion__icon {
+    width: 9px;
+    height: 6px;
+  }
+
+  .custom-accordion__name {
+    font-size: 1rem;
+    line-height: 24px;
+  }
+
+  .custom-accordion__body {
+    margin-top: 9px;
+    padding: 30px 12px 0;
+  }
+
+  .custom-accordion__content {
+    padding: 0 0 0 15px;
+    grid-template-columns: 80px 1fr 130px;
+  }
+
+  .custom-accordion__content:not(:first-child) {
+    margin-top: 18px;
+  }
+
+  .video-time {
+    font-size: 12px;
+  }
+}
+
+@media all and (max-width: 767.99px) {
+  .custom-accordion__button {
+  grid-template-columns: 15px 80px   1fr;
+  }
+
+  .custom-accordion__content {
+    grid-template-columns:  80px   1fr;
+  }
+  .custom-accordion__name,
+  .video-time{
+    order: 4;
+    grid-column: 1 / 7;
+  }
+
+  .custom-accordion__time,
+  .custom-accordion__intro{
+    order: 3;
+    grid-column: 3 / 7;
+  }
+
+  .custom-accordion__content {
+
+  }
+
+  .custom-accordion__name {
+    padding: 2px 0 0;
+  }
+
+  .custom-accordion__intro {
+    padding: 0;
+  }
+}

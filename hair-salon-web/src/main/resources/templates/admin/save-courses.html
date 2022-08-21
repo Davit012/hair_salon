@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="admin/fragments/admin-fragments :: header"></div>
+    <title>Save Courses</title>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="admin/fragments/admin-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="admin/fragments/admin-fragments :: topNavbar"></div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row flex-between-end">
+                        <div class="col-auto align-self-center">
+                            <h5 class="mb-0" data-anchor="data-anchor">Add New Course</h5>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="nav nav-pills nav-pills-falcon flex-grow-1" role="tablist">
+                                <a href="/admin/courses">
+                                    <button class="btn btn-sm" type="button">Courses</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body bg-light">
+                    <div class="tab-content">
+                        <div class="tab-pane preview-tab-pane active" role="tabpanel">
+                            <form method="post" action="/admin/courses/add">
+                                <div class="mb-3"><label class="form-label" for="name">Name
+                                </label><input class="form-control" id="name" type="text" name="name"/></div>
+
+                                <div class="mb-3"><label class="form-label" for="description">Description
+                                </label><input class="form-control" id="description" type="text" name="description"/></div>
+
+                                <div class="mb-3"><label class="form-label" for="authorId">Author
+                                    </label><select class="form-control" id="authorId" name="authorId">
+                                                <option th:each="author: ${authors}" th:value="${author.id}" th:text="${author.name}">
+                                                </option>
+                                            </select>
+                                </div>
+
+                                <div class="mb-3"><label class="form-label" for="modulesId">Modules
+                                </label>
+                                    <div th:each="module: ${modules}" class="form-check">
+                                        <input class="form-check-input" name="modulesId" th:value="${module.id}" id="modulesId" type="checkbox" />
+                                        <label class="form-check-label" th:text="${module.name}" for="modulesId">Default checkbox</label>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="admin/fragments/admin-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="admin/fragments/admin-fragments :: js"></div>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="teacher/fragments/teacher-fragments :: header"></div>
+    <title>Modules page</title>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="teacher/fragments/teacher-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="teacher/fragments/teacher-fragments :: topNavbar"></div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div style="margin-left: 0.4em">
+                            <div class="search-box" data-list='{"valueNames":["name"]}'
+                                 style="position: absolute; right: 148px;top: 3px;">
+                                <form class="position-relative" data-bs-toggle="search" data-bs-display="static"><input
+                                        class="form-control search-input fuzzy-search" type="search"
+                                        placeholder="Search..."
+                                        aria-label="Search"/>
+                                    <span class="fas fa-search search-box-icon"></span>
+                                </form>
+                            </div>
+
+                            <div class="col-8 col-sm-auto text-end ps-2">
+
+                                <div id="table-customers-replace-element">
+
+                                    <button class="btn btn-falcon-default btn-sm mx-2" type="button" id="button"
+                                            style="margin-top: -1em;">
+                                        <img src="/teacher/img/icons/filterIcon.png"
+                                             style="height: 0.6em;margin-top: -0.1em;">
+                                        <span class="d-none d-sm-inline-block ms-1">Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex px-3 col-sm-12" style="text-align:right">
+                                <div class = "col-sm-12 m-2">
+                                <a class="btn btn-primary"
+                                   href="/teacher/modules/add">New Module</a>
+                                </div>
+                            </div>
+
+                            <div id="myInput" style="display:none;">
+                                <form action="/teacher/modules" method="get">
+                                    <div class="card"
+                                         style=" position: fixed; right: 2.65em; margin-top: 0.4em; width: 25.35em;border: solid;border-color: lightgray;">
+
+                                        <div class="col-sm-10" style="margin-left: 1em;">
+
+
+                                            <div class="mb-2"><label class="form-label" for="userId"
+                                                                     style="display: revert; color: lightgrey;">Author:
+                                            </label>
+                                                <br>
+                                                <select id="userId" name="userId" class="col-sm-12 card"
+                                                        style="height: 2em;border: revert;border-radius: revert;border-color: lightgrey;">
+                                                    <th:block th:each="item: ${authors}">
+                                                        <option th:if="${param.userId == null} or ${param.userId[0].equals('')}"
+                                                                selected hidden></option>
+                                                        <option th:value="${item.id}" th:text="${item.name}"
+                                                                th:if="${param.userId != null} and ${!param.userId[0].equals('')} and ${param.userId[0].equals(item.id.toString())}"
+                                                                selected>
+                                                        </option>
+                                                        <option th:value="${item.id}" th:text="${item.name}"
+                                                                th:if="${param.userId != null} and ${!param.userId[0].equals('')} and ${!param.userId[0].equals(item.id.toString())}">
+                                                        </option>
+                                                        <option th:value="${item.id}" th:text="${item.name}"
+                                                                th:if="${param.userId == null} or ${param.userId[0].equals('')}">
+                                                        </option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3"><label class="form-label" for="courseId"
+                                                                     style="display: revert; color: lightgrey;">Course
+                                                Name:
+                                            </label>
+                                                <br>
+                                                <select id="courseId" name="courseId" class="col-sm-12 card"
+                                                        style="height: 2em;border: revert;border-radius: revert;border-color: lightgrey;">
+                                                    <th:block th:each="course: ${courses}">
+                                                        <option th:if="${param.courseId == null} or ${param.courseId[0].equals('')}"
+                                                                selected hidden></option>
+                                                        <option th:value="${course.id}" th:text="${course.name}"
+                                                                th:if="${param.courseId != null} and ${!param.courseId[0].equals('')} and ${param.courseId[0].equals(course.id.toString())}"
+                                                                selected>
+                                                        </option>
+                                                        <option th:value="${course.id}" th:text="${course.name}"
+                                                                th:if="${param.courseId != null} and ${!param.courseId[0].equals('')} and ${!param.courseId[0].equals(course.id.toString())}">
+                                                        </option>
+                                                        <option th:value="${course.id}" th:text="${course.name}"
+                                                                th:if="${param.courseId == null} or ${param.courseId[0].equals('')}">
+                                                        </option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3"><label class="form-label" for="moduleId"
+                                                                     style="display: revert; color: lightgrey;">Module:
+                                            </label>
+                                                <br>
+                                                <select id="moduleId" name="moduleId" class="col-sm-12 card"
+                                                        style="height: 2em;border: revert;border-radius: revert;border-color: lightgrey;">
+                                                    <th:block th:each="item: ${modulesPage}">
+                                                        <option th:if="${param.moduleId == null} or ${param.moduleId[0].equals('')}"
+                                                                selected hidden></option>
+                                                        <option th:value="${item.id}" th:text="${item.name}"
+                                                                th:if="${param.moduleId != null} and ${!param.moduleId[0].equals('')} and ${param.moduleId[0].equals(item.id.toString())}"
+                                                                selected>
+                                                        </option>
+                                                        <option th:value="${item.id}" th:text="${item.name}"
+                                                                th:if="${param.moduleId != null} and ${!param.moduleId[0].equals('')} and ${!param.moduleId[0].equals(item.id.toString())}">
+                                                        </option>
+                                                        <option th:value="${item.id}" th:text="${item.name}"
+                                                                th:if="${param.moduleId == null} or ${param.moduleId[0].equals('')}">
+                                                        </option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+
+                                            <a href="/teacher/modules"
+                                               style="color: red; text-decoration: none; margin-left: 0.3em">Clear
+                                                all filters</a>
+                                            <label for="filter">
+                                                <h6 style="margin-left: 13em;">Filter</h6>
+                                                <input type="submit" style="display: none" id="filter">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="mb-4 col-md-6 col-lg-4" th:each="module: ${modules}">
+                            <div class="border rounded-1 h-100 d-flex flex-column justify-content-between pb-3">
+                                <div class="overflow-hidden">
+                                    <div class="position-relative rounded-top overflow-hidden"><a class="d-block"
+                                                                                                  href="product-details.html"><img
+                                            class="img-fluid rounded-top" th:if="${module.modulePicture != null}"
+                                            th:src="${module.modulePicture}"/></a></div>
+                                    <div class="p-3">
+                                        <h5 th:text="${module.name}" class="fs-0"><a class="text-dark"
+                                                                                     th:href="@{/teacher/modules(id=${module.id})}"></a>
+                                        </h5>
+                                        <hr>
+                                        <p class="fs--1 mb-1">Teacher: <strong th:if="${module.author != null}"
+                                                                               th:text="${module.author.name} + ' ' + ${module.author.surname}"></strong>
+                                        </p>
+                                        <hr>
+                                        <div style="display: flex">
+                                            <span style="margin-right: 1%" class="fas fa-user"></span>
+                                            <p class="fs--1 mb-1">Student <strong th:each="sale: ${sales}"
+                                                                                  class="text-success"></strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-between-center px-3">
+                                    <a class="btn btn-primary btn-sm" th:href="@{'/teacher/module/' + ${module.id}}">View</a>
+                                    <div style="margin-left: 57%">
+                                        <a class="dropdown-item"
+                                           style="display:inline-block;width:16px;"
+                                           th:href="@{'/teacher/modules/edit/' + ${module.id}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                            </svg>
+                                        </a>
+
+                                        <a class="dropdown-item text-danger modal-delete-open"
+                                           style="display:inline-block;width:16px;"
+                                           th:id="${module.id}" type="button" data-bs-toggle="modal"
+                                           data-bs-target="#delete-modal">
+                                            <svg style="color:red" xmlns="http://www.w3.org/2000/svg" width="16"
+                                                 height="16" fill="currentColor" class="bi bi-trash"
+                                                 viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                <path fill-rule="evenodd"
+                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true"
+                 style="padding-left: 0px;">
+                <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 300px">
+                    <div class="modal-content position-relative">
+                        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light" style="margin-left: 40px">
+                                <h4 class="mb-1" id="modalExampleDemoLabel">Are you sure? </h4>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="width: 235px">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
+                            <a class="btn btn-primary" id="modal-delete-href" href="#" type="button">Yes </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="teacher/fragments/teacher-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="teacher/fragments/teacher-fragments :: js"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.modal-delete-open').on('click', function () {
+            let id = $(this).attr('id');
+            $('#modal-delete-href').attr('href', '/teacher/modules/delete/' + id);
+        });
+    })
+</script>
+<script>
+    $('#button').on('click', function () {
+        $('#myInput').toggle()
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/admin/css/quiz-add-menu.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link href="/vendors/video-js/video-js.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <div th:replace="admin/fragments/admin-fragments :: header"></div>
+    <title>Edit Lesson</title>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="admin/fragments/admin-fragments :: mainNavbar"></div>
+
+        <div class="content tab-content">
+            <div th:replace="admin/fragments/admin-fragments :: topNavbar"></div>
+            <div class="tab-pane px-sm-3 px-md-5" role="tabpanel"
+                 th:classappend="${step.name() == 'LESSON_DETAIL'} ? 'active' : ''"
+                 aria-labelledby="bootstrap-wizard-tab1" id="bootstrap-wizard-tab1">
+                <div class="card p-2 my-2">
+                    <form action="/admin/lessons/add" method="post" id="lessonForm" enctype="multipart/form-data"
+                          onsubmit="return validateLessonRequest();">
+                        <input type="text" th:value="${lesson.id}" name="lessonId" style="display: none">
+                        <input type="text" th:value="${lesson.picture}" name="pictureFromDb" style="display: none">
+                        <div class="col-sm-12" id="lesson-details">
+                            <div class="col-sm-12 d-inline-block">
+                                <div class="col-sm-2 d-inline-block" style="text-align:center">
+                                    <h5 style="color:#2C7BE5;">Lesson</h5>
+                                    <hr style="color:#2C7BE5">
+                                </div>
+
+                                <div class="col-sm-9 d-inline-block">
+                                    <h5 class="my-0 mx-5 d-inline-block" style="color:#5E6E82;"><a
+                                            th:href="@{'/admin/lessons/' + ${lesson.id} + '/resources/edit'}"
+                                            style="text-decoration: none;color:#5E6E82;">Resource</a></h5>
+                                    <h5 class="my-0 mx-5 d-inline-block" style="color:#5E6E82;"><a
+                                            th:href="@{'/admin/lessons/' + ${lesson.id} + '/homeworks/edit'}"
+                                            style="text-decoration: none;color:#5E6E82;">Homeworks</a></h5>
+                                    <h5 class="my-0 mx-5 d-inline-block" style="color:#5E6E82;"><a
+                                            th:href="@{'/admin/lessons/' + ${lesson.id} + '/quiz/edit'}"
+                                            style="text-decoration: none;color:#5E6E82;">Quiz</a></h5>
+                                    <hr style="color:#5E6E82">
+                                </div>
+                                <div class="d-flex">
+                                    <div class="col-sm-7">
+                                        <div class="col-sm-11">
+                                            <label class="form-label" for="exampleFormControlInput1">Course
+                                                Title</label>
+                                            <div class="col-sm-12" style="display: flex">
+                                                <div class="tab-pane preview-tab-pane active col-sm-12" role="tabpanel"
+                                                     aria-labelledby="tab-dom-2c4fbe1d-229b-413b-81fd-dd4d474154a9"
+                                                     id="dom-2c4fbe1d-229b-413b-81fd-dd4d474154a9">
+                                                    <div class="mb-3"><input class="form-control"
+                                                                             id="exampleFormControlInput1"
+                                                                             type="text"
+                                                                             th:value="${lesson.name}" name="name">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Module</p>
+                                                <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                                     id="dom-3dce3b56-e71d-4c8c-9410-5105efaba2c2">
+                                                    <select class="form-select" name="module"
+                                                            th:if="${lesson.module} != null">
+                                                        <option th:each="module:${modules}" th:text="${module.name}"
+                                                                th:value="${module.id}"
+                                                                th:if="${!lesson.module.id.toString().equalsIgnoreCase(module.id.toString())}"></option>
+                                                        <option th:each="module:${modules}" th:text="${module.name}"
+                                                                th:value="${module.id}"
+                                                                th:if="${lesson.module.id.toString().equalsIgnoreCase(module.id.toString())}"
+                                                                selected></option>
+                                                    </select>
+                                                    <select class="form-select" name="module" id="module"
+                                                            th:if="${lesson.module} == null">
+                                                        <option selected hidden disabled>Select Module
+                                                        </option>
+                                                        <option th:each="module:${modules}" th:text="${module.name}"
+                                                                th:value="${module.id}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3"><label style="color:#2c7be5;" class="form-label"
+                                                                     for="exampleFormControlTextarea1">Description</label><textarea
+                                                    class="form-control" id="exampleFormControlTextarea1"
+                                                    style="resize:none" rows="3" name="description"
+                                                    th:text="${lesson.description}"></textarea>
+                                                <p style="display:flex;font-size:10px;">Describe this lesson</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="col-sm-12" style="margin-left:2%;height:99%">
+                                            <div class="col-sm-12">
+                                                <p style="display:inline-block;">UploadVideo</p>
+                                            </div>
+                                            <div class="bg-200" style="text-align:center">
+                                                <video th:src="${lesson.video}"
+                                                       id="videojs-playbackrate-adjuster-player_html5_api"
+                                                       class="col-sm-12 vjs-tech" tabindex="-1" controls
+                                                       controlsList="nodwonload">
+                                                </video>
+                                                <div>
+                                                    <div class="mx-2">
+                                                        <input type="file" class="form-control" name="introVideo"
+                                                               id="lesson-video">
+                                                    </div>
+                                                    or
+                                                    <div class="col-sm-12" style="display: flex">
+                                                        <div class="tab-pane preview-tab-pane active col-sm-12 my-2"
+                                                             role="tabpanel"
+                                                             aria-labelledby="tab-dom-2c4fbe1d-229b-413b-81fd-dd4d474154a9"
+                                                             id="dom-2c4fbe1d-229b-413b-81fd-dd4d474154a9">
+                                                            <div class="mb-3 mx-2"><input class="form-control"
+                                                                                          id="exampleFormControlInput1"
+                                                                                          type="text"
+                                                                                          placeholder="Paste an actual link"
+                                                                                          name="introVideoLink"
+                                                                                          th:value="${lesson.video}"
+                                                                                          accept="video/*">
+                                                            </div>
+                                                            <ul class="pager wizard list-inline mb-0"
+                                                                style="display:inline-flex">
+                                                                <li class="next">
+                                                                    <p class="btn btn-primary px-5 px-sm-6">
+                                                                        Update Video
+                                                                    </p>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="px-sm-3 px-md-5 col-sm-12" style="text-align: center;margin-top:2%;">
+                                <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                                    <li class="next">
+                                        <button class="btn btn-primary px-5 px-sm-6" type="submit">
+                                            Save<span
+                                                class="fas fa-chevron-right ms-2"> </span></button>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/courses">
+                                            <button type="button" class="btn btn-outline-danger"
+                                                    id="delete_course" data-mdb-ripple-color="dark"
+                                                    style="margin-left:10%">
+                                                Delete
+                                            </button>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="tab-pane px-sm-3 px-md-5" role="tabpanel"
+                 th:classappend="${step.name() == 'RESOURCES'} ? 'active' : ''"
+                 aria-labelledby="bootstrap-wizard-tab2" id="bootstrap-wizard-tab2">
+                <div class="card p-2 my-2">
+                    <form action="/admin/lessons/resources/add" method="post" id="upload-form"
+                          enctype="multipart/form-data" class="dropzone">
+                        <div class="col-sm-2 d-inline-block" style="text-align:center">
+                            <h5 style="color:#5E6E82;"><a th:href="@{'/admin/lessons/edit/' + ${lesson.id}}"
+                                                          style="text-decoration: none;color:#5E6E82;">Lesson</a></h5>
+                            <hr style="color:#5E6E82">
+                        </div>
+                        <div class="col-sm-2 d-inline-block" style="text-align: center">
+                            <h5 class="my-0 d-inline-block" style="color:#2C7BE5;">Resource</h5>
+                            <hr style="color:#2C7BE5">
+                        </div>
+                        <div class="col-sm-7 d-inline-block">
+                            <h5 class="my-0 mx-5 d-inline-block" style="color:#5E6E82;"><a
+                                    th:href="@{'/admin/lessons/' + ${lesson.id} + '/homeworks/edit'}"
+                                    style="text-decoration: none;color:#5E6E82;">Homeworks</a></h5>
+                            <h5 class="my-0 mx-5 d-inline-block" style="color:#5E6E82;"><a
+                                    th:href="@{'/admin/lessons/' + ${lesson.id} + '/quiz/edit'}"
+                                    style="text-decoration: none;color:#5E6E82;">Quiz</a></h5>
+                            <hr style="color:#5E6E82">
+                        </div>
+                        <div class="d-flex">
+                            <div class="col-sm-5">
+                                <div class="col-sm-12  my-3">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading0">
+                                            <button class="accordion-button collapsed bg-200" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapse0"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapse0"
+                                                    onclick="changeFileIcon(videoSection)">
+                                                <img src="/admin/img/icons/file.png" id="videoSection"
+                                                     class="px-2">video
+                                                files
+                                            </button>
+                                        </h2>
+                                        <div class="accordion-collapse collapse bg-200 col-sm-12" id="collapse0"
+                                             aria-labelledby="heading0" data-bs-parent="#accordionExample"
+                                             style="text-align: -webkit-center;">
+                                            <th:block th:each="resource:${resources}">
+                                                <div class="col-sm-10 card align my-2"
+                                                     th:id="'fileDiv' + ${resource.id}"
+                                                     style="text-align:center;"
+                                                     th:if="${resource.resourceType.toString.equalsIgnoreCase('youtube_video')}">
+                                                    <div class="accordion-body col-sm-12 p-2"
+                                                         style="border: 1px solid gray">
+                                                        <div class="col-sm-12" style="text-align:left;" id="a">
+                                                            <div style="display: flex;">
+                                                                <div>
+                                                                    <img src="/admin/img/icons/youtube.png"
+                                                                         class="px-2">Video
+                                                                </div>
+                                                                <div class="col-sm-9">
+                                                                    <div style="text-align: right"
+                                                                         th:if="${resource.lesson == null}">
+                                                                        <img th:id="${resource.id}"
+                                                                             src="/admin/img/icons/cloud-plus-fill.svg"
+                                                                             onclick="addToLesson(this);"
+                                                                             style="cursor:pointer;">
+                                                                    </div>
+                                                                    <div style="text-align: right"
+                                                                         th:if="${resource.lesson != null}">
+                                                                        <img th:id="${resource.id}"
+                                                                             src="/admin/img/icons/trash.svg"
+                                                                             onclick="deleteResourceIdInput(this,false);"
+                                                                             style="cursor:pointer;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <video th:if="${resource.resourceType.toString().equalsIgnoreCase('video')}"
+                                                           th:src="${resource.value}"
+                                                           id="videojs-playbackrate-adjuster-player_html5_api"
+                                                           class="col-sm-12 vjs-tech" tabindex="-1" controls
+                                                           controlsList="nodwonload">
+                                                    </video>
+                                                    <iframe class="col-sm-12"
+                                                            th:if="${resource.resourceType.toString().equalsIgnoreCase('youtube_video')}"
+                                                            th:src="${resource.value}">
+                                                    </iframe>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12  my-3">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading1">
+                                            <button class="accordion-button collapsed bg-200" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapse1"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapse1" onclick="changeFileIcon(textSection)">
+                                                <img src="/admin/img/icons/file.png" id="textSection"
+                                                     class="px-2">text files
+                                            </button>
+                                        </h2>
+                                        <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                             id="collapse1"
+                                             aria-labelledby="heading1" data-bs-parent="#accordionExample"
+                                             style="text-align: -webkit-center;">
+                                            <th:block th:each="resource:${resources}">
+                                                <div class="col-sm-10 card align my-2"
+                                                     th:id="'fileDiv' + ${resource.id}"
+                                                     style="text-align:center;"
+                                                     th:if="${resource.resourceType.toString.equalsIgnoreCase('text')}">
+                                                    <div class="accordion-body col-sm-12 p-2"
+                                                         style="border: 1px solid gray">
+                                                        <div class="col-sm-12" style="text-align:left" id="text">
+                                                            <div style="display: flex;">
+                                                                <div>
+                                                                    <img src="/admin/img/icons/bi_journal-text.png"
+                                                                         class="px-2">Text
+                                                                </div>
+
+
+                                                                <div class="col-sm-9">
+                                                                    <div style="text-align: right">
+                                                                        <div style="display: inline-block">
+                                                                            <img th:id="editText + ${resource.id}"
+                                                                                 src="/admin/img/icons/edit.png"
+                                                                                 onclick="editTextFile(this,'text');"
+                                                                                 style="cursor:pointer;">
+                                                                        </div>
+                                                                        <div style="display: inline-block"
+                                                                             th:if="${resource.lesson == null}">
+                                                                            <img th:id="${resource.id}"
+                                                                                 src="/admin/img/icons/cloud-plus-fill.svg"
+                                                                                 onclick="addToLesson(this);"
+                                                                                 style="cursor:pointer;">
+                                                                        </div>
+                                                                        <div style="display: inline-block"
+                                                                             th:if="${resource.lesson != null}">
+                                                                            <img th:id="${resource.id}"
+                                                                                 src="/admin/img/icons/trash.svg"
+                                                                                 onclick="deleteResourceIdInput(this,false);"
+                                                                                 style="cursor:pointer;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p th:text="${resource.name}" th:title="${resource.value}"></p>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12  my-3">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading2">
+                                            <button class="accordion-button collapsed bg-200" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapse2"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapse2"
+                                                    onclick="changeFileIcon(imageSection)">
+                                                <img
+                                                        src="/admin/img/icons/file.png" id="imageSection"
+                                                        class="px-2">image files
+                                            </button>
+                                        </h2>
+                                        <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                             id="collapse2"
+                                             aria-labelledby="heading2" data-bs-parent="#accordionExample"
+                                             style="text-align: -webkit-center;">
+                                            <th:block th:each="resource:${resources}">
+                                                <div class="col-sm-10 card align my-2"
+                                                     th:id="'fileDiv' + ${resource.id}"
+                                                     style="text-align:center;"
+                                                     th:if="${resource.resourceType.toString.equalsIgnoreCase('image')}">
+                                                    <div class="accordion-body col-sm-12 p-2"
+                                                         style="border: 1px solid gray">
+                                                        <div class="col-sm-12" style="text-align:left" id="image">
+                                                            <div style="display: flex;">
+                                                                <div>
+                                                                    <img src="/admin/img/icons/ant-design_picture-outlined.png"
+                                                                         class="px-2">image
+                                                                </div>
+                                                                <div class="col-sm-9">
+                                                                    <div style="text-align: right"
+                                                                         th:if="${resource.lesson == null}">
+                                                                        <img th:id="${resource.id}"
+                                                                             src="/admin/img/icons/cloud-plus-fill.svg"
+                                                                             onclick="addToLesson(this);"
+                                                                             style="cursor:pointer;">
+                                                                    </div>
+                                                                    <div style="text-align: right"
+                                                                         th:if="${resource.lesson != null}">
+                                                                        <img th:id="${resource.id}"
+                                                                             src="/admin/img/icons/trash.svg"
+                                                                             onclick="deleteResourceIdInput(this,false);"
+                                                                             style="cursor:pointer;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <img th:src="${resource.value}">
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12  my-3">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading3">
+                                            <button class="accordion-button collapsed bg-200" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapse3"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapse2" onclick="changeFileIcon(linkSection)">
+                                                <img src="/admin/img/icons/file.png" id="linkSection"
+                                                     class="px-2">link files
+                                            </button>
+                                        </h2>
+                                        <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                             id="collapse3"
+                                             aria-labelledby="heading3" data-bs-parent="#accordionExample"
+                                             style="text-align: -webkit-center;">
+                                            <th:block th:each="resource:${resources}">
+                                                <div class="col-sm-10 card align my-2"
+                                                     th:id="'fileDiv' + ${resource.id}"
+                                                     style="text-align:center;"
+                                                     th:if="${resource.resourceType.toString.equalsIgnoreCase('link')}">
+                                                    <div class="accordion-body col-sm-12 p-2"
+                                                         style="border: 1px solid gray">
+                                                        <input name="link" th:id="'input' + ${resource.id}"
+                                                               style="display: none">
+                                                        <div class="col-sm-12" style="text-align:left" id="link">
+                                                            <div style="display: flex;">
+                                                                <div>
+                                                                    <img src="/admin/img/icons/akar-icons_link-chain.png"
+                                                                         class="px-2">Link
+                                                                </div>
+                                                                <div class="col-sm-9">
+                                                                    <div style="text-align: right">
+                                                                        <div style="display: inline-block">
+                                                                            <img th:id="editText + ${resource.id}"
+                                                                                 src="/admin/img/icons/edit.png"
+                                                                                 onclick="editTextFile(this,'link');"
+                                                                                 style="cursor:pointer;">
+                                                                        </div>
+                                                                        <div style="display: inline-block"
+                                                                             th:if="${resource.lesson == null}">
+                                                                            <img th:id="${resource.id}"
+                                                                                 src="/admin/img/icons/cloud-plus-fill.svg"
+                                                                                 onclick="addToLesson(this);"
+                                                                                 style="cursor:pointer;">
+                                                                        </div>
+                                                                        <div style="display: inline-block"
+                                                                             th:if="${resource.lesson != null}">
+                                                                            <img th:id="${resource.id}"
+                                                                                 src="/admin/img/icons/trash.svg"
+                                                                                 onclick="deleteResourceIdInput(this,false);"
+                                                                                 style="cursor:pointer;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <a th:text="${resource.value}" th:title="${resource.value}"></a>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12  my-3">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading4">
+                                            <button class="accordion-button collapsed bg-200" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapse4"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapse4"
+                                                    onclick="changeFileIcon(otherSection)">
+                                                <img src="/admin/img/icons/file.png" id="otherSection"
+                                                     class="px-2">other files
+                                            </button>
+                                        </h2>
+                                        <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                             id="collapse4"
+                                             aria-labelledby="heading4" data-bs-parent="#accordionExample"
+                                             style="text-align: -webkit-center;">
+                                            <th:block th:each="resource:${resources}">
+                                                <div class="col-sm-10 card align my-2"
+                                                     th:id="'fileDiv' + ${resource.id}"
+                                                     style="text-align:center;"
+                                                     th:if="${resource.resourceType.toString.equalsIgnoreCase('file')}">
+                                                    <div class="accordion-body col-sm-12 p-2"
+                                                         style="border: 1px solid gray">
+                                                        <div class="col-sm-12" style="text-align:left" id="files">
+                                                            <div style="display: flex;">
+                                                                <div>
+                                                                    <img src="/admin/img/icons/ant-design_file-text-outlined.png"
+                                                                         class="px-2">Other
+                                                                </div>
+                                                                <div class="col-sm-9">
+                                                                    <div style="text-align: right"
+                                                                         th:if="${resource.lesson == null}">
+                                                                        <img th:id="${resource.id}"
+                                                                             src="/admin/img/icons/cloud-plus-fill.svg"
+                                                                             onclick="addToLesson(this);"
+                                                                             style="cursor:pointer;">
+                                                                    </div>
+                                                                    <div style="text-align: right"
+                                                                         th:if="${resource.lesson != null}">
+                                                                        <img th:id="${resource.id}"
+                                                                             src="/admin/img/icons/trash.svg"
+                                                                             onclick="deleteResourceIdInput(this,false);"
+                                                                             style="cursor:pointer;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p th:text="${resource.name}"></p>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: none">
+                                <div class="col-sm-10 card align my-2" id="innerDivForVideos"
+                                     style="text-align:center;display:none;">
+                                    <div class="accordion-body col-sm-12 p-2"
+                                         style="border: 1px solid gray">
+                                        <div class="col-sm-12" style="text-align:left;" id="video">
+                                            <div style="display: flex;">
+                                                <div>
+                                                    <img src="/admin/img/icons/youtube.png"
+                                                         class="px-2">Video
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div style="text-align: right">
+                                                        <img id="forLinkDelete"
+                                                             src="/admin/img/icons/trash.svg">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10 card align my-2" id="innerDivForImages"
+                                     style="text-align:center;display:none;">
+                                    <div class="accordion-body col-sm-12 p-2"
+                                         style="border: 1px solid gray">
+                                        <div class="col-sm-12" style="text-align:left;" id="image">
+                                            <div style="display: flex;">
+                                                <div>
+                                                    <img src="/admin/img/icons/ant-design_picture-outlined.png"
+                                                         class="px-2">image
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div style="text-align: right">
+                                                        <img id="forImageDelete"
+                                                             src="/admin/img/icons/trash.svg">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10 card align my-2" id="innerDivForText"
+                                     style="text-align:center;display:none;">
+                                    <div class="accordion-body col-sm-12 p-2"
+                                         style="border: 1px solid gray">
+                                        <div class="col-sm-12" style="text-align:left;" id="text">
+                                            <div style="display: flex;">
+                                                <div>
+                                                    <img src="/admin/img/icons/bi_journal-text.png"
+                                                         class="px-2">Text
+                                                </div>
+                                                <div class="col-sm-9" style="text-align: right">
+                                                    <div style="display: inline-block">
+                                                        <img id="forTextEdit"
+                                                             src="/admin/img/icons/edit.png"
+                                                             onclick="editTextFile(this,'text');"
+                                                             style="cursor:pointer;">
+                                                    </div>
+                                                    <div style="display: inline-block">
+                                                        <img id="forTextDelete"
+                                                             src="/admin/img/icons/trash.svg">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-10 card align my-2" id="innerDivForLink"
+                                     style="text-align:center;display:none;">
+                                    <div class="accordion-body col-sm-12 p-2"
+                                         style="border: 1px solid gray">
+                                        <div class="col-sm-12" style="text-align:left;" id="link">
+                                            <div style="display: flex;">
+                                                <div>
+                                                    <img src="/admin/img/icons/akar-icons_link-chain.png"
+                                                         class="px-2">Link
+                                                </div>
+                                                <div class="col-sm-9" style="text-align: right">
+                                                    <div style="display: inline-block">
+                                                        <img id="forLinkEdit"
+                                                             src="/admin/img/icons/edit.png"
+                                                             onclick="editTextFile(this,'link');"
+                                                             style="cursor:pointer;">
+                                                    </div>
+                                                    <div style="display: inline-block">
+                                                        <img id="forLinkDelete"
+                                                             src="/admin/img/icons/trash.svg">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10 card align my-2" id="innerDivForFiles"
+                                     style="text-align:center;display:none;">
+                                    <div class="accordion-body col-sm-12 p-2"
+                                         style="border: 1px solid gray">
+                                        <div class="col-sm-12" style="text-align:left;" id="other">
+                                            <div style="display: flex;">
+                                                <div>
+                                                    <img src="/admin/img/icons/ant-design_file-text-outlined.png"
+                                                         class="px-2">Other
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div style="text-align: right">
+                                                        <img id="forOtherDelete"
+                                                             src="/admin/img/icons/trash.svg">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6 mx-2 my-3" th:if="${lesson} != null">
+                                <input type="hidden" th:value="${lesson.id}">
+                                <div>
+                                    <p>Title</p>
+                                    <input type="text" class="form-control" name="lessonName"
+                                           th:value="${lesson.name}">
+                                    <input type="text" class="form-control" name="lessonOldName"
+                                           th:value="${lesson.name}" style="display:none;">
+                                    <input type="text" class="form-control" name="lessonId" th:value="${lesson.id}"
+                                           style="display: none">
+                                </div>
+                                <div>
+                                    <p class="mt-3">Files</p>
+                                    <div style="border:1px solid rgba(94, 110, 130, 0.5);;box-sizing: border-box;text-align: center;">
+                                        <div class="col-sm-11" id="uploadedFiles">
+                                            <div class="drag-area py-5">
+                                                <i class="fas fa-cloud-upload-alt col-sm-12"></i>
+                                                <p>Drag & Drop to Upload File</p>
+                                                <button style="display:none">Browse File</button>
+                                                <input type="file" multiple="multiple" id="file" hidden>
+                                                <div id="forInputs" style="display:none">
+                                                    <input type=text name="images[]">
+                                                    <input type=text name="videos[]">
+                                                    <input type=text name="files[]">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display:none" id="forClone">
+
+                                </div>
+                                <div class="d-flex">
+                                    <label for="file" class="d-flex">
+                                        <div style="text-align: center;cursor: pointer">
+                                            <img style="width: 20px;" src="/admin/img/icons/youtube.png">
+                                            <p>Video</p>
+                                        </div>
+                                        <div class="mx-3" style="text-align: center;cursor: pointer">
+                                            <img style="width: 20px;"
+                                                 src="/admin/img/icons/ant-design_picture-outlined.png">
+                                            <p>Image</p>
+                                        </div>
+                                        <div class="mx-3" style="text-align: center;cursor: pointer">
+                                            <img style="width: 20px;"
+                                                 src="/admin/img/icons/ant-design_file-text-outlined.png">
+                                            <p>File</p>
+                                        </div>
+                                    </label>
+                                    <label>
+                                        <div class="mx-3" style="text-align: center;cursor: pointer"
+                                             onclick="showTextInput();">
+                                            <img style="width: 20px;" src="/admin/img/icons/bi_journal-text.png">
+                                            <p>Text</p>
+                                        </div>
+                                    </label>
+                                    <label>
+                                        <div class="mx-3" style="text-align: center;cursor: pointer"
+                                             onclick="showLinkInput();">
+                                            <img style="width: 20px;"
+                                                 src="/admin/img/icons/akar-icons_link-chain.png">
+                                            <p>Link</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-sm-3 px-md-5 col-sm-12" style="text-align: center;margin-top:2%;">
+                            <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                                <li class="next">
+                                    <button class="btn btn-primary px-5 px-sm-6" type="submit"
+                                            id="submitForTeacherResources">
+                                        Save<span
+                                            class="fas fa-chevron-right ms-2"> </span></button>
+                                </li>
+                                <li>
+                                    <a th:if="${lesson} != null"
+                                       th:href="@{'/admin/lessons/delete/' + ${lesson.id}}">
+                                        <button type="button" class="btn btn-outline-danger"
+                                                id="delete_lesson" data-mdb-ripple-color="dark"
+                                                style="margin-left:10%">
+                                            Delete
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <input type="text" name="isEdit" value="true" style="display:none">
+                    </form>
+                    <div class="modal fade" id="uploadProcess"
+                         role="dialog" aria-hidden="true" style="display:none;opacity: unset">
+                        <div class="modal-dialog modal-dialog-centered" tabindex="-1" role="document"
+                             style="max-width: 500px">
+                            <div class="modal-content position-relative">
+                                <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close" onclick="hideModal();"></button>
+                                </div>
+                                <div class="modal-body p-0">
+                                    <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                                        <h4 class="mb-1" id="modalExampleDemoLabel" style="color:#2C7BE5">Files
+                                            Upload
+                                            Process</h4>
+                                    </div>
+                                    <div class="p-4 pb-0" style="overflow-y:scroll;max-height:25rem">
+                                        <div class="mb-3 col-sm-12" style="display: inline-block;padding:1%;">
+                                            <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                                 aria-labelledby="tab-dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da"
+                                                 id="dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da">
+                                                <div class="table-responsive scrollbar">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        <tr class="hover-actions-trigger" id="showUploadStatus"
+                                                            style="display:block">
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="textInputModal"
+                         role="dialog" aria-hidden="true" style="display:none;opacity: unset">
+                        <div class="modal-dialog modal-dialog-centered" tabindex="-1" role="document">
+                            <div class="modal-content position-relative">
+                                <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close" onclick="hideTextInput();"></button>
+                                </div>
+                                <div class="modal-body p-0">
+                                    <div class="p-4 pb-0" style="overflow-y:scroll;max-height:25rem">
+                                        <div class="mb-3 col-sm-12" style="display: inline-block;padding:1%;">
+                                            <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                                 aria-labelledby="tab-dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da"
+                                                 id="dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da">
+                                                <div class="table-responsive" style="overflow-x: hidden;">
+                                                    <p class="mx-2">Name</p>
+                                                    <div class="mb-3 mx-2"><input class="form-control"
+                                                                                  id="textFileName"
+                                                                                  type="text"
+                                                                                  placeholder="File Name"></div>
+                                                </div>
+                                                <p class="mx-2">Text</p>
+                                                <div class="mb-3 mx-2"><textarea
+                                                        class="form-control" id="textAreaForTextFile"
+                                                        style="resize:none" rows="3"></textarea>
+                                                </div>
+                                                <ul class="pager wizard list-inline mb-0 col-sm-12 mx-2"
+                                                    style="text-align:right">
+                                                    <li class="next">
+                                                        <p class="btn btn-primary px-5 px-sm-6"
+                                                           id="buttonForTextSave"
+                                                           onclick="saveTextFile();">
+                                                            Submit<span
+                                                                class="fas fa-chevron-right ms-2"> </span></p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="linkInputModal"
+                         role="dialog" aria-hidden="true" style="display:none;opacity: unset">
+                        <div class="modal-dialog modal-dialog-centered" tabindex="-1" role="document"
+                             style="max-width: 500px">
+                            <div class="modal-content position-relative">
+                                <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close" onclick="hideLinkInput();"></button>
+                                </div>
+                                <div class="modal-body p-0">
+                                    <div class="p-4 pb-0">
+                                        <div class="mb-3 col-sm-12" style="display: inline-block;padding:1%;">
+                                            <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                                 aria-labelledby="tab-dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da"
+                                                 id="dom-9df04b6b-1dd0-4ae9-898a-50897d5eea">
+                                                <div class="table-responsive" style="overflow-x: hidden;">
+                                                    <p class="mx-2">Name</p>
+                                                    <div class="mb-3 mx-2"><input class="form-control"
+                                                                                  id="linkFileName"
+                                                                                  type="text"
+                                                                                  placeholder="File Name"></div>
+                                                </div>
+                                                <p class="mx-2">Link</p>
+                                                <div class="mb-3 mx-2"><textarea
+                                                        class="form-control" id="textAreaForLinkFile"
+                                                        style="resize:none" rows="3"></textarea>
+                                                </div>
+                                                <select class="form-select mx-2" id="linkType">
+                                                    <option value="unselected" selected hidden>Select Link Type
+                                                    </option>
+                                                    <option value="video">Video Link</option>
+                                                    <option value="content">Content Link</option>
+                                                </select>
+                                                <ul class="pager wizard list-inline mb-0 col-sm-12 mx-2"
+                                                    style="text-align:right">
+                                                    <li class="next">
+                                                        <p class="btn btn-primary px-5 px-sm-6"
+                                                           onclick="saveLinkFile();" id="buttonForLinkSave">
+                                                            Submit<span
+                                                                class="fas fa-chevron-right ms-2"> </span></p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane px-sm-3 px-md-5" role="tabpanel"
+                 th:classappend="${step.name() == 'HOMEWORKS'} ? 'active' : ''"
+                 aria-labelledby="bootstrap-wizard-tab2" id="bootstrap-wizard-tab3">
+                <form action="/admin/lessons/homework/add" method="post" enctype="multipart/form-data">
+                    <input th:if="${lesson} != null" name="lessonId" th:value="${lesson.id}" style="display: none">
+                    <input type=text name="images[]" style="display: none;">
+                    <div class="card p-2 my-2">
+                        <div class="col-sm-12">
+                            <div class="col-sm-5 d-inline-block" style="text-align:center">
+                                <h5 class="my-0 col-sm-6 d-inline-block" style="color:#5E6E82;"><a
+                                        th:href="@{'/admin/lessons/edit/' + ${lesson.id}}"
+                                        style="text-decoration: none;color:#5E6E82;">Lesson</a></h5>
+                                <h5 class="my-0 col-sm-5 d-inline-block" style="color:#5E6E82;"><a
+                                        th:href="@{'/admin/lessons/' + ${lesson.id} + '/resources/edit'}"
+                                        style="text-decoration: none;color:#5E6E82;">Resource</a></h5>
+                                <hr style="color:#5E6E82">
+                            </div>
+                            <div class="col-sm-2 d-inline-block" style="text-align: center">
+                                <h5 class="my-0 d-inline-block" style="color:#2C7BE5">Homeworks</h5>
+                                <hr style="color:#2C7BE5">
+                            </div>
+                            <div class="col-sm-4 d-inline-block">
+                                <h5 class="my-0 mx-5 d-inline-block" style="color:#5E6E82;"><a
+                                        th:href="@{'/admin/lessons/' + ${lesson.id} + '/quiz/edit'}"
+                                        style="text-decoration: none;color:#5E6E82;">Quiz</a></h5>
+                                <hr style="color:#5E6E82">
+                            </div>
+                        </div>
+                        <div class="col-sm-11 mx-3" id="homeworks">
+                            <div class="bg-200 col-sm-12 p-2">
+                                <p style="color: black" class="my-1">Assign Homework</p>
+                            </div>
+                            <th:block th:if="${homeworks} != null" th:each="homework:${homeworks}">
+                                <div th:id="'homework' + ${homework.id}" class="col-sm-12 p-2"
+                                     style="border: 1px solid rgba(94, 110, 130, 0.25);">
+                                    <div class="col-sm-12 d-flex">
+                                        <div th:id="'homeworkTitle' + ${homework.id}" class="col-sm-7"
+                                             style="text-align:left;display: inline-block">
+                                            <h5 th:id="'homeworkTitleText' + ${homework.id}"
+                                                th:text="${homework.title}"></h5>
+                                            <div class="col-sm-4 mb-4" th:if="${homework.picture} != null">
+                                                <img th:id="'showHomeworkImage'  + ${homework.id}"
+                                                     style="max-width: 100%;"
+                                                     th:src="${homework.picture}">
+                                            </div>
+                                        </div>
+                                        <div id="actionsDiv" class="col-sm-5"
+                                             style="text-align:right;display: inline-block">
+                                            <a th:if="${homeworks} != null"
+                                               th:href="@{'/admin/homework/edit/' + ${homework.id}}">
+                                                <img src="/admin/img/icons/edit.png"
+                                                     th:id="'homeworkEditButton' + ${homework.id}"
+                                                     style="cursor:pointer"/></a>
+                                            <ul class="pager wizard list-inline mb-0 px-3"
+                                                th:id="'deleteHomeworkButton' + ${homework.id}"
+                                                style="display:inline-flex">
+                                                <li>
+                                                    <p class="btn btn-outline-danger"
+                                                       th:id="'remove' + ${homework.id}"
+                                                       data-mdb-ripple-color="dark"
+                                                       style="margin-left:10%;padding:.1rem .5rem;vertical-align:unset"
+                                                       onclick="removeFromHomework(this);">
+                                                        Remove
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 mx-3">
+                                        <p th:id="'homeworkTask' + ${homework.id}" th:text="${homework.text}"
+                                           class="mx-3" style="margin-right: 3rem !important;"></p>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+                        <div class="col-sm-11 mx-3">
+                            <p>Title</p>
+                            <div class="mb-3 col-sm-12"><input class="form-control"
+                                                               id="homeworkName"
+                                                               type="text"
+                                                               name="name"></div>
+
+                            <div id="newHomework">
+                                <div class="bg-200 col-sm-12 p-2">
+                                    <div class="col-sm-2" style="text-align:left;display: inline-block">
+                                        <p onclick="removeImageFromHomework(this);" id="removeImage"
+                                           class="index" style="display: none;cursor:pointer;">Remove Image</p>
+                                    </div>
+                                    <div style="text-align: right;display: inline-block" class="col-sm-9">
+                                        <label for="forHomeworkImage">
+                                            <img src="/admin/img/icons/ant-design_picture-outlined.png"
+                                                 width="20px">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-sm-12"
+                                     style="display: flex;border: 1px solid rgba(94, 110, 130, 0.25);">
+                                    <div class="col-sm-11">
+                                        <textarea
+                                                class="form-control col-sm-11" id="homeworkText"
+                                                style="resize:none;display: inline-block;border:none"
+                                                rows="2"></textarea>
+                                    </div>
+                                    <div class="col-sm-1 my-3" style="text-align: right;padding-right:2rem;">
+                                        <img src="/admin/img/icons/send.png" id='submitHomework'
+                                             style="display: inline-block;cursor:pointer"
+                                             onclick="showHomework();">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="forHomeworkInputs" style="display: none"></div>
+                    <div id="forFileNames" style="display: none"></div>
+                    <div id="forHomeworkClone" style="display: none">
+                        <div id="homework" class="col-sm-12 p-2"
+                             style="border: 1px solid rgba(94, 110, 130, 0.25);">
+                            <div class="col-sm-12 d-flex">
+                                <div id="homeworkTitle" class="col-sm-7"
+                                     style="text-align:left;display: inline-block">
+                                    <h5 id="homeworkTitleText"></h5>
+                                    <div class="col-sm-4 mb-4">
+                                        <img id="showHomeworkImage" style="max-width: 100%;display: none">
+                                    </div>
+                                </div>
+                                <div id="actionsDiv" class="col-sm-5"
+                                     style="text-align:right;display: inline-block">
+                                    <img src="/admin/img/icons/edit.png" id="homeworkEditButton"
+                                         style="cursor:pointer"/>
+                                    <ul class="pager wizard list-inline mb-0 px-3" id="deleteHomeworkButton"
+                                        style="display:inline-flex">
+                                        <li>
+                                            <p class="btn btn-outline-danger"
+                                               id="delete-homework" data-mdb-ripple-color="dark"
+                                               style="margin-left:10%;padding:.1rem .5rem;vertical-align:unset">
+                                                Delete
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 mx-3">
+                                <p id="homeworkTask" class="mx-3" style="margin-right: 3rem !important;"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="text-align: center">
+                        <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                            <li class="next">
+                                <button class="btn btn-primary px-5 px-sm-6" type="submit"
+                                        id="submitForTeacherResources">
+                                    Save<span
+                                        class="fas fa-chevron-right ms-2"> </span></button>
+                            </li>
+                            <li>
+                                <a th:if="${lesson} != null" th:href="@{'/admin/lessons/delete/' + ${lesson.id}}">
+                                    <button type="button" class="btn btn-outline-danger"
+                                            id="delete_course" data-mdb-ripple-color="dark"
+                                            style="margin-left:10%">
+                                        Delete
+                                    </button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+                <input type="file" id="forHomeworkImage" style="display:none" accept="image/jpeg,image/png">
+                <input type="text" id="forEditImage" style="display:none" accept="image/jpeg,image/png">
+            </div>
+            <div class="tab-pane px-sm-3 px-md-5" role="tabpanel"
+                 th:classappend="${step.name() == 'QUIZ'} ? 'active' : ''"
+                 aria-labelledby="bootstrap-wizard-tab4" id="bootstrap-wizard-tab4">
+                <form action="/admin/lessons/quiz/question/add" method="post" enctype="multipart/form-data"
+                      onsubmit="return validFunction()">
+                    <input type="text" name="quizId" th:if="${quiz} != null" th:value="${quiz.id}" style="display:none">
+                    <div class="card p-2 my-2">
+                        <div class="col-sm-12">
+                            <div class="col-sm-7 d-inline-block" style="text-align:center">
+                                <h5 class="my-0 col-sm-3 d-inline-block" style="color:#5E6E82;">
+                                    <a th:href="@{'/admin/lessons/edit/' + ${lesson.id}}"
+                                       style="text-decoration: none;color:#5E6E82;">Lesson</a></h5>
+                                <h5 class="my-0 col-sm-4 d-inline-block" style="color:#5E6E82;">
+                                    <a th:href="@{'/admin/lessons/' + ${lesson.id} + '/resources/edit'}"
+                                       style="text-decoration: none;color:#5E6E82;">Resource</a></h5>
+                                <h5 class="my-0 col-sm-3 d-inline-block" style="color:#5E6E82;">
+                                    <a th:href="@{'/admin/lessons/' + ${lesson.id} + '/homeworks/edit'}"
+                                       style="text-decoration: none;color:#5E6E82;">Homeworks</a></h5>
+                                <hr style="color:#5E6E82">
+                            </div>
+                            <div class="col-sm-1 d-inline-block" style="text-align: center">
+                                <h5 class="my-0 d-inline-block" style="color:#2C7BE5">Quiz</h5>
+                                <hr style="color:#2C7BE5">
+                            </div>
+                            <div class="col-sm-3 d-inline-block">
+                                <hr style="color:#5E6E82">
+                            </div>
+                        </div>
+                        <input th:if="${lesson} != null" type="text" th:value="${lesson.id}" id="lessonId"
+                               name="lessonId"
+                               style="display:none" ;>
+                        <div class="col-sm-11" id="create_quiz">
+                            <h5 style="color:#5E6E82">Create Quiz</h5>
+                            <input name="quizName" list="quizzes" class="form-control" id="quizName" type="text"
+                                   style="display:inline-block;" th:if="${quiz} == null" autocomplete="off">
+                            <input name="quizName" list="quizzes" class="form-control" id="dbQuizName" type="text"
+                                   style="display:inline-block;" th:if="${quiz} != null" autocomplete="off"
+                                   th:value="${quiz.name}">
+                            <datalist id="quizzes" class="col-sm-11">
+                                <option th:name="${quiz.name}" th:each="quiz:${quizzes}" th:text="${quiz.name}"
+                                        th:id="${quiz.id}"></option>
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="card p-2 my-2">
+                        <div class="col-sm-11">
+                            <div class="col-sm-12" id="createQuestion">
+                                <h5 style="color:#5E6E82">Create Question</h5>
+                                <div class="mt-4">
+                                    <p>New Question</p>
+                                    <input name="text" class="form-control" id="question"
+                                           type="text"
+                                           style="display:inline-block;">
+                                    <label for="questionImage">
+                                        <img src="/admin/img/icons/ant-design_picture-outlined.png" width="20px">
+                                    </label>
+                                    <input type="file" name="image" id="questionImage" style="display:none"
+                                           accept="image/*">
+                                </div>
+                                <div class="col-sm-12 mt-3" id="editAnswer">
+                                    <div class="col-sm-12 mt-3" id="addAnswer">
+                                        <p>Question Type</p>
+                                        <select id="select_answer_type"
+                                                name="answerType" class="form-control">
+                                            <option value="SINGLE_CHOICE">Single Choice
+                                            </option>
+                                            <option value="MULTI_CHOICE">Multi Choice
+                                            </option>
+                                            <option value="SHORT_ANSWER">Short Answer
+                                            </option>
+                                            <option value="TEXT_ANSWER">Text Answer
+                                            </option>
+                                            <option selected hidden>Answer type
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div id="single" class="blocked col-sm-12">
+                                            <div id="single_choice_block" class="col-sm-12">
+                                                <div class="col-sm-12 single_answer_row" style="border:none !important">
+                                                    <div style="display:inline">
+                                                        <img src="/admin/img/icons/trash.svg"
+                                                             class="deleteSingleAnswer">
+                                                        <div class="col-sm-10 d-inline-block">
+                                                            <input class="single_answer_text form-control"
+                                                                   name="singleAnswers[]"
+                                                                   type="text"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="check_right_answer col-sm-2">
+                                                        <input type="radio"
+                                                               class="check_input"
+                                                               name="singleRightAnswer"
+                                                               value="0">
+                                                        <p style="display:inline">Right
+                                                            Answer</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 single_answer_row"
+                                                     style="border:none !important">
+                                                    <div style="display:inline">
+                                                        <img src="/admin/img/icons/trash.svg"
+                                                             class="deleteSingleAnswer">
+                                                        <div class="col-sm-10 d-inline-block">
+                                                            <input class="single_answer_text form-control"
+                                                                   name="singleAnswers[]"
+                                                                   type="text"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="check_right_answer col-sm-2">
+                                                        <input type="radio"
+                                                               class="check_input"
+                                                               name="singleRightAnswer"
+                                                               value="0">
+                                                        <p style="display:inline">Right
+                                                            Answer</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="multi" class="blocked col-sm-12">
+                                            <div id="multi_choice_block" class="col-sm-12">
+                                                <div class="col-sm-12 multi_answer_row"
+                                                     style="border:none !important">
+                                                    <div style="display: inline">
+                                                        <img src="/admin/img/icons/trash.svg"
+                                                             class="deleteSingleAnswer">
+                                                        <div class="col-sm-10 d-inline-block">
+                                                            <input class="multi_answer_text form-control"
+                                                                   name="multiAnswers[]"
+                                                                   type="text"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="check_right_answer col-sm-2">
+                                                        <input type="checkbox"
+                                                               class="checkbox_input"
+                                                               name="multiRightAnswers[]"
+                                                               value="0">
+                                                        <p style="display:inline">Right
+                                                            Answer</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 multi_answer_row"
+                                                     style="border:none !important">
+                                                    <div style="display: inline">
+                                                        <img src="/admin/img/icons/trash.svg"
+                                                             class="deleteSingleAnswer">
+                                                        <div class="col-sm-10 d-inline-block">
+                                                            <input class="multi_answer_text form-control"
+                                                                   name="multiAnswers[]"
+                                                                   type="text"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="check_right_answer col-sm-2">
+                                                        <input type="checkbox"
+                                                               class="checkbox_input"
+                                                               name="multiRightAnswers[]"
+                                                               value="1">
+                                                        <p style="display:inline">Right
+                                                            Answer</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="blocked" id="short_answer">
+                                            <p>This type is not get any answers, the student
+                                                answer will sent to you</p>
+                                        </div>
+                                        <div class="blocked" id="text_answer">
+                                            <p>This type is not get any answers, the student
+                                                answer will sent to you</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12" id="forAnswers">
+                                        <div class="col-sm-9 mt-3">
+                                            <div class="col-sm-12">
+                                                <p>Completion Points</p>
+                                                <div class="col-sm-3 d-inline-block">
+                                                    <input name="points" class="form-control" id="points"
+                                                           type="number"
+                                                           style="display:inline-block;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="col-sm-2 py-2 mt-2 newAnswerButton"
+                                           id="create_new_single_answer"
+                                           style="background:#4DCA88;color:white;cursor:pointer;text-align:center"
+                                           onclick="createNewAnswers('radio', 'single_choice_block');">
+                                            New Answer</p>
+                                        <div class="col-sm-2" style="text-align:right">
+                                            <button class="col-sm-12 py-2 newAnswerButton"
+                                                    id="createQuestionButton"
+                                                    style="background:#4DCA88;color:white;cursor:pointer;border:none;">
+                                                Save Question
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="forQuizDeletedElements" style="display: none">
+                        <input id="editedQuestion" type="text">
+                    </div>
+                </form>
+                <div class="col-sm-12 card my-2" id="answerDiv" th:each="question:${questions}">
+                    <div class="col-sm-12" th:if="${question.quiz.id.equals(quiz.id)}">
+                        <div class="bg-200 px-3">
+                            <div class="col-sm-9 d-inline-block" style="text-align:left">
+                                <img src="/admin/img/icons/lines.png" class="d-inline-block">
+                                <h5 th:text="${question.text}" class="d-inline-block mx-2"
+                                    th:id="'question' + ${question.id}"></h5>
+                                <div class="col-sm-3">
+                                    <th:block th:each="image:${images}"
+                                              th:if="${image}!=null">
+                                        <img th:if="${image.question.id.equals(question.id)}" th:src="${image.value}"
+                                             style="max-width: 100%"
+                                             th:id="'img' + ${question.id}">
+                                    </th:block>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 d-inline-block" style="text-align:right">
+                                <div class="col-sm-12 mt-3"
+                                     style="text-align:right;display: inline-block">
+                                    <img src="/admin/img/icons/edit.png" th:id="'editQuestion' + ${question.id}"
+                                         style="cursor:pointer" onclick="editQuestion(this);"/>
+                                    <ul class="pager wizard list-inline mb-0 px-3" id="questionDelete"
+                                        style="display:inline-flex">
+                                        <li>
+                                            <p class="btn btn-outline-danger"
+                                               th:id="'deleteQuestion' + ${question.id}" data-mdb-ripple-color="dark"
+                                               style="margin-left:10%;padding:.1rem .5rem;vertical-align:unset"
+                                               onclick="deleteQuestion(this);">
+                                                Delete
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 my-2 mx-2">
+                            <div th:each="questionOption:${questionOptions}"
+                                 th:if="${questionOption.question.id.equals(question.id)}" class="mx-3">
+                                <div class="col-sm-11 d-inline-block" style="text-align:left">
+                                    <img src="/admin/img/icons/lines.png" class="d-inline-block">
+                                    <div class="col-sm-11 d-inline-block">
+                                        <input th:class="'form-control ' + 'questionOption' + ${question.id}"
+                                               type="text" th:value="${questionOption.option}" readonly/>
+                                    </div>
+                                </div>
+                                <div class="d-inline-block">
+                                    <div class="d-inline-block"
+                                         th:if="${question.answerType.toString().equalsIgnoreCase('single_choice')}">
+                                        <input type="radio" th:if="${questionOption.rightAnswer == true}"
+                                               th:class="'questionRadio' + ${question.id}"
+                                               checked disabled>
+                                        <input type="radio" th:if="${questionOption.rightAnswer == false}"
+                                               th:class="'questionRadio' + ${question.id}" disabled>
+                                    </div>
+                                    <div class="d-inline-block"
+                                         th:if="${question.answerType.toString().equalsIgnoreCase('multi_choice')}">
+                                        <input type="checkbox" th:if="${questionOption.rightAnswer == true}"
+                                               th:class="'questionCheckbox' + ${question.id}"
+                                               checked disabled>
+                                        <input type="checkbox" th:if="${questionOption.rightAnswer == false}"
+                                               th:class="'questionCheckbox' + ${question.id}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form th:if="${lesson} != null" th:action="@{'/admin/lessons/' + ${lesson.id} + '/quiz/edit'}"
+                      method="get" id="quizEditForm" style="display: none">
+                    <input type="text" name="quizId" id="quizIdForEditQuiz">
+                </form>
+                <form action="/admin/lessons/finish" method="post">
+                    <div class="px-sm-3 px-md-5 col-sm-12" style="text-align: center;margin-top:2%;">
+                        <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                            <li class="next">
+                                <button class="btn btn-primary px-5 px-sm-6" type="submit"
+                                        id="submitForTeacherQuiz">
+                                    Create<span
+                                        class="fas fa-chevron-right ms-2"> </span></button>
+                            </li>
+                            <li>
+                                <a th:if="${lesson} != null" th:href="@{'/admin/lessons/delete/' + ${lesson.id}}">
+                                    <button type="button" class="btn btn-outline-danger"
+                                            data-mdb-ripple-color="dark"
+                                            style="margin-left:10%">
+                                        Delete
+                                    </button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="admin/fragments/admin-fragments :: js"></div>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+<script src="/admin/js/imageUtil.js"></script>
+<script src="/vendors/video-js/video.js"></script>
+<script src="/vendors/video-js/videojs-playbackrate-adjuster.js"></script>
+<script src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js"></script>
+<script src="/admin/js/deleteAnswer.js"></script>
+<script src="/admin/js/createQuestion.js"></script>
+<script src="/admin/js/validateQuestionForm.js"></script>
+<script type="module" src="./dist/datalist-css.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
+<script>
+    function changeFileIcon(openedSection) {
+        if (openedSection.parentElement.className.includes('collapsed')) {
+            openedSection.src = "/admin/img/icons/file.png"
+        } else {
+            openedSection.src = "/admin/img/icons/open-file.png"
+        }
+    }
+
+    function hideModal() {
+        document.getElementById('uploadProcess').style.display = "none";
+        document.getElementById('showUploadStatus').innerHTML = '';
+    }
+
+    function showTextInput() {
+        document.getElementById('textInputModal').style.display = 'block'
+    }
+
+    function showLinkInput() {
+        document.getElementById('linkInputModal').style.display = 'block'
+    }
+
+    function hideTextInput() {
+        document.getElementById('textInputModal').style.display = 'none';
+        document.getElementById('textAreaForTextFile').value = "";
+        document.getElementById('textFileName').value = "";
+    }
+
+    function hideLinkInput() {
+        document.getElementById('linkInputModal').style.display = 'none';
+        document.getElementById('textAreaForLinkFile').value = "";
+        document.getElementById('linkFileName').value = "";
+        document.getElementById('linkType').value = 'unselected';
+    }
+</script>

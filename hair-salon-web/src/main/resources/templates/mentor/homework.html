@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="mentor/fragments/mentor-fragments :: header"></div>
+    <title>Mentor Dashboard</title>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background: #2196F3;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+        <script>
+            const isFluid = JSON.parse(localStorage.getItem('isFluid'));
+            if (isFluid) {
+                const container = document.querySelector('[data-layout]');
+                container.classList.remove('container');
+                container.classList.add('container-fluid');
+            }
+        </script>
+        <div th:replace="mentor/fragments/mentor-fragments :: mainNavbar"></div>
+
+        <div class="content" style="overflow-x: hidden">
+            <div th:replace="mentor/fragments/mentor-fragments :: topNavbar"></div>
+
+            <div style="display: flex; margin-top: 4%">
+                <div class="col-sm-3 card h-md-100"
+                     style="max-height: 750px;top: -40px; margin-right: 1%">
+                        <h5 th:text="'Modules' + ' ' + '(' + ${mentorModules.size()} + ')'" style="color: #5E6E82;margin-left: 3%;margin-top:4%;"></h5>
+                        <div style="height:750px;margin-top:-48px;">
+                            <div style="top:7%;position:relative;overflow-y:scroll;height:91%;display:block;">
+                                <hr style="margin-top: 3%; margin-bottom: 2%">
+                                <div th:each="item: ${mentorModules}" th:if="${mentorModules != null}" style="display: flex">
+                                    <img style="height: 10%; margin-left: 5%" src="/mentor/java.png">
+                                    <div style="margin-bottom: 2rem;margin-left: 9%">
+                                        <h5 th:text="${item.name}" style="display:inline-block;"></h5>
+                                        <p style="display: inline;margin-left: 50px;">06 March</p>
+                                        <br>
+                                        <img style="height: 20px" src="/mentor/img/crm/gazaraguyn.png">
+                                        <p th:text="${item.lessons} + ' lesson'" style="display: inline"></p>
+                                        <br>
+                                        <img style="height: 20px" src="/mentor/img/crm/kanach.png">
+                                        <p th:text="${item.homeworks} + ' practices'" style="display: inline"></p>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div id="allHomeworks" style="display: flex; width: 100%">
+                    <div class="col-sm-12" style="max-height: 750px;">
+                        <div class="col-sm-12 card h-md-100"
+                             style="display:inline-flex;top: -40px;position: relative;height:589px;">
+                            <div class="col-sm-12"
+                                 style="height:100%;border-radius: 6px;display:block;">
+                                <div style="padding-top:2%">
+                                    <a onclick="showAllHomeworks()"><h5  th:text="'All Homeworks(' + ${homeWorks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                    <a onclick="showUncheckedHomeworks()"><h5 th:text="'Unchecked(' + ${unCheckedHomeworks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                    <a onclick="showCheckedHomeworks()"><h5 th:text="'Checked(' + ${checkedHomeworks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                </div>
+                                <hr style="margin: 0; margin-top: 1%">
+                                <div class="row g-3 mb-3" role="tabpanel"
+                                     aria-labelledby="tab-dom-60521a66-d0a3-4761-987b-2b8853ac5c1f">
+                                    <div class="table-responsive">
+                                        <div style="height:730px;max-height:730px;margin-top:-67px;">
+                                            <div style="top:10%;position:relative;overflow-y:scroll;height:86%;display:block;">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Module</th>
+                                                        <th scope="col">Topic</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody th:each="item:${homeWorks}">
+                                                    <tr data-toggle="collapse" th:data-target="'#demo' + ${item.id}" class="accordion-toggle">
+                                                        <td style="width: 5%">
+                                                            <button class="accordion-button collapsed" type="button"
+                                                                    data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${item.id}"
+                                                                    aria-expanded="true" th:aria-controls="'collapse' + ${item.id}" style="padding: 0; width: 75%">
+                                                            </button>
+                                                        </td>
+                                                        <td class="name align-middle white-space-nowrap py-2">
+                                                            <a href="customer-details.html">
+                                                                <div class="d-flex d-flex align-items-center">
+                                                                    <div class="avatar avatar-xl me-2">
+                                                                        <div class="avatar-name rounded-circle"><span th:text="${item.student.getUser().name.toUpperCase().charAt(0) +''+ item.student.getUser().surname.toUpperCase().charAt(0)}">
+                                                                                KG</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex-1">
+                                                                        <h5 class="mb-0 fs--1"
+                                                                            th:text="${item.student.getUser().name + ' ' + item.student.getUser().surname}">
+                                                                            Ricky
+                                                                            Antony</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-nowrap">
+                                                            <span th:if="${item.lesson.module != null}" th:text="${item.lesson.module.name}"></span>
+                                                        </td>
+                                                        <td class="text-nowrap" th:text="${item.lesson.name}"></td>
+                                                        <td class="text-nowrap">
+                                                            <a th:href="@{/mentor/action/(resultType = 'FAIL',id = ${item.id})}"><img style="height: 20px" src="/mentor/fail.png"></a>
+                                                            <a th:href="@{/mentor/action/(resultType = 'SUCCESS',id = ${item.id})}"><img style="height: 20px" src="/mentor/success.png"></a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="8">
+                                                            <div class="accordion-collapse collapse" th:id="'collapse' + ${item.id}" th:aria-labelledby="'heading' + ${item.id}" data-bs-parent="#accordionExample">
+                                                                <div class="accordion-body">
+                                                                    <div>
+                                                                        <div class="card-footer bg-light pt-0">
+                                                                            <div class="d-flex mt-3" style="padding-top: 2%">
+                                                                                <div class="avatar avatar-xl">
+                                                                                    <img class="rounded-circle" src="/mentor/img/team/2.jpg" alt="" />
+                                                                                </div>
+                                                                                <div class="flex-1 ms-2 fs--1">
+                                                                                    <p class="mb-1 bg-200 rounded-3 p-2"><a class="fw-semi-bold" href="../../pages/user/profile.html">Kit Harington</a> Good mornng Sarah!</p>
+                                                                                    <div class="px-2"> 10:43
+                                                                                        <br>
+                                                                                        <img src="/mentor/red-file.png"> File 1 <a href="*">Download</a>
+                                                                                        <br>
+                                                                                        <img src="/mentor/green-file.png"> File 2  <a href="*">Download</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <form class="d-flex align-items-center border-top border-200 pt-3">
+                                                                                <div class="avatar avatar-xl">
+                                                                                    <img class="rounded-circle" src="/mentor/img/team/3.jpg" alt="" />
+                                                                                </div><input class="form-control rounded-pill ms-2 fs--1" type="text" placeholder="Add a comment..." />
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="uncheckedHomeworks" style="display: none; width: 100%">
+                    <div class="col-sm-12" style="max-height: 750px;">
+                        <div class="col-sm-12 card h-md-100"
+                             style="display:inline-flex;top: -40px;position: relative;height:589px;">
+                            <div class="col-sm-12"
+                                 style="height:100%;border-radius: 6px;display:block;">
+                                <div style="padding-top:2%">
+                                    <a onclick="showAllHomeworks()"><h5 th:text="'All Homeworks(' + ${homeWorks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                    <a onclick="showUncheckedHomeworks()"><h5 th:text="'Unchecked(' + ${unCheckedHomeworks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                    <a onclick="showCheckedHomeworks()"><h5 th:text="'Checked(' + ${checkedHomeworks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                </div>
+                                <hr style="margin: 0; margin-top: 1%">
+                                <div class="row g-3 mb-3" role="tabpanel"
+                                     aria-labelledby="tab-dom-60521a66-d0a3-4761-987b-2b8853ac5c1f">
+                                    <div class="table-responsive">
+                                        <div style="height:730px;max-height:730px;margin-top:-67px;">
+                                            <div style="top:10%;position:relative;overflow-y:scroll;height:86%;display:block;">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Module</th>
+                                                        <th scope="col">Topic</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody th:each="item:${unCheckedHomeworks}">
+                                                    <tr data-toggle="collapse" th:data-target="'#demo' + ${item.id}" class="accordion-toggle">
+                                                        <td style="width: 5%">
+                                                            <button class="accordion-button collapsed" type="button"
+                                                                    data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${item.id}"
+                                                                    aria-expanded="true" th:aria-controls="'collapse' + ${item.id}" style="padding: 0; width: 75%">
+                                                            </button>
+                                                        </td>
+                                                        <td class="name align-middle white-space-nowrap py-2">
+                                                            <a href="customer-details.html">
+                                                                <div class="d-flex d-flex align-items-center">
+                                                                    <div class="avatar avatar-xl me-2">
+                                                                        <div class="avatar-name rounded-circle"><span th:text="${item.student.getUser().name.toUpperCase().charAt(0) +''+ item.student.getUser().surname.toUpperCase().charAt(0)}">
+                                                                                KG</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex-1">
+                                                                        <h5 class="mb-0 fs--1"
+                                                                            th:text="${item.student.getUser().name + ' ' + item.student.getUser().surname}">
+                                                                            Ricky
+                                                                            Antony</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-nowrap">
+                                                            <span th:if="${item.lesson.module != null}" th:text="${item.lesson.module.name}"></span>
+                                                        </td>
+                                                        <td class="text-nowrap" th:text="${item.lesson.name}"></td>
+                                                        <td class="text-nowrap">
+                                                            <a th:href="@{/mentor/action/(resultType = 'FAIL',id = ${item.id})}"><img style="height: 20px" src="/mentor/fail.png"></a>
+                                                            <a th:href="@{/mentor/action/(resultType = 'SUCCESS',id = ${item.id})}"><img style="height: 20px" src="/mentor/success.png"></a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="8">
+                                                            <div class="accordion-collapse collapse" th:id="'collapse' + ${item.id}" th:aria-labelledby="'heading' + ${item.id}" data-bs-parent="#accordionExample">
+                                                                <div class="accordion-body">
+                                                                    <div>
+                                                                        <div class="card-footer bg-light pt-0">
+                                                                            <div class="d-flex mt-3" style="padding-top: 2%">
+                                                                                <div class="avatar avatar-xl">
+                                                                                    <img class="rounded-circle" src="/mentor/img/team/2.jpg" alt="" />
+                                                                                </div>
+                                                                                <div class="flex-1 ms-2 fs--1">
+                                                                                    <p class="mb-1 bg-200 rounded-3 p-2"><a class="fw-semi-bold" href="../../pages/user/profile.html">Kit Harington</a> Good mornng Sarah!</p>
+                                                                                    <div class="px-2"> 10:43
+                                                                                        <br>
+                                                                                        <img src="/mentor/red-file.png"> File 1 <a href="*">Download</a>
+                                                                                        <br>
+                                                                                        <img src="/mentor/green-file.png"> File 2  <a href="*">Download</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <form class="d-flex align-items-center border-top border-200 pt-3">
+                                                                                <div class="avatar avatar-xl">
+                                                                                    <img class="rounded-circle" src="/mentor/img/team/3.jpg" alt="" />
+                                                                                </div><input class="form-control rounded-pill ms-2 fs--1" type="text" placeholder="Add a comment..." />
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="checkedHomeworks" style="display: none; width: 100%">
+                    <div class="col-sm-12" style="max-height: 750px;">
+                        <div class="col-sm-12 card h-md-100"
+                             style="display:inline-flex;top: -40px;position: relative;height:589px;">
+                            <div class="col-sm-12"
+                                 style="height:100%;border-radius: 6px;display:block;">
+                                <div style="padding-top:2%">
+                                    <a onclick="showAllHomeworks()"><h5 th:text="'All Homeworks(' + ${homeWorks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                    <a onclick="showUncheckedHomeworks()"><h5 th:text="'Unchecked(' + ${unCheckedHomeworks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                    <a onclick="showCheckedHomeworks()"><h5 th:text="'Checked(' + ${checkedHomeworks.size()} + ')'" style="cursor: pointer;display:inline-block;color: #5E6E82;margin-left:1.5%"></h5></a>
+                                </div>
+                                <hr style="margin: 0; margin-top: 1%">
+                                <div class="row g-3 mb-3" role="tabpanel"
+                                     aria-labelledby="tab-dom-60521a66-d0a3-4761-987b-2b8853ac5c1f">
+                                    <div class="table-responsive">
+                                        <div style="height:730px;max-height:730px;margin-top:-67px;">
+                                            <div style="top:10%;position:relative;overflow-y:scroll;height:86%;display:block;">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Module</th>
+                                                        <th scope="col">Topic</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody th:each="item:${checkedHomeworks}">
+                                                    <tr data-toggle="collapse" th:data-target="'#demo' + ${item.id}" class="accordion-toggle">
+                                                        <td style="width: 5%">
+                                                            <button class="accordion-button collapsed" type="button"
+                                                                    data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${item.id}"
+                                                                    aria-expanded="true" th:aria-controls="'collapse' + ${item.id}" style="padding: 0; width: 75%">
+                                                            </button>
+                                                        </td>
+                                                        <td class="name align-middle white-space-nowrap py-2">
+                                                            <a href="customer-details.html">
+                                                                <div class="d-flex d-flex align-items-center">
+                                                                    <div class="avatar avatar-xl me-2">
+                                                                        <div class="avatar-name rounded-circle"><span th:text="${item.student.getUser().name.toUpperCase().charAt(0) +''+ item.student.getUser().surname.toUpperCase().charAt(0)}">
+                                                                                KG</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex-1">
+                                                                        <h5 class="mb-0 fs--1"
+                                                                            th:text="${item.student.getUser().name + ' ' + item.student.getUser().surname}">
+                                                                            Ricky
+                                                                            Antony</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-nowrap">
+                                                            <span th:if="${item.lesson.module != null}" th:text="${item.lesson.module.name}"></span>
+                                                        </td>
+                                                        <td class="text-nowrap" th:text="${item.lesson.name}"></td>
+                                                        <td class="text-nowrap">
+                                                            <a th:href="@{/mentor/action/(resultType = 'FAIL',id = ${item.id})}"><img style="height: 20px" src="/mentor/fail.png"></a>
+                                                            <a th:href="@{/mentor/action/(resultType = 'SUCCESS',id = ${item.id})}"><img style="height: 20px" src="/mentor/success.png"></a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="8">
+                                                            <div class="accordion-collapse collapse" th:id="'collapse' + ${item.id}" th:aria-labelledby="'heading' + ${item.id}" data-bs-parent="#accordionExample">
+                                                                <div class="accordion-body">
+                                                                    <div>
+                                                                        <div class="card-footer bg-light pt-0">
+                                                                            <div class="d-flex mt-3" style="padding-top: 2%">
+                                                                                <div class="avatar avatar-xl">
+                                                                                    <img class="rounded-circle" src="/mentor/img/team/2.jpg" alt="" />
+                                                                                </div>
+                                                                                <div class="flex-1 ms-2 fs--1">
+                                                                                    <p class="mb-1 bg-200 rounded-3 p-2"><a class="fw-semi-bold" href="../../pages/user/profile.html">Kit Harington</a> Good mornng Sarah!</p>
+                                                                                    <div class="px-2"> 10:43
+                                                                                        <br>
+                                                                                        <img src="/mentor/red-file.png"> File 1 <a href="*">Download</a>
+                                                                                        <br>
+                                                                                        <img src="/mentor/green-file.png"> File 2  <a href="*">Download</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <form class="d-flex align-items-center border-top border-200 pt-3">
+                                                                                <div class="avatar avatar-xl">
+                                                                                    <img class="rounded-circle" src="/mentor/img/team/3.jpg" alt="" />
+                                                                                </div><input class="form-control rounded-pill ms-2 fs--1" type="text" placeholder="Add a comment..." />
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="mentor/fragments/mentor-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="mentor/fragments/mentor-fragments :: js"></div>
+
+</body>
+
+<script>
+    var allHomeworks = document.getElementById("allHomeworks");
+    var uncheckedHomeworks = document.getElementById("uncheckedHomeworks");
+    var checkedHomeworks = document.getElementById("checkedHomeworks");
+
+    function showAllHomeworks() {
+        allHomeworks.style.display = "flex";
+        allHomeworks.style.color = "blue";
+        uncheckedHomeworks.style.display = "none";
+        checkedHomeworks.style.display = "none";
+    }
+
+    function showCheckedHomeworks() {
+        allHomeworks.style.display = "none";
+        uncheckedHomeworks.style.display = "none";
+        checkedHomeworks.style.display = "flex";
+        checkedHomeworks.style.color = "blue";
+    }
+
+    function showUncheckedHomeworks() {
+        allHomeworks.style.display = "none";
+        uncheckedHomeworks.style.display = "flex";
+        uncheckedHomeworks.style.color = "blue";
+        checkedHomeworks.style.display = "none";
+    }
+
+</script>
+</html>

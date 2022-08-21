@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="links">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITSpace</title>
+    <!--slider-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css
+">
+    <!--bootstrap link-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!--custom links-->
+    <link rel="stylesheet" href="/main/styles/core/reset.css">
+    <link rel="stylesheet" href="/main/styles/hero-section.css">
+    <link rel="stylesheet" href="/main/styles/teachers-page.css">
+</th:block>
+
+
+<th:block th:fragment="topNavbar">
+    <header class="sticky-top header-top">
+        <nav class="navbar navbar-expand-lg container-xl py-0">
+            <a class="text-decoration-none navbar__brand py-0" href="/">ITSpace</a>
+            <button class="navbar-toggler p-0 border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <svg width="20" height="14">
+                    <use xlink:href="../sprite.svg#navigationToggle"></use>
+                </svg>
+            </button>
+            <div class="collapse navbar-collapse mobile-collapse" id="navbarSupportedContent">
+                <header class="d-flex d-lg-none justify-content-between align-items-center">
+                    <a class="text-decoration-none mobile-collapse__brand py-0" href="#">ITSpace</a>
+                    <button class="navbar-toggler p-0 border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <svg width="16" height="16">
+                            <use xlink:href="../sprite.svg#close"></use>
+                        </svg>
+                    </button>
+                </header>
+                <ul class="navbar-nav ms-auto mb-0 menu align-items-start align-items-xl-center">
+                    <li class="nav-item menu__item">
+                        <a class="nav-link menu__link position-relative" aria-current="page"
+                           href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item menu__item">
+                        <a class="nav-link menu__link position-relative" href="/teachers">Teachers</a>
+                    </li>
+                    <li class="nav-item menu__item">
+                        <a class="nav-link menu__link position-relative" href="our-students.html">Students</a>
+                    </li>
+                    <li class="nav-item menu__item">
+                        <a class="nav-link menu__link position-relative" href="mentors-page.html">Mentors</a>
+                    </li>
+                    <li class="nav-item menu__item menu__item position-relative">
+                        <a class="nav-link menu__link position-relative" href="/aboutUs">About Us</a>
+                    </li>
+                    <li class="nav-item menu__item">
+                        <a class="nav-link menu__link position-relative" href="/blog">Blog</a>
+                    </li>
+                    <li class="nav-item menu__item order-2 order-lg-1 flex-grow-1">
+                        <a class="nav-link menu__registration text-center" href="/registration">Register</a>
+                    </li>
+                    <li class="nav-item menu__item d-flex order-1 order-lg-2">
+                        <a class="nav-link menu__signIn p-xl-0 align-self-center text-center w-100" href="/login">Sign
+                            In</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</th:block>
+
+
+<th:block th:fragment="footer">
+    <footer class="footer">
+        <nav class="container-xl d-flex flex-wrap justify-content-between">
+            <ol class="list-unstyled col-12 col-md-3 mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        ITSpace
+                    </h2>
+                </li>
+                <li>
+                    You can email us on any question you care, either training or cooperation.
+                </li>
+                <li>
+                    <ul class="list-unstyled d-flex align-items-center social-icons">
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="11" height="22">
+                                <use xlink:href="../sprite.svg#facebook"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="21" height="18">
+                                <use xlink:href="../sprite.svg#telegram"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="22" height="22">
+                                <use xlink:href="../sprite.svg#instagram"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="20" height="20">
+                                <use xlink:href="../sprite.svg#linkedin"></use>
+                            </svg>
+                        </a></li>
+                    </ul>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-6 col-sm-3 col-md-2 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Explore
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Home</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Courses</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Teachers</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Students</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Mentors</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">About Us</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="/blog" class="footer__link text-decoration-none">Blog</a>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-6 col-sm-3  col-md-2 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Our Courses
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Development</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Marketing</a>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-12 col-sm-4 col-md-3 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Contact Us
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    Phone:
+                    <a href="tel:+884-9273-3867" class="footer__link text-decoration-none">+884-9273-3867</a>
+                </li>
+                <li class="footer-menu__item">
+                    Email:
+                    <a href="mailTo:hello@gmail.com" class="footer__link text-decoration-none">hello@gmail.com</a>
+                </li>
+                <li>
+                    <address>Address: Gyumri
+                        Armenia
+                    </address>
+                </li>
+            </ol>
+        </nav>
+        <div class="copywrite-container text-center">
+            <p class="mb-0">&copy; ITSpace. All rights reserved.</p>
+        </div>
+    </footer>
+</th:block>
+
+
+<th:block th:fragment="js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <script src="/main/scripts/main.js"></script>
+</th:block>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="main/fragments/main-fragments.html :: links"></div>
+</head>
+<body>
+<main class="d-flex flex-column min-vh-100">
+    <!--header-->
+    <div th:replace="main/fragments/main-fragments :: topNavbar"></div>
+
+    <div class="flex-grow-1">
+        <figure class="d-lg-none m-0">
+            <img src="../images/teachers-bg-mobile.jpg" class="w-100" alt="">
+        </figure>
+        <div class="lending-block-bg" style="--bg-image: url(../../images/teachesr-bg.jpg)">
+            <div class="container-xl">
+            <div class="lending-block">
+                <h1 class="title">Teachers</h1>
+                <p class="lending-block__description mb-0">Come teach with us and Become an instructor and change
+                    lives — including your own</p>
+                <button class="fill-button lending-block__button  button-style text-decoration-none d-inline-block text-center rounded-0">
+                    Get started
+                </button>
+            </div>
+            </div>
+        </div>
+        <!--Courses-->
+        <section class="container-xl">
+            <div class="d-grid justify-content-between align-items-center sub-header">
+                <h2 class="sub-header__title m-0">Instructors Ready for You</h2>
+                <div>
+                    <p class="sub-header__description mx-auto">
+                        Each of our instructors are all distinguished and respected figures in the world of technology
+                    </p>
+                </div>
+                <div class="d-flex justify-content-md-end">
+                    <button class="fill-button  button-style sub-header__button text-decoration-none d-inline-block text-center rounded-0">
+                        View all courses
+                    </button>
+                </div>
+            </div>
+
+            <div class="d-grid position-relative grid-container">
+                <div th:each="item: ${teachers}">
+                    <a th:href="@{'/teachers/' + ${item.id}}">
+                        <section class="card card-white overflow-hidden border-0 m-0">
+                            <figure class="card__figure position-relative mb-0">
+                                <img th:if="${item.user.profilePic} == null" src="/main/images/teachers/jonas-kakaroto-KIPqvvTOC1s-unsplash.jpg"
+                                     class="w-100 h-100 card__image" alt="">
+                                <img th:if="${item.user.profilePic} != null" th:src="${item.user.profilePic}"
+                                     class="w-100 h-100 card__image" alt="">
+                            </figure>
+                            <div class="card__body">
+                                <ul class="list-unstyled d-flex card__info justify-content-between mb-0">
+                                    <li class="d-flex align-items-center text-truncate">
+                                        <span th:text="${item.user.name} + ' ' + ${item.user.surname}" class="text-truncate card__authorName"></span>
+                                    </li>
+                                    <li class="d-flex align-items-center text-truncate">
+                                        <svg width="20" height="20" class="card__star">
+                                            <use xlink:href="../sprite.svg#starIcon">
+                                            </use>
+                                        </svg>
+                                        <span th:text="${item.currentPosition}"></span>
+                                    </li>
+                                </ul>
+                                <p class="card__description mb-0" th:text="${item.experience} + ' years of experince'">
+                                </p>
+                            </div>
+                        </section>
+                    </a>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href=""
+                   class="outline-button button-style text-decoration-none d-inline-block text-center rounded-0">Expand
+                    More</a>
+            </div>
+        </section>
+
+        <section class="steps-container">
+            <div class="container-xl">
+                <ul class="steps-content list-unstyled d-grid">
+                    <li class="steps-content__item d-grid">
+                        <div class="steps-content__number w-100 overflow-hidden">1</div>
+                        <div>
+                            <h4 class="steps-content__title">Teacher Friendly</h4>
+                            <p class="steps-content__description">Save time creating personalized lessons using our
+                                intuitive lesson builder and easy-to-use platform!</p>
+                        </div>
+                    </li>
+                    <li class="steps-content__item d-grid">
+                        <div class="steps-content__number w-100 overflow-hidden">2</div>
+                        <div>
+                            <h4 class="steps-content__title">Continued Profit</h4>
+                            <p class="steps-content__description">Earn passive income for every minute a student spends
+                                on your lesson, indefinitely!</p>
+                        </div>
+                    </li>
+                    <li class="steps-content__item d-grid">
+                        <div class="steps-content__number w-100 overflow-hidden">3</div>
+                        <div>
+                            <h4 class="steps-content__title">Free Access</h4>
+                            <p class="steps-content__description">Get free access to inspiring quality content created
+                                by your fellow teachers!</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    <!--footer-->
+    <div th:replace="main/fragments/main-fragments :: footer"></div>
+</main>
+
+<div th:replace="main/fragments/main-fragments :: js"></div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+.about-video {
+  width: 480px;
+  margin-left: 117px;
+}
+
+.about-video__play {
+  top: 0;
+  left: 0;
+}
+
+.about-lending .lending-block {
+  max-width: 700px;
+}
+
+.about-info__title {
+  font-size: 38px;
+  line-height: 48px;
+  margin: 0 0 20px;
+}
+
+.about-info__answer {
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 28px;
+}
+
+
+.about-title {
+  font-size: 40px;
+  line-height: 48px;
+  margin-bottom: 40px;
+}
+
+.why-we-do-block {
+  margin-bottom: 10px;
+  margin-top: 100px;
+}
+
+.why-we-do-block__figure {
+  width: 450px;
+  margin-right: 80px;
+}
+
+.why-we-do-block .about-info__title {
+  margin-bottom: 33px;
+}
+.time-life__figure {
+  width: 615px;
+  margin-left: 50px;
+}
+
+.our-mission {
+  width: 540px;
+  max-width: 100%;
+  margin-top: 60px;
+}
+
+@media all and (max-width: 1199.99px) {
+  .about-video {
+    width: 400px;
+    margin-left: 25px;
+  }
+  .time-life__figure {
+    width: 500px;
+    margin-left: 20px;
+  }
+}
+@media all and (max-width: 991.99px) {
+  .about-video {
+    width: 100vw;
+    margin-left: -12px;
+    margin-top: 40px;
+  }
+
+
+  .about-lending {
+    margin-bottom: 40px;
+  }
+
+  .about-lending .lending-block {
+    max-width: 100%;
+  }
+
+  .about-info__title {
+    font-size: 24px;
+    line-height: 30px;
+    margin: 0 0 16px;
+  }
+
+  .about-info__answer {
+    font-size: 16px;
+    line-height: 21px;
+    margin-bottom: 20px;
+  }
+
+  .about-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  .why-we-do-block {
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .why-we-do-block__figure {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .why-we-do-block .about-info__title {
+    margin-bottom: 27px;
+  }
+  .time-life__figure {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 30px;
+  }
+
+  .our-mission {
+    margin-top: 40px;
+  }
+.about-hero-block{
+  padding-bottom: 0;
+}
+}

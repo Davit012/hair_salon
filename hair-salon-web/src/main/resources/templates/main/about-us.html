@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="main/fragments/main-fragments.html :: links"></div>
+</head>
+<body>
+<main class="d-flex flex-column min-vh-100">
+    <!--header-->
+    <div th:replace="main/fragments/main-fragments :: topNavbar"></div>
+
+    <div class="flex-grow-1">
+        <div class="gray-bg about-hero-block">
+            <div class="container-xl d-flex flex-column flex-lg-row justify-content-between align-items-md-center
+about-lending">
+                <div class="lending-block">
+                    <h1 class="title">We envision a world where every
+                        student graduates, confident
+                        and prepared. </h1>
+                </div>
+                <div class="about-video flex-shrink-0">
+                    <figure class="position-relative w-100 mb-0">
+                        <img src="/main/images/about-us/about.jpg" class="w-100" alt="">
+                        <figcaption
+                                class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center about-video__play">
+                            <a href="">
+                                <svg width="84" height="57">
+                                    <use xlink:href="../sprite.svg#playSquarePlayIcon"></use>
+                                </svg>
+                            </a>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+        <div class="container-xl">
+            <h2 class="about-title">About Us</h2>
+            <div class="about-info">
+                <h3 class="about-info__title">
+                    Make every study hour count
+                </h3>
+                <p class="about-info__answer">ITSpace academy is an online learning platform for course-specific study
+                    resources.
+                    ITSpace academy is on a mission to help students graduate confident and prepared. </p>
+                <p class="about-info__answer">ITSpace academy is one of many educational businesses within ITSpace
+                    academy
+                    Inc., a leading education platform, offering a suite of learning resources and tools to help anyone
+                    learn more deeply, more effectively, and affordably throughout the arc of their career. </p>
+            </div>
+            <div class="about-info">
+                <h3 class="about-info__title">
+                    Educators
+                </h3>
+                <p class="about-info__answer">ITSpace Academy growing community of higher education faculty share the
+                    goals of helping fellow educators develop their teaching skills and helping students to learn and
+                    succeed in their studies. Through ITSpace, educators share their resources, collaborate with other
+                    faculty, and hone new strategies for instruction. </p>
+            </div>
+            <div class="about-info our-mission">
+                <h3 class="about-info__title">
+                    Our Mission </h3>
+                <p class="about-info__answer mb-0">
+                    Our mission is to offer a world-class education to the next generation of professionals and
+                    leaders.</p>
+            </div>
+        </div>
+        <section class="container-xl d-flex flex-column flex-lg-row align-items-center why-we-do-block">
+            <figure class="why-we-do-block__figure flex-shrink-0 mb-0">
+                <img src="/main/images/about-us/why_we_do_it.png" class="w-100" alt="">
+            </figure>
+            <article class="about-info">
+                <h3 class="about-info__title">
+                    Setting the standard </h3>
+                <p class="about-info__answer mb-0">
+                    We want to set the standard in education globally. We aim to provide professionals and employers
+                    with a tangible, straightforward and objective measure by which to assess and prove skills and
+                    knowledge. Our courses are overseen by an Industry Advisory Council to ensure relevance. And we’ve
+                    partnered with ITSpace LLC to make sure they meet the highest educational standards.</p>
+            </article>
+        </section>
+        <section class="gray-bg time-life m-0">
+        <div class="container-xl d-flex flex-column-reverse flex-lg-row align-items-center">
+            <article class="about-info">
+                <h3 class="about-info__title d-none d-lg-block">
+                    Our Team Life </h3>
+                <p class="about-info__answer mb-0">
+                    We want to set the standard in education globally. We aim to provide professionals and employers
+                    with a tangible, straightforward and objective measure by which to assess and prove skills and
+                    knowledge. Our courses are overseen by an Industry Advisory Council to ensure relevance. And we’ve
+                    partnered with ITSpace LLC to make sure they meet the highest educational standards.</p>
+            </article>
+            <div class="flex-shrink-0 time-life__figure">
+                <h3 class="about-info__title d-lg-none">
+                    Our Team Life </h3>
+                <picture class="d-block flex-shrink-0 mb-0">
+                    <source media="" srcset="/main/images/about-us/jason-goodman.jpg">
+                    <img src="/main/images/about-us/jason-goodman-mobile.jpg" class="w-100" alt="">
+                </picture>
+            </div>
+        </div>
+        </section>
+    </div>
+
+    <div th:replace="main/fragments/main-fragments :: footer"></div>
+    <!--footer-->
+</main>
+
+<div th:replace="main/fragments/main-fragments :: js"></div>
+
+</body>
+</html>

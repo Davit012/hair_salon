@@ -1,32 +1,31 @@
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: nikozohrabyan@mail.ru
-    password: Ni1ko2lya34
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
   datasource:
-    url:    jdbc:mysql://localhost:3306/hair_salon?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-  jackson:
-    serialization:
-      fail-on-empty-beans:  false
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/itspaceacademy
+  liquibase:
+    enabled: true
+    drop-first: false
+    change-log: classpath:db/changelog/changelog.xml
+    default-schema: public
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
 
-server:
-  port: 8081
-
+academy:
+  aws:
+    access:
+      key: AKIAQFNUMZTPHVIHZNR6
+    secret:
+      key: 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
+    bucket:
+      quiz:
+        name: academydevitspace
 file:
   upload:
-    dir: D:\IdeaProjects\2021-spring\HairSalon\upload
+    url: https://academydevitspace.s3.eu-central-1.amazonaws.com/
+    image: images/
+    video: videos/
+    file: files/

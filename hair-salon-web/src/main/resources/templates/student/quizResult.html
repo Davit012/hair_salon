@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="student/fragments/student-fragments :: header"></div>
+    <title>Student Dashboard</title>
+    <link href="/student/css/quiz-add-menu.css" rel="stylesheet" id="quiz-add-menu">
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="student/fragments/student-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="student/fragments/student-fragments :: topNavbar"></div>
+            <div class="card mb-3" id="customersTable"
+                 data-list='{"valueNames":["name","type","createdDate"],"page":10,"pagination":true}'>
+                <div class="card-body p-4">
+                    <div class="table-responsive scrollbar">
+                        <div class="mb-1 d-flex">
+                            <img src="/student/img/logos/angular.png" style="height: fit-content">
+                            <div style="margin-left: 1rem">
+                                <h4 style="color: #1da1f2" class="mb-1">BASIC INFORMATION</h4>
+                                <h5 th:text="${quiz.user.name + ' ' + quiz.user.surname}"
+                                    style="display: inline-block"></h5>
+                                <p th:text="${quiz.user.teacher.currentPosition}"
+                                   style="display: inline-block; margin-left: inherit;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4" style="background-color: #1da1f2; text-align: center">
+
+                    <h5>
+                        <div class="d-inline-block">
+                            <h5 class="mb-4" style="color: white">Submited on</h5>
+                        </div>
+                        <div th:text="${T(academy.itspace.util.DateUtil).formatDateToString(date)}"
+                             style="display: contents;color: white;">
+                        </div>
+                    </h5>
+
+                    <h1 class="mb-4" style="color: white" th:text=" 'Your Score:' + ' ' + ${result} "></h1>
+                    <div>
+                        <a style="color: white; background-color:#1da1f2;text-decoration: none;"
+                           th:href="@{'/student/course/lesson/'+ ${quiz.lesson.id} + '/quiz'}">
+                            <img src="/student/img/icons/restart.png">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="student/fragments/student-fragments :: footer"></div>
+        </div>
+
+    </div>
+</main>
+
+<div th:replace="student/fragments/student-fragments :: js"></div>
+
+</body>
+</html>

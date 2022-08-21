@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="admin/fragments/admin-fragments :: header"></div>
+    <title>Save Admin</title>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="admin/fragments/admin-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="admin/fragments/admin-fragments :: topNavbar"></div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row flex-between-end">
+                        <div class="col-auto align-self-center">
+                            <h5 class="mb-0" data-anchor="data-anchor">Add New Admin</h5>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="nav nav-pills nav-pills-falcon flex-grow-1" role="tablist">
+                                <a href="/admin/admins">
+                                    <button class="btn btn-sm" type="button">Admins</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body bg-light">
+                    <div class="tab-content">
+                        <div class="tab-pane preview-tab-pane active" role="tabpanel">
+                            <form method="post" action="/admin/add">
+                                <div class="mb-3"><label class="form-label" for="name">Name
+                                </label><input class="form-control" id="name" type="text" name="name"/></div>
+
+                                <div class="mb-3"><label class="form-label" for="surname">Surname
+                                </label><input class="form-control" id="surname" type="text" name="surname"/></div>
+
+                                <div class="mb-3"><label class="form-label" for="email">Email
+                                    address</label><input class="form-control" id="email" type="email" name="email"
+                                                          placeholder="name@example.com"/></div>
+
+                                <div class="mb-3"><label class="form-label" for="password">Password </label>
+                                    <input class="form-control" id="password" type="password" name="password"
+                                           placeholder="at least 6 symbols"/></div>
+
+                                <div class="mb-3"><label class="form-label" for="phoneNumber">Phone Number with country code (+374)
+                                </label><input class="form-control" id="phoneNumber" type="text" name="phoneNumber"/>
+                                </div>
+
+                                <div class="mb-3"><label class="form-label" for="country">Country
+                                </label><input class="form-control" id="country" type="text" name="country"/>
+                                </div>
+
+                                <div class="mb-3"><label class="form-label" for="city">City
+                                </label><input class="form-control" id="city" type="text" name="city"/>
+                                </div>
+
+                                <div class="mb-3"><label class="form-label" for="address">Address
+                                </label><input class="form-control" id="address" type="text" name="address"/>
+                                </div>
+
+
+                                <div class="mb-3"><label class="form-label" for="dob">Date of Birth</label>
+                                    <input class="form-control" id="dob" type="date" name="dob"></div>
+
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="admin/fragments/admin-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="admin/fragments/admin-fragments :: js"></div>
+
+</body>
+</html>

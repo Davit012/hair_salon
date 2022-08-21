@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="admin/fragments/admin-fragments :: header"></div>
+    <title>Admin Dashboard</title>
+    <link href="/admin/css/quiz-add-menu.css" rel="stylesheet" id="quiz-add-menu">
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="admin/fragments/admin-fragments :: mainNavbar"></div>
+        <div class="content">
+            <div th:replace="admin/fragments/admin-fragments :: topNavbar"></div>
+            <div class="card mb-3" id="customersTable">
+                <div class="card-header">
+                    <div class="row flex-between-center">
+                        <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                            <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Questions</h5>
+                        </div>
+                        <div class="col-8 col-sm-auto text-end ps-2">
+                            <div id="table-customers-replace-element">
+                                <a th:href="@{/admin/question/add/{id}(id = ${quizId})}">
+                                    <button class="btn btn-falcon-default btn-sm" type="button"><span
+                                            class="fas fa-plus"
+                                            data-fa-transform="shrink-3 down-2"></span><span
+                                            class="d-none d-sm-inline-block ms-1">Add Question</span></button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main_div">
+                    <div class="inner_div_for_questions" th:each="question:${questionsByQuizId}">
+                        <form>
+                            <h4 th:text="${questionStat.index}+1"></h4>
+                            <img th:each="image:${questionImages}" th:if="${question.equals(image.question)}"
+                                 th:src="@{${image.value}}"
+                                 th:width="${image.width}" th:height="${image.height}">
+                            <h5 th:text="   ${question.text}"></h5>
+                            <div class="inputs_quiz_edit" th:each="questionOption:${questionOptions}">
+                                <div class="div_only_input_quest" th:each="option:${questionOption}"
+                                     th:if="${option.question.id.equals(question.id)}">
+                                    <div th:if="${question.answerType.toString().equalsIgnoreCase('SINGLE_CHOICE')}">
+                                        <input th:if="${option.rightAnswer} == true" type="radio"
+                                               readonly th:text="'   ' + ${option.option}" checked="checked">
+                                        <input th:if="${option.rightAnswer} == false" type="radio"
+                                               readonly th:text="'   ' + ${option.option}">
+                                        <th:block th:each="image:${questionOptionImages}"
+                                                  th:if="${option.equals(image.questionOption)}">
+                                            <br>
+                                            <img th:src="@{${image.value}}"
+                                                 th:width="${image.width}" th:height="${image.height}">
+                                        </th:block>
+                                    </div>
+                                    <div th:if="${question.answerType.toString().equalsIgnoreCase('MULTI_CHOICE')}">
+                                        <input type="checkbox" readonly th:text="'   ' + ${option.option}"
+                                               th:if="${option.rightAnswer} == true" checked="checked">
+                                        <input type="checkbox" readonly th:text="'   ' + ${option.option}"
+                                               th:if="${option.rightAnswer} == false">
+                                        <th:block th:each="image:${questionOptionImages}"
+                                                  th:if="${option.equals(image.questionOption)}">
+                                            <br>
+                                            <img th:src="@{${image.value}}"
+                                                 th:width="${image.width}" th:height="${image.height}">
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${question.answerType.toString().equalsIgnoreCase('SHORT_ANSWER')}">
+                                <p th:text="   ${question.inputAnswer}"></p>
+                            </div>
+                            <div th:if="${question.answerType.toString().equalsIgnoreCase('TEXT_ANSWER')}">
+                                <p>your question is not get any answer,it will be send to you</p>
+                            </div>
+                        </form>
+                        <a th:href="@{/admin/question/edit/{id}(id = ${question.id})}" href="#"><p
+                                class="crud_for_quest">
+                            Edit</p></a>
+                        <a th:href="@{/admin/question/delete/{id}(id = ${question.id})}" href="#"><p
+                                class="crud_for_quest">
+                            Delete</p></a>
+
+                    </div>
+                </div>
+            </div>
+            <div th:replace="admin/fragments/admin-fragments :: footer"></div>
+        </div>
+    </div>
+</main>
+<div th:replace="admin/fragments/admin-fragments :: js"></div>
+
+</body>
+</html>
+<script src="https://cdn.tiny.cloud/1/zwx12qoygtn1s9m8z2yetjapu9d1qomdcn50td7tuek1y299/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin">
+    tinymce.init({
+        selector: '#mytextarea'
+    });
+</script>

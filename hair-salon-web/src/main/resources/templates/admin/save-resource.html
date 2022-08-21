@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="admin/fragments/admin-fragments :: header"></div>
+    <title>Add Resource</title>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+        <script>
+            const isFluid = JSON.parse(localStorage.getItem('isFluid'));
+            if (isFluid) {
+                const container = document.querySelector('[data-layout]');
+                container.classList.remove('container');
+                container.classList.add('container-fluid');
+            }
+        </script>
+        <div th:replace="admin/fragments/admin-fragments :: mainNavbar"></div>
+
+        <div class="content">
+            <div th:replace="admin/fragments/admin-fragments :: topNavbar"></div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row flex-between-end">
+                        <div class="col-auto align-self-center">
+                            <h5 class="mb-0" data-anchor="data-anchor">Add New Resource</h5>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="nav nav-pills nav-pills-falcon flex-grow-1" role="tablist">
+                                <a href="/admin/resources">
+                                    <button class="btn btn-sm" type="button">New Resource</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body bg-light">
+                    <div class="tab-content">
+                        <div class="tab-pane preview-tab-pane active" role="tabpanel">
+                            <form method="post" action="/admin/resources/add" enctype="multipart/form-data">
+                                <div class="mb-3"><label class="form-label" for="name">Name
+                                </label><input class="form-control" id="name" type="text" name="name"/></div>
+
+                                <div class="mb-3">ResourceType<br>
+                                    <select id="select_answer_type" class="input" name="resourceType">
+                                        <option value="VIDEO" selected>VIDEO</option>
+                                        <option value="YOUTUBE_VIDEO">YOUTUBE_VIDEO</option>
+                                        <option value="IMAGE">IMAGE</option>
+                                        <option value="LINK">LINK</option>
+                                        <option value="FILE">FILE</option>
+                                        <option value="TEXT">TEXT</option>
+                                    </select><br>
+                                </div>
+                                Value
+                                <div class="mb-3">
+                                    <div class="block" id="add_video">
+                                        <label class="form-label" for="valueVideo">
+                                            <input type="file" name="fileValue" id="valueVideo"/>
+                                        </label>
+                                    </div>
+                                    <div class="block" id="add_youtubeVideo">
+                                        <label class="form-label" for="valueYoutubeVideo">
+                                            <input type="text" name="youtubeLinkValue" id="valueYoutubeVideo"/>
+                                        </label>
+                                    </div>
+                                    <div class="block" id="add_image">
+                                        <label class="form-label" for="valueImage">
+                                            <input type="file" name="fileValue" id="valueImage"/>
+                                        </label>
+                                    </div>
+                                    <div class="block" id="add_link">
+                                        <label class="form-label" for="valueLink">
+                                            <input type="text" name="linkValue" id="valueLink"/>
+                                        </label>
+                                    </div>
+                                    <div class="block" id="add_file">
+                                        <label class="form-label" for="valueFile">
+                                            <input type="file" name="fileValue" id="valueFile"/>
+                                        </label>
+                                    </div>
+                                    <div class="block" id="add_text">
+                                        <label class="form-label" for="valueText">
+                                            <input type="text" name="textValue" id="valueText"/>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3"><label class="form-label">User<br>
+                                    <select class="input" name="authorId">
+                                        <option th:each="user:${users}" th:text="${user.name}"
+                                                th:value="${user.id}"></option>
+                                    </select><br>
+                                </label></div>
+
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="admin/fragments/admin-fragments :: footer"></div>
+
+        </div>
+
+    </div>
+</main>
+<div th:replace="admin/fragments/admin-fragments :: js"></div>
+
+</body>
+</html>
+<script>
+    let select = document.getElementById('select_answer_type');
+    let block = document.querySelectorAll('.block');
+    let lastIndex = -1;
+    const strUser = select.options[select.selectedIndex].value;
+    console.log(strUser)
+    if (lastIndex === -1) {
+        block[0] = strUser
+        console.log(block[0])
+        block[0].style.display = "block";
+        lastIndex++;
+    }
+    select.addEventListener('change', function () {
+        block[lastIndex].style.display = "none";
+        let index = select.selectedIndex;
+        block[index].style.display = "block";
+        lastIndex = index;
+    });
+</script>

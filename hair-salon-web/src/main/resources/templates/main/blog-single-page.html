@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="main/fragments/main-fragments.html :: links"></div>
+    <!--custom links-->
+    <link rel="stylesheet" href="/main/styles/core/reset.css">
+    <link rel="stylesheet" href="/main/styles/blog.css">
+</head>
+<body>
+
+<main class="d-flex flex-column min-vh-100">
+    <!--header-->
+    <div th:replace="main/fragments/main-fragments :: topNavbar"></div>
+
+    <div class="flex-grow-1">
+        <div class="gray-bg">
+            <div class="container-xl d-flex flex-column-reverse flex-md-row justify-content-between align-items-md-center blog-landing">
+                <div class="lending-block">
+                    <h1 class="title" th:text="${blog.title}">Blog</h1>
+                    <p class="lending-block__description" th:text="${blog.description}">
+                        Welcome to our blog! Stay up to date with the latest industry insights, company news, and
+                        updates.</p>
+                </div>
+            </div>
+        </div>
+        <section class="container-xl single-blog-container">
+            <div>
+                <h2 class="single-blog-container__title" th:text="${blog.title}">Best freelance portals for developers</h2>
+                <p class="single-blog-container__description" th:text="${blog.description}">If you are fresh to – or considering – a freelancing
+                    career, we’ve compiled a guide to the best
+                    freelance
+                    portals for developers</p>
+                <span class="single-blog-container__date d-block" th:text="${T(academy.itspace.util.DateUtil).formatDateToString(blog.createdDate)}">may 12, 2022</span>
+            </div>
+            <figure class="single-blog-container__figure">
+                <img th:src="${blog.image}" class="w-100 h-100 single-blog-container__image" alt="">
+            </figure>
+            <div class="questions">
+                <p class="question__answer" th:text="${blog.post}">A freelance portal is a web platform that connects freelancers with clients.
+                    Some freelance portals have client management tools built in including contracts, payment processing
+                    and messaging. Others are simply job boards and portfolio hosts that allow freelancers to find gigs
+                    and clients to find freelancers. </p>
+            </div>
+        </section>
+    </div>
+    <!--footer-->
+    <footer class="footer">
+        <nav class="container-xl d-flex flex-wrap justify-content-between">
+            <ol class="list-unstyled col-12 col-md-3 mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        ITSpace
+                    </h2>
+                </li>
+                <li>
+                    You can email us on any question you care, either training or cooperation.
+                </li>
+                <li>
+                    <ul class="list-unstyled d-flex align-items-center social-icons">
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="11" height="22">
+                                <use xlink:href="../sprite.svg#facebook"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="21" height="18">
+                                <use xlink:href="../sprite.svg#telegram"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="22" height="22">
+                                <use xlink:href="../sprite.svg#instagram"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="20" height="20">
+                                <use xlink:href="../sprite.svg#linkedin"></use>
+                            </svg>
+                        </a></li>
+                    </ul>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-6 col-sm-3 col-md-2 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Explore
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Home</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Courses</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Teachers</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Students</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Mentors</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">About Us</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Blog</a>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-6 col-sm-3  col-md-2 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Our Courses
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Development</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Marketing</a>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-12 col-sm-4 col-md-3 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Contact Us
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    Phone:
+                    <a href="tel:+884-9273-3867" class="footer__link text-decoration-none">+884-9273-3867</a>
+                </li>
+                <li class="footer-menu__item">
+                    Email:
+                    <a href="mailTo:hello@gmail.com" class="footer__link text-decoration-none">hello@gmail.com</a>
+                </li>
+                <li>
+                    <address>Address: Gyumri
+                        Armenia
+                    </address>
+                </li>
+            </ol>
+        </nav>
+        <div class="copywrite-container text-center">
+            <p class="mb-0">&copy; ITSpace. All rights reserved.</p>
+        </div>
+    </footer>
+</main>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="/main/scripts/main.js"></script>
+</body>
+</html>

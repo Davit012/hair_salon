@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="main/fragments/main-fragments.html :: links"></div>
+</head>
+<body>
+<main class="d-flex flex-column min-vh-100">
+    <!--header-->
+    <div th:replace="main/fragments/main-fragments :: topNavbar"></div>
+
+    <div class="flex-grow-1">
+        <div class="gray-bg">
+            <div class="container-xl d-flex flex-column-reverse flex-md-row justify-content-between align-items-md-center">
+                <div class="lending-block lending-block-margin max-w-75">
+                    <h1 th:text="${teacher.user.name} + ' ' + ${teacher.user.surname}" class="title">Angela Ward</h1>
+
+                    <p class="lending-block__description mb-0" th:text="${teacher.currentPosition}"></p>
+
+                    <button class="fill-button lending-block__button  button-style text-decoration-none d-inline-block text-center rounded-0">
+                        See all instructor’s Courses
+                    </button>
+
+                    <ul class="list-unstyled mb-0 details-list">
+                        <li class="details-list__item d-flex align-items-center">
+                            <svg class="details-list__icon" width="18" height="18">
+                                <use xlink:href="../sprite.svg#location"></use>
+                            </svg>
+                            <span th:text="${teacher.user.country}"></span>
+                        </li>
+                        <li class="details-list__item d-flex align-items-center">
+                            <svg class="details-list__icon" width="18" height="18">
+                                <use xlink:href="../sprite.svg#youtube"></use>
+                            </svg>
+                            <span th:text="${courseCount} + ' courses'"></span>
+                        </li>
+                        <li class="details-list__item d-flex align-items-center">
+                            <svg class="details-list__icon" width="18" height="18">
+                                <use xlink:href="../sprite.svg#file"></use>
+                            </svg>
+                            <span>30 articles</span>
+                        </li>
+                    </ul>
+                </div>
+                <figure class="figure-circle rounded-circle flex-shrink-0 align-self-center align-self-md-end">
+                    <img th:if="${teacher.user.profilePic} == null" src="/main/images/teachers/jonas-kakaroto-KIPqvvTOC1s-unsplash.jpg"
+                         class="w-100 h-100 rounded-circle figure-circle__image" alt="">
+                    <img th:if="${teacher.user.profilePic} != null" th:src="${teacher.user.profilePic}"
+                         class="w-100 h-100 rounded-circle figure-circle__image" alt="">
+                </figure>
+            </div>
+        </div>
+        <div class="tabs-container">
+            <ul class="nav nav-tabs border-0 container-xl" id="profileTabs" role="tablist">
+                <li class="nav-item tab-item" role="presentation">
+                    <button class="nav-link active tab-item__link border-0 bg-transparent position-relative"
+                            id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab"
+                            aria-controls="activity" aria-selected="true">Activity
+                    </button>
+                </li>
+                <li class="nav-item tab-item" role="presentation">
+                    <button class="nav-link tab-item__link border-0 bg-transparent position-relative" id="about-tab"
+                            data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab"
+                            aria-controls="about" aria-selected="false">About
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content" id="profileTabsContent">
+                <div class="tab-pane fade show active" id="activity" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="container-xl">
+                    <div class="d-grid justify-content-between align-items-center sub-header">
+                        <h2 class="sub-header__title m-0">Meet Your Instructor </h2>
+                        <div>
+                            <p class="sub-header__description mx-auto">
+                                You don't need to be a spetialist or have any previous experience . You just need
+                                curiosity and the desire to learn. </p>
+                        </div>
+                        <div class="d-flex justify-content-md-end">
+                            <button class="fill-button  button-style sub-header__button text-decoration-none d-inline-block text-center rounded-0">
+                                Explore Courses
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-tabs-container">
+                        <ul class="nav nav-tabs card-tab border-0 d-grid" id="myTab" role="tablist">
+                            <li class="nav-item card-tab__item h-100 item" role="presentation">
+                                <button class="nav-link card-tab__link  text-center d-flex flex-column align-items-center position-relative h-100 active"
+                                        id="home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#home"
+                                        type="button" role="tab" aria-controls="home" aria-selected="true">
+                                    <span class="flex-grow-1">iOS & Swift - The Complete iOS App Development Bootcamp</span>
+                                    <img src="/main/images/tabs/node.png" class="card-tab__image" alt="">
+                                </button>
+                            </li>
+                            <li class="nav-item card-tab__item item" role="presentation">
+                                <button class="nav-link card-tab__link  text-center d-flex flex-column align-items-center position-relative h-100"
+                                        id="profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#profile"
+                                        type="button" role="tab" aria-controls="profile" aria-selected="false">
+                                <span class="flex-grow-1">ES6 Foundations 100 sales
+Vue.js Fundamentals</span>
+                                    <img src="/main/images/tabs/web.png" class="card-tab__image" alt="">
+                                </button>
+                            </li>
+                            <li class="nav-item card-tab__item item" role="presentation">
+                                <button class="nav-link card-tab__link  text-center d-flex flex-column align-items-center position-relative h-100"
+                                        id="contact-tab" data-bs-toggle="tab"
+                                        data-bs-target="#contact"
+                                        type="button" role="tab" aria-controls="contact" aria-selected="false">
+                                    <span class="flex-grow-1">iOS & Swift - The Complete iOS App Development Bootcamp</span>
+                                    <img src="/main/images/tabs/csharp.png" class="card-tab__image" alt="">
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="d-flex flex-column flex-md-row">
+                                    <div class="card-preview flex-shrink-0">
+                                        <figure class="preview-video position-relative w-100 mb-0">
+                                            <figcaption class="preview-video__text position-absolute">Course Preview
+                                            </figcaption>
+                                            <img src="/main/images/teachers/unsplash_gMsnXqILjp4.jpg" class="w-100 "
+                                                 alt="">
+                                            <figcaption class="w-100 h-100 position-absolute preview-video__play">
+                                                <a href="#"
+                                                   class="text-decoration-none d-flex align-items-center justify-content-center w-100 h-100">
+                                                    <svg width="77" height="78">
+                                                        <use xlink:href="../sprite.svg#playBtn"></use>
+                                                    </svg>
+                                                </a>
+                                            </figcaption>
+                                        </figure>
+                                        <div class="video-info d-flex position-relative">
+                                            <figure class="video-info__figure rounded-circle overflow-hidden mb-0 position-relative">
+                                                <img th:if="${teacher.user.profilePic} == null" src="/main/images/teachers/jonas-kakaroto-KIPqvvTOC1s-unsplash.jpg"
+                                                     class="w-100 h-100 rounded-circle figure-circle__image" alt="">
+                                                <img th:if="${teacher.user.profilePic} != null" th:src="${teacher.user.profilePic}"
+                                                     class="w-100 h-100 rounded-circle figure-circle__image" alt="">
+                                            </figure>
+                                            <div class="text-end video-info__container position-absolute w-100">
+                                                <span class="video-info__curse text-truncate">Video Course</span>
+                                                <h4 class="video-info__price">
+                                                    $99.00
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <div class="card-preview__info">
+                                            <div class="card-preview__texts">
+                                                <h2 class="card-preview__authorName" th:text="${teacher.user.name} + ' ' + ${teacher.user.surname}"></h2>
+                                                <p class="card-preview__description m-0" th:text="${teacher.currentPosition}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <article class="preview-article d-none d-md-block">
+                                        <p class="preview-article__description">This course will provide you with
+                                            knowledge and practical skills that
+                                            will enable
+                                            you to conduct effective interviews and thereby improve your ability to make
+                                            effective selection (and promotion) decisions.</p>
+                                        <a href="" class="preview-article__link text-decoration-none">Read more</a>
+                                    </article>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
+                    <section class="about-container">
+                        <div class="container-xl">
+                        <h3 class="about-container__title">About Teacher</h3>
+                        <p class="about-container__description" th:text="${teacher.user.description}">
+                        </p>
+                            <p class="about-container__description" th:text="${teacher.user.phoneNumber}">
+                            </p>
+                            <p class="about-container__description" th:text="${teacher.user.email}">
+                            </p>
+                            <p class="about-container__description" th:text="${teacher.user.country}">
+                            </p>
+                            <p class="about-container__description">
+                            His programming and computer science journey began when he was just 13 years old (with a
+                            Commodore 64 computer).
+                            </p>
+                            <div class="d-flex justify-content-center">
+                                <button type="button" class="about-container__button d-md-none">Read More</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+        </div>
+        <section class="container-xl">
+            <div class="d-grid justify-content-between align-items-center sub-header mt-0">
+                <h2 class="sub-header__title m-0">Meet our Instructors</h2>
+                <div>
+                    <p class="sub-header__description mx-auto">
+                        Lift Your Carier With ITSpace Academy</div>
+                <div class="d-flex justify-content-md-end">
+                    <button class="fill-button  button-style sub-header__button text-decoration-none d-inline-block text-center rounded-0">
+                        Explore Teachers
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section class="container-xl owl-carousel instructors-carousel">
+            <figure th:each="item: ${mentors}" class="image-card position-relative overflow-hidden item">
+                <img th:if="${item.user.profilePic == null}" src="/main/images/teachers/christina-wocintechchat-com-c-mgSuxqpzA-unsplash.jpg"
+                     class="image-card__image w-100 h-100 position-absolute" alt="">
+                <img th:if="${item.user.profilePic != null}" th:src="${item.user.profilePic}"
+                     class="image-card__image w-100 h-100 position-absolute" alt="">
+                <figcaption class="position-absolute image-card__name w-100" th:text="${item.currentPosition}">
+                </figcaption>
+            </figure>
+        </section>
+    </div>
+    <!--footer-->
+    <div th:replace="main/fragments/main-fragments :: footer"></div>
+
+</main>
+
+<div th:replace="main/fragments/main-fragments :: js"></div>
+
+</body>
+</html>

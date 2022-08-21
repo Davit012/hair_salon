@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+    <link href="/teacher/css/quiz-add-menu.css" rel="stylesheet">
+    <div th:replace="teacher/fragments/teacher-fragments :: header"></div>
+    <title>Save Module</title>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2196F3;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+
+        <div th:replace="teacher/fragments/teacher-fragments :: mainNavbar"></div>
+
+        <div class="content card">
+
+            <div th:replace="teacher/fragments/teacher-fragments :: topNavbar"></div>
+            <form action="/teacher/modules/add" method="post" enctype="multipart/form-data"
+                  onsubmit="return validFunction()">
+                <div class="col-sm-12 d-flex">
+                    <div class="col-sm-7 mx-3 my-4">
+                        <div>
+                            <h5 style="color:#2C7BE5;">Basic Information</h5>
+                        </div>
+                        <div class="mt-4">
+                            <p>Module Title</p>
+                            <div class="mb-3"><input class="form-control" id="moduleName" type="text"
+                                                     placeholder="Java" name="name"></div>
+                        </div>
+                        <h5 style="color:#2c7be5;">Description</h5>
+                        <div class="mb-3"><textarea
+                                placeholder="please enter a description"
+                                class="form-control" id="moduleDescription"
+                                style="resize:none" rows="3" name="description"></textarea>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <h5>Category</h5>
+                            <select class="form-select" style="font-size:13px;" name="category">
+                                <option hidden selected disabled>Category</option>
+                                <option th:each="category:${moduleCategories}" th:value="${category.id}"
+                                        th:text="${category.name}">Angular
+                                </option>
+                            </select>
+                        </div>
+                        <div class="my-3">
+                            <div>
+                                <h5 style="color:#2c7be5;">Lessons Section</h5>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-12" style="display: inline-block">
+                                    <div class="form-control mb-3 " tabindex="0">
+                                        <div>
+                                            </h2>
+                                            <div>
+                                                <div id="accordion-body-parent">
+                                                    <div class="accordion-body" id="choosen-modules">
+
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: right;margin-right: 4%;">
+                                                    <label id="add-module" data-bs-toggle="modal"
+                                                           data-bs-target="#add-existing-module-modal"
+                                                           style="width: 13%;text-align: center"><p
+                                                            style="border: 1px solid #2C7BE5;color:#2C7BE5;">Add
+                                                        Lesson</p>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 mx-3 my-4">
+                        <div class="col-sm-12" style="display: inline-block">
+                            <div class="col-sm-12">
+                                <div class="col-sm-12">
+                                    <p style="color:#2c7be5;margin-top:1%;">Module Preview</p>
+                                    <hr>
+                                </div>
+                                <div style="text-align: center" class="col-sm-12 bg-200">
+                                    <div style="margin-bottom:3%;text-align:center" class="col-sm-12">
+                                        <div class=" card-body d-flex flex-center flex-column col-sm-12"
+                                             style="height: 12vw;">
+                                            <img id="selected_image" src="/teacher/img/icons/camera.png"
+                                                 alt="Click For Zoom"
+                                                 style="max-width:100%;max-height: 100%">
+                                        </div>
+                                    </div>
+                                    <div style="display: inline-block; text-align:center" class="col-sm-12">
+                                        <input type="file" id="imageInput" style="display: none"
+                                               onchange="PreviewImage();" name="image" accept="image/*">
+                                        <label for="imageInput"><p style="border: 1px solid gray;padding: 3px;">Choose
+                                            Image</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 my-5">
+                            <p>Published</p>
+                            <div class="d-inline-flex">
+                                <label class="switch" style="display:inline-block">
+                                    <input type="checkbox" name="isPublic" checked onchange="changePublicStatus(this);">
+                                    <span class="slider round"></span>
+                                </label>
+                                <p id="publicStatus" style="display: inline-block" class="mx-2">Yes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="inputsList" style="display:none">
+
+                </div>
+                <div class="px-sm-3 px-md-5 col-sm-12" style="text-align: center;margin-top:2%;">
+                    <ul class="pager wizard list-inline mb-0" style="display:inline-flex">
+                        <li class="next">
+                            <button class="btn btn-primary px-5 px-sm-6" type="submit">
+                                Create<span
+                                    class="fas fa-chevron-right ms-2"> </span></button>
+                        </li>
+                        <li>
+                            <a href="/teacher/modules">
+                                <button type="button" class="btn btn-outline-danger"
+                                        id="delete_course" data-mdb-ripple-color="dark" style="margin-left:10%">
+                                    Delete
+                                </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+            <div class="modal fade" id="add-existing-module-modal" tabindex="-1"
+                 role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document"
+                     style="max-width: 500px">
+                    <div class="modal-content position-relative">
+                        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                                <h4 class="mb-1" id="modalExampleDemoLabel" style="color:#2C7BE5">Add Lesson</h4>
+                            </div>
+                            <div class="p-4 pb-0" style="overflow-y:scroll;max-height:25rem">
+                                <div class="mb-3 col-sm-12" th:each="lesson: ${lessons}"
+                                     style="display: inline-block;padding:1%;">
+                                    <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                         aria-labelledby="tab-dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da"
+                                         id="dom-9df04b6b-1dd0-4ae9-898a-50897d5ee0da">
+                                        <div class="table-responsive scrollbar">
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                <tr class="hover-actions-trigger" th:id="module + ${lesson.id}">
+                                                    <td class="align-middle text-nowrap">
+                                                        <div class="d-flex align-items-center"
+                                                             th:id="forDelete + ${lesson.id}">
+                                                            <div class="ms-2" th:text="${lesson.name}"
+                                                                 th:value="${lesson.id}">name
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="align-middle text-nowrap"
+                                                        th:text="${lesson.duration} + ' min'"
+                                                        th:id="lessonDuration + ${lesson.id}"></td>
+                                                    <td class="align-middle text-nowrap addModule"
+                                                        style="color:#2C7BE5;cursor: pointer" th:id="${lesson.id}"
+                                                        th:name="${lesson.name}">
+                                                        <div class="ms-2">Add
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="teacher/fragments/teacher-fragments :: js"></div>
+
+</body>
+</html>
+<script src="/teacher/js/moduleActions.js"></script>
+<script src="/teacher/js/imageUtil.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+<script>
+    function changePublicStatus(element) {
+        let status = document.getElementById("publicStatus");
+        if (element.checked) {
+            status.textContent = "Yes";
+        } else {
+            status.textContent = "No";
+        }
+    }
+
+    function validFunction() {
+        let name = document.getElementById("moduleName").value;
+        let description = document.getElementById("moduleDescription").value;
+        if (name.trimStart() === '' || description.trimStart() === '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Pleases input Module's name and description field"
+            })
+            return false;
+        }
+    }
+</script>

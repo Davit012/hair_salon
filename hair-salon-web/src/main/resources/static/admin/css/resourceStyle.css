@@ -1,0 +1,10 @@
+.block {
+    display: none;
+    margin: 10px;
+    padding: 10px;
+    margin-left: -10px;
+}
+
+.test {
+    background-color: #edf2f9;
+}

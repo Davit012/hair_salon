@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="teacher/fragments/teacher-fragments :: header"></div>
+  <title>Students page</title>
+</head>
+<body>
+
+<main class="main" id="top">
+  <div class="container-fluid" data-layout="container">
+
+    <div th:replace="teacher/fragments/teacher-fragments :: mainNavbar"></div>
+
+    <div class="content">
+      <div th:replace="teacher/fragments/teacher-fragments :: topNavbar"></div>
+
+      <div class="card mb-3" id="customersTable"
+           data-list='{"valueNames":["name","email","phone","address","joined"],"page":10,"pagination":true}'>
+        <div class="card-header">
+          <div class="row flex-between-center">
+            <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+              <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">My Students</h5>
+            </div>
+            <div class="col-8 col-sm-auto text-end ps-2">
+              <div class="d-none" id="table-customers-actions">
+                <div class="d-flex"><select class="form-select form-select-sm"
+                                            aria-label="Bulk actions">
+                  <option selected="">Bulk actions</option>
+                  <option value="Delete">Delete</option>
+                </select>
+                  <button class="btn btn-falcon-default btn-sm ms-2" type="button">Apply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive scrollbar">
+            <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+              <thead class="bg-200 text-900">
+              <tr>
+                <th>
+                  <div class="form-check fs-0 mb-0 d-flex align-items-center"><input
+                          class="form-check-input" id="checkbox-bulk-customers-select" type="checkbox"
+                          data-bulk-select='{"body":"table-customers-body","actions":"table-customers-actions","replacedElement":"table-customers-replace-element"}'/>
+                  </div>
+                </th>
+                <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
+                <th class="sort pe-1 align-middle white-space-nowrap" data-sort="email">Email</th>
+                <th class="sort pe-1 align-middle white-space-nowrap" data-sort="dob">Phone Number</th>
+                <th class="sort pe-1 align-middle white-space-nowrap" data-sort="module">Date Of Birthdate</th>
+                <th class="sort pe-1 align-middle white-space-nowrap" data-sort="module">Registered Date</th>
+              </tr>
+              </thead>
+              <tbody class="list" id="table-customers-body">
+              <tr class="btn-reveal-trigger" th:each="item: ${students}">
+                <td class="align-middle py-2" style="width: 28px;">
+                  <div class="form-check fs-0 mb-0 d-flex align-items-center"><input
+                          class="form-check-input" type="checkbox" id="customer-0"
+                          data-bulk-select-row="data-bulk-select-row"/></div>
+                </td>
+                <td class="name align-middle white-space-nowrap py-2">
+                  <a href="customer-details.html">
+                    <div class="d-flex d-flex align-items-center">
+                      <div class="flex-1">
+                        <a th:href="@{'/teacher/students/' + ${item.id}}">
+                          <h5 class="mb-0 fs--1"
+                              th:text="${item.name + ' ' + item.surname}">
+                            Ricky
+                            Antony</h5>
+                        </a>
+                      </div>
+                    </div>
+                  </a>
+                </td>
+                <td class="email align-middle py-2"><a
+                        th:text="${item.email}">ricky@example.com</a></td>
+
+                <td class="phoneNumber align-middle py-2"
+                    th:text="${item.phoneNumber}">
+                </td>
+
+                <td class="dob align-middle py-2"
+                    th:text="${T(academy.itspace.util.DateUtil).formatDateToString(item.getDateOfBirthday())}">
+                </td>
+
+                <td class="dob align-middle py-2"
+                    th:text="${T(academy.itspace.util.DateUtil).formatDateToString(item.getRegisterDate())}">
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer d-flex align-items-center justify-content-center">
+          <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous"
+                  data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+          <ul class="pagination mb-0"></ul>
+          <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next"
+                  data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
+        </div>
+      </div>
+
+      <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true"
+           style="padding-left: 0px;">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 300px">
+          <div class="modal-content position-relative">
+            <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+              <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                      data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+              <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light" style="margin-left: 40px">
+                <h4 class="mb-1" id="modalExampleDemoLabel">Are you sure? </h4>
+              </div>
+            </div>
+            <div class="modal-footer" style="width: 235px">
+              <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
+              <a class="btn btn-primary" id="modal-delete-href" href="#" type="button">Yes </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div th:replace="teacher/fragments/teacher-fragments :: footer"></div>
+
+    </div>
+
+  </div>
+</main>
+<div th:replace="teacher/fragments/teacher-fragments :: js"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('.modal-delete-open').on('click', function () {
+      let id = $(this).attr('id');
+      $('#modal-delete-href').attr('href', '/admin/lessons/delete/' + id);
+    });
+  })
+</script>
+
+</body>
+</html>

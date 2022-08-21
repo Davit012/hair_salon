@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="main/fragments/main-fragments.html :: links"></div>
+    <link rel="stylesheet" href="../styles/blog.css">
+</head>
+<body>
+
+<main class="d-flex flex-column min-vh-100">
+    <!--header-->
+    <div th:replace="main/fragments/main-fragments :: topNavbar"></div>
+
+    <div class="flex-grow-1">
+        <div class="gray-bg">
+            <div class="container-xl d-flex flex-column-reverse flex-md-row justify-content-between align-items-md-center blog-landing">
+                <div class="lending-block lending-block-margin ">
+                    <h1 class="title">Blog</h1>
+                    <p class="lending-block__description">
+                        Welcome to our blog! Stay up to date with the latest industry insights, company news, and
+                        updates. </p>
+                    <form class="d-flex flex-column flex-sm-row filter-container">
+                        <div class="input-group filter-group">
+                            <input type="search" class="form-control shadow-none border-0 filter-group___input"
+                                   placeholder="Search">
+                            <button class="btn filter-group___button shadow-none p-0 d-flex align-items-center justify-content-center flex-shrink-0"
+                                    type="button">
+                                <svg width="16" height="16">
+                                    <use xlink:href="../sprite.svg#search"></use>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="d-sm-none text-center filter-container__instruction">Use the filters to find courses
+                            and other content that will help you get ahead in your career.</p>
+                        <div class="input-group filter-group">
+                            <input type="text" class="form-control shadow-none  border-0 filter-group___input"
+                                   value="All">
+                            <button class="btn filter-group___button shadow-none p-0 d-flex align-items-center justify-content-center flex-shrink-0"
+                                    type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                    aria-expanded="false">
+                                <svg width="17" height="13">
+                                    <use xlink:href="../sprite.svg#bigArrowDown"></use>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu filter-dropdown  dropdown-menu-end">
+                                <div>
+                                    <div class="select-group">
+                                        <label class="d-block select-group__label">Author:</label>
+                                        <button class="btn select-group__button text-start shadow-none rounded-0 d-grid w-100 align-items-center"
+                                                type="button" id="author" data-bs-toggle="dropdown"
+                                                data-bs-auto-close="outside"
+                                                aria-expanded="false">
+                                            <span class="text-truncate"> Nikolaj Coster</span>
+                                            <svg width="13" height="9">
+                                                <use xlink:href="../sprite.svg#arrowDown"></use>
+                                            </svg>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-container border-0 rounded-0"
+                                            aria-labelledby="author">
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Menu item</a>
+                                            </li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Menu item</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item dropdown-container__item dropdown-container__item_actiev"
+                                                   href="#">Menu item</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="select-group">
+                                        <label class="d-block select-group__label">Course Name:</label>
+                                        <button class="btn select-group__button text-start shadow-none rounded-0 d-grid w-100 align-items-center"
+                                                type="button" id="courseName" data-bs-toggle="dropdown"
+                                                data-bs-auto-close="outside" aria-expanded="false">
+                                            <span class="text-truncate">Addition to the lecture</span>
+                                            <svg width="13" height="9">
+                                                <use xlink:href="../sprite.svg#arrowDown"></use>
+                                            </svg>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-container border-0 rounded-0"
+                                            aria-labelledby="courseName">
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Addition to
+                                                the
+                                                lecture</a></li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Addition to
+                                                the
+                                                lecture</a></li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Addition to
+                                                the
+                                                lecture</a></li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Addition to
+                                                the
+                                                lecture</a></li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Addition to
+                                                the
+                                                lecture</a></li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Addition to
+                                                the
+                                                lecture</a></li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Addition to
+                                                the
+                                                lecture</a></li>
+                                            <li>
+                                                <a class="dropdown-item dropdown-container__item dropdown-container__item_actiev"
+                                                   href="#">Addition to the lecture</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="select-group">
+                                        <label class="d-block select-group__label">Module:</label>
+                                        <button class="btn select-group__button text-start shadow-none rounded-0 d-grid w-100 align-items-center"
+                                                type="button" id="module" data-bs-toggle="dropdown"
+                                                data-bs-auto-close="outside"
+                                                aria-expanded="false">
+                                            <span class="text-truncate">Complete Angular 11</span>
+                                            <svg width="13" height="9">
+                                                <use xlink:href="../sprite.svg#arrowDown"></use>
+                                            </svg>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-container border-0 rounded-0"
+                                            aria-labelledby="module">
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Menu item</a>
+                                            </li>
+                                            <li><a class="dropdown-item dropdown-container__item" href="#">Menu item</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item dropdown-container__item dropdown-container__item_actiev"
+                                                   href="#">Menu item</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <button type="reset"
+                                            class="btn shadow-none border-0 bg-transparent dropdown-container__clear">
+                                        Clear all
+                                        filters
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <section class="blog-carts d-grid container-xl">
+            <a th:each="blog:${blogs}" th:href="@{'/blog/' + ${blog.id}}" class="blog-card text-decoration-none d-flex flex-column">
+                <figure class="position-relative blog-card__figure">
+                    <img src="/main/images/blog.png" class="blog-card__image w-100 h-100 position-absolute" alt="">
+                    <figcaption class="blog-card__date position-absolute d-flex align-items-center">
+                        <svg width="18" height="18" class="blog-card__calculator">
+                            <use xlink:href="../sprite.svg#calendar"></use>
+                        </svg>
+                        <span th:text="${T(academy.itspace.util.DateUtil).formatDateToString(blog.createdDate)}"></span>
+                    </figcaption>
+                </figure>
+                <div class="blog-card__body">
+                    <div>
+                        <h3 class="blog-card__title text-truncate" th:text="${blog.title}"></h3>
+                        <p class="blog-card__description" th:if="${blog.description.length()} > 30" th:text="${blog.description.substring(0,30)} + '...'"></p>
+                        <p class="blog-card__description" th:if="${blog.description.length()} <= 30" th:text="${blog.description}"></p>
+                    </div>
+                    <footer class="blog-card__footer d-flex align-items-center">
+                        <figure class="blog-card__userFigure rounded-circle overflow-hidden mb-0 flex-shrink-0">
+                            <img th:src="${blog.image}" class="blog-card__userImage w-100 h-100" alt="">
+                        </figure>
+                        <h4 class="blog-card__userName text-truncate m-0" th:text="${blog.author.name} + ${blog.author.surname}"></h4>
+                    </footer>
+                </div>
+            </a>
+        </section>
+        <div class="d-flex justify-content-center more-container">
+            <button type="button" class="more-container__button btn shadow-none rounded-0 border-0">
+                Show more articles
+            </button>
+        </div>
+    </div>
+    <!--footer-->
+    <footer class="footer">
+        <nav class="container-xl d-flex flex-wrap justify-content-between">
+            <ol class="list-unstyled col-12 col-md-3 mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        ITSpace
+                    </h2>
+                </li>
+                <li>
+                    You can email us on any question you care, either training or cooperation.
+                </li>
+                <li>
+                    <ul class="list-unstyled d-flex align-items-center social-icons">
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="11" height="22">
+                                <use xlink:href="../sprite.svg#facebook"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="21" height="18">
+                                <use xlink:href="../sprite.svg#telegram"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="22" height="22">
+                                <use xlink:href="../sprite.svg#instagram"></use>
+                            </svg>
+                        </a></li>
+                        <li><a href="" class="text-decoration-none">
+                            <svg width="20" height="20">
+                                <use xlink:href="../sprite.svg#linkedin"></use>
+                            </svg>
+                        </a></li>
+                    </ul>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-6 col-sm-3 col-md-2 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Explore
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Home</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Courses</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Teachers</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Students</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Mentors</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">About Us</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Blog</a>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-6 col-sm-3  col-md-2 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Our Courses
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Development</a>
+                </li>
+                <li class="footer-menu__item">
+                    <a href="" class="footer__link text-decoration-none">Marketing</a>
+                </li>
+            </ol>
+            <ol class="list-unstyled col-12 col-sm-4 col-md-3 footer-menu mb-0">
+                <li>
+                    <h2 class="footer__title">
+                        Contact Us
+                    </h2>
+                </li>
+                <li class="footer-menu__item">
+                    Phone:
+                    <a href="tel:+884-9273-3867" class="footer__link text-decoration-none">+884-9273-3867</a>
+                </li>
+                <li class="footer-menu__item">
+                    Email:
+                    <a href="mailTo:hello@gmail.com" class="footer__link text-decoration-none">hello@gmail.com</a>
+                </li>
+                <li>
+                    <address>Address: Gyumri
+                        Armenia
+                    </address>
+                </li>
+            </ol>
+        </nav>
+        <div class="copywrite-container text-center">
+            <p class="mb-0">&copy; ITSpace. All rights reserved.</p>
+        </div>
+    </footer>
+</main>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="../scripts/main.js"></script>
+</body>
+</html>

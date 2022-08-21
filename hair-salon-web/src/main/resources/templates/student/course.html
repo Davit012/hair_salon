@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="student/fragments/student-fragments :: header"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link href="/vendors/video-js/video-js.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <title>Student Dashboard</title>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background: #2196F3;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main" id="top">
+    <div class="container-fluid" data-layout="container">
+        <script>
+            const isFluid = JSON.parse(localStorage.getItem('isFluid'));
+            if (isFluid) {
+                const container = document.querySelector('[data-layout]');
+                container.classList.remove('container');
+                container.classList.add('container-fluid');
+            }
+        </script>
+        <div th:replace="student/fragments/student-fragments :: mainNavbar"></div>
+
+        <div class="content tab-content">
+            <div th:replace="student/fragments/student-fragments :: topNavbar"></div>
+            <h5 th:text="${course.name}" class="mb-0"></h5>
+            <div class="col-sm-10 my-4" style="display: flex;">
+                <div class="col-sm-9 card" style="height:50em">
+                    <div class="col-sm-12 card">
+                        <video id="videojs-playbackrate-adjuster-player_html5_api" class="vjs-tech" tabindex="-1"
+                               th:src="${currentLesson.video}" controls controlsList="nodownload"
+                               style="max-height:20em">
+                            <source th:src="${currentLesson.video}">
+                        </video>
+                    </div>
+                    <div th:if="${step.name() == ('OVERVIEW')}">
+                        <div class="col-sm-12 d-flex mt-4">
+                            <a class="col-sm-2" style="text-align:center"><h5
+                                    style="cursor: pointer;color: #2C7BE5;">
+                                Overview</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/resources'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Resources</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/homeworks'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Homework</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/quiz'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Quiz</h5></a>
+                        </div>
+                        <hr class="mt-0">
+                        <div style="overflow-y:scroll;">
+                            <h3 class="text-primary mb-1 p-2">About this course</h3>
+                            <div class="col-sm-12">
+                                <p th:text="'Description: ' + ${course.description}" class="p-2"></p>
+                                <p th:text="'Author: ' + ${course.author.name}" class="p-2"></p>
+                                <p th:text="'Price: ' + ${course.price} + ${course.currency}"
+                                   class="p-2"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="overflow-y: scroll;" th:if="${step.name() == 'RESOURCES'}">
+                        <div class="col-sm-12 d-flex mt-4">
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id}}"><h5
+                                    style="cursor: pointer;color: #5E6E82;">
+                                Overview</h5></a>
+                            <a class="col-sm-2" style="text-align:center"><h5
+                                    style="cursor: pointer;color: #2C7BE5;">
+                                Resources</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/homeworks'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Homework</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/quiz'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Quiz</h5></a>
+                        </div>
+                        <hr class="mt-0">
+                        <div style="overflow-y:scroll;">
+                            <h3 class="text-primary mb-1 p-2">Resources</h3>
+                            <div class="col-sm-12">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12  my-3">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading0">
+                                                <button class="accordion-button collapsed bg-200" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse0"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse0"
+                                                        onclick="changeFileIcon(videoSection)">
+                                                    <img src="/student/img/icons/file.png" id="videoSection"
+                                                         class="px-2">video
+                                                    files
+                                                </button>
+                                            </h2>
+                                            <div class="accordion-collapse collapse bg-200 col-sm-12" id="collapse0"
+                                                 aria-labelledby="heading0" data-bs-parent="#accordionExample"
+                                                 style="text-align: -webkit-center;">
+                                                <th:block th:each="resource:${resources}">
+                                                    <div class="col-sm-10 card align my-2"
+                                                         th:id="'fileDiv' + ${resource.id}"
+                                                         style="text-align:center;"
+                                                         th:if="${resource.resourceType.toString.equalsIgnoreCase('youtube_video')} or ${resource.resourceType.toString().equalsIgnoreCase('video')}">
+                                                        <div class="accordion-body col-sm-12 p-2"
+                                                             style="border: 1px solid gray">
+                                                            <div class="col-sm-12" style="text-align:left;" id="a">
+                                                                <div style="display: flex;">
+                                                                    <div>
+                                                                        <img src="/student/img/icons/youtube.png"
+                                                                             class="px-2">Video
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <video th:if="${resource.resourceType.toString().equalsIgnoreCase('video')}"
+                                                               th:src="${resource.value}"
+                                                               id="videojs-playbackrate-adjuster-player_html5_api1"
+                                                               class="col-sm-12 vjs-tech" tabindex="-1" controls
+                                                               controlsList="nodwonload">
+                                                        </video>
+                                                        <iframe class="col-sm-12"
+                                                                th:if="${resource.resourceType.toString().equalsIgnoreCase('youtube_video')}"
+                                                                th:src="${resource.value}">
+                                                        </iframe>
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12  my-3">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading1">
+                                                <button class="accordion-button collapsed bg-200" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse1"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse1" onclick="changeFileIcon(textSection)">
+                                                    <img src="/student/img/icons/file.png" id="textSection"
+                                                         class="px-2">text files
+                                                </button>
+                                            </h2>
+                                            <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                                 id="collapse1"
+                                                 aria-labelledby="heading1" data-bs-parent="#accordionExample"
+                                                 style="text-align: -webkit-center;">
+                                                <th:block th:each="resource:${resources}">
+                                                    <div class="col-sm-10 card align my-2"
+                                                         th:id="'fileDiv' + ${resource.id}"
+                                                         style="text-align:center;"
+                                                         th:if="${resource.resourceType.toString.equalsIgnoreCase('text')}">
+                                                        <div class="accordion-body col-sm-12 p-2"
+                                                             style="border: 1px solid gray">
+                                                            <div class="col-sm-12" style="text-align:left" id="text">
+                                                                <div style="display: flex;">
+                                                                    <div>
+                                                                        <img src="/student/img/icons/bi_journal-text.png"
+                                                                             class="px-2">Text
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <p th:text="${resource.value}" th:title="${resource.name}"></p>
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12  my-3">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading2">
+                                                <button class="accordion-button collapsed bg-200" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse2"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse2"
+                                                        onclick="changeFileIcon(imageSection)">
+                                                    <img
+                                                            src="/student/img/icons/file.png" id="imageSection"
+                                                            class="px-2">image files
+                                                </button>
+                                            </h2>
+                                            <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                                 id="collapse2"
+                                                 aria-labelledby="heading2" data-bs-parent="#accordionExample"
+                                                 style="text-align: -webkit-center;">
+                                                <th:block th:each="resource:${resources}">
+                                                    <div class="col-sm-10 card align my-2"
+                                                         th:id="'fileDiv' + ${resource.id}"
+                                                         style="text-align:center;"
+                                                         th:if="${resource.resourceType.toString.equalsIgnoreCase('image')}">
+                                                        <div class="accordion-body col-sm-12 p-2"
+                                                             style="border: 1px solid gray">
+                                                            <div class="col-sm-12" style="text-align:left" id="image">
+                                                                <div style="display: flex;">
+                                                                    <div>
+                                                                        <img src="/student/img/icons/ant-design_picture-outlined.png"
+                                                                             class="px-2">image
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <img th:src="${resource.value}">
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12  my-3">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading3">
+                                                <button class="accordion-button collapsed bg-200" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse3"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse2" onclick="changeFileIcon(linkSection)">
+                                                    <img src="/student/img/icons/file.png" id="linkSection"
+                                                         class="px-2">link files
+                                                </button>
+                                            </h2>
+                                            <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                                 id="collapse3"
+                                                 aria-labelledby="heading3" data-bs-parent="#accordionExample"
+                                                 style="text-align: -webkit-center;">
+                                                <th:block th:each="resource:${resources}">
+                                                    <div class="col-sm-10 card align my-2"
+                                                         th:id="'fileDiv' + ${resource.id}"
+                                                         style="text-align:center;"
+                                                         th:if="${resource.resourceType.toString.equalsIgnoreCase('link')}">
+                                                        <div class="accordion-body col-sm-12 p-2"
+                                                             style="border: 1px solid gray">
+                                                            <input name="link" th:id="'input' + ${resource.id}"
+                                                                   style="display: none">
+                                                            <div class="col-sm-12" style="text-align:left" id="link">
+                                                                <div style="display: flex;">
+                                                                    <div>
+                                                                        <img src="/student/img/icons/akar-icons_link-chain.png"
+                                                                             class="px-2">Link
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a th:text="${resource.value}" th:href="${resource.value}"></a>
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12  my-3">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading4">
+                                                <button class="accordion-button collapsed bg-200" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse4"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse4"
+                                                        onclick="changeFileIcon(otherSection)">
+                                                    <img src="/student/img/icons/file.png" id="otherSection"
+                                                         class="px-2">other files
+                                                </button>
+                                            </h2>
+                                            <div class="accordion-collapse collapse bg-200 col-sm-12 py-2"
+                                                 id="collapse4"
+                                                 aria-labelledby="heading4" data-bs-parent="#accordionExample"
+                                                 style="text-align: -webkit-center;">
+                                                <th:block th:each="resource:${resources}">
+                                                    <div class="col-sm-10 card align my-2"
+                                                         th:id="'fileDiv' + ${resource.id}"
+                                                         style="text-align:center;"
+                                                         th:if="${resource.resourceType.toString.equalsIgnoreCase('file')}">
+                                                        <div class="accordion-body col-sm-12 p-2"
+                                                             style="border: 1px solid gray">
+                                                            <div class="col-sm-12" style="text-align:left" id="files">
+                                                                <div style="display: flex;">
+                                                                    <div>
+                                                                        <img src="/student/img/icons/ant-design_file-text-outlined.png"
+                                                                             class="px-2">Other
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a th:download="${resource.value}"
+                                                           style="text-decoration: none">
+                                                            <p th:text="${resource.name}"></p>
+                                                        </a>
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${step.name() == ('HOMEWORK')}" style="overflow-y:scroll;overflow-x:hidden">
+                        <div class="col-sm-12 d-flex mt-4">
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id}}"><h5
+                                    style="cursor: pointer;color: #5E6E82;">
+                                Overview</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/resources'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Resources</h5></a>
+                            <a class="col-sm-2" style="text-align:center">
+                                <h5
+                                        style="cursor: pointer;color: #2C7BE5;">
+                                    Homework</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/quiz'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Quiz</h5></a>
+                        </div>
+                        <hr class="mt-0">
+                        <div>
+                            <h3 class="text-primary mb-1 p-1">Homeworks</h3>
+                            <div class="col-sm-12">
+                                <div class="col-sm-12 my-3" th:each="homework:${homeworks}">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" th:id="'heading' + ${homeworkStat.index}">
+                                            <button class="accordion-button collapsed bg-200" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    th:data-bs-target="'#collapse' + ${homeworkStat.index}"
+                                                    aria-expanded="false"
+                                                    th:aria-controls="'collapse' + ${homeworkStat.index}">
+                                                <p class="m-0" th:text="${homework.title}"></p>
+                                            </button>
+                                        </h2>
+                                        <div class="accordion-collapse collapse col-sm-12 py-2 my-2"
+                                             th:id="'collapse' + ${homeworkStat.index}"
+                                             th:aria-labelledby="'heading' + ${homeworkStat.index}"
+                                             data-bs-parent="#accordionExample"
+                                             style="text-align: -webkit-center;">
+                                            <th:block th:each="homeworkAnswer:${homeworkAnswers.get(homework)}">
+                                                <div class="d-flex col-sm-12 bg-200 p-2">
+                                                    <div class="avatar avatar-xl">
+                                                        <img th:if="${currentUser.profilePic} != null"
+                                                             class="rounded-circle" th:src="${currentUser.profilePic}">
+                                                        <img th:if="${currentUser.profilePic} == null"
+                                                             class="rounded-circle" src="/student/img/team/avatar.png">
+                                                    </div>
+                                                    <div class="col-sm-11">
+                                                        <p class="mx-2" th:if="${homeworkAnswer.githubUrl} != null"
+                                                           th:text="${homeworkAnswer.githubUrl}"
+                                                           style="text-align: left"></p>
+                                                        <p class="mx-2" th:if="${homeworkAnswer.text} != null"
+                                                           th:text="${homeworkAnswer.text}"
+                                                           style="text-align: left"></p>
+                                                    </div>
+                                                </div>
+                                            </th:block>
+                                            <form th:action="@{'/student/course/' + ${course.id} + '/lesson/'  + ${homework.lesson.id} + '/homework/' + ${homework.id} + '/answer'}"
+                                                  method="post">
+                                                <input class="form-control"
+                                                       id="exampleFormControlInput1"
+                                                       type="text"
+                                                       placeholder="https://github.com/" name="githubUrl">
+                                                <div class="d-flex">
+                                                   <textarea
+                                                           class="form-control" id="exampleFormControlTextarea1"
+                                                           style="resize:none" rows="3" name="text"></textarea>
+                                                    <div class="col-sm-1 my-3"
+                                                         style="text-align: right;padding-right:2rem;">
+                                                        <button type="submit" style="display:none"
+                                                                th:id="'submit' + ${homeworkStat.index}"></button>
+                                                        <label th:for="'submit'+${homeworkStat.index}">
+                                                            <img src="/student/img/icons/send.png" id='submitHomework'
+                                                                 style="display: inline-block;cursor:pointer">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${step.name() == ('QUIZ')}" style="overflow-y:scroll;overflow-x:hidden">
+                        <div class="col-sm-12 d-flex mt-4">
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id}}"><h5
+                                    style="cursor: pointer;color: #5E6E82;">
+                                Overview</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/resources'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Resources</h5></a>
+                            <a class="col-sm-2" style="text-align:center"
+                               th:href="@{'/student/course/'+${course.id}+'/lesson/'+${currentLesson.id} + '/homeworks'}">
+                                <h5
+                                        style="cursor: pointer;color: #5E6E82;">
+                                    Homework</h5></a>
+                            <a class="col-sm-2" style="text-align:center">
+                                <h5 style="cursor: pointer;color: #2C7BE5;">
+                                    Quiz</h5></a>
+                        </div>
+                        <hr class="mt-0">
+                        <div>
+                            <h3 class="text-primary mb-1 p-1">Quiz</h3>
+                            <div class="col-sm-12" style="text-align:center" th:if="${quiz} != null">
+                                <div class="col-sm-10 bg-200 d-inline-block p-4">
+                                    <div class="d-inline-block">
+                                        <div class="d-flex col-sm-12" style="text-align:center">
+                                            <div class="d-flex mx-2">
+                                                <div>
+                                                    <img src="/student/img/icons/question.png">
+                                                </div>
+                                                <div class="mb-0">
+                                                    <h4 th:text="${quiz.questions.size} + ' Questions'"
+                                                        class="mx-2"></h4>
+                                                </div>
+                                            </div>
+                                            |
+                                            <div class="d-flex mx-2">
+                                                <div>
+                                                    <img src="/student/img/icons/star.png">
+                                                </div>
+                                                <div class="mb-0">
+                                                    <h4 th:text="${points} + ' Points'" class="mx-2"></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="btn btn-primary px-5 px-sm-6 my-3"
+                                   id="submitForLessonHomeworks"
+                                   th:href="@{'/student/course/lesson/' + ${quiz.lesson.id} + '/quiz'}">
+                                    Take Quiz<span
+                                        class="fas fa-chevron-right ms-2"> </span></a>
+                            </div>
+                            <div class="col-sm-12" style="text-align:center" th:if="${quiz} == null">
+                                <div class="col-sm-10 bg-200 d-inline-block p-4">
+                                    <div class="d-inline-block">
+                                        <div class="d-flex col-sm-12" style="text-align:center">
+                                            <div class="d-flex mx-2">
+                                                <div>
+                                                    <img src="/student/img/icons/question.png">
+                                                </div>
+                                                <div class="mb-0">
+                                                    <h4 class="mx-2">0 Questions</h4>
+                                                </div>
+                                            </div>
+                                            |
+                                            <div class="d-flex mx-2">
+                                                <div>
+                                                    <img src="/student/img/icons/star.png">
+                                                </div>
+                                                <div class="mb-0">
+                                                    <h4 class="mx-2">0 Points</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="btn btn-primary px-5 px-sm-6 my-3"
+                                   id="submitForLessonHomeworks1">
+                                    Take Quiz<span
+                                        class="fas fa-chevron-right ms-2"> </span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 card mx-3">
+                    <div>
+                        <h5 class="text-primary mb-1 p-3">Course content</h5>
+                        <p th:text="'Module(' + ${course.modules.size()} + ')'"
+                           style="display:inline;color: #5E6E82;" class="mx-3"></p>
+                        <p th:text="'Lesson(' + ${lessonsCount} + ')'"
+                           style="display:inline;color: #5E6E82;" class="mx-1"></p>
+                        <p th:text="'Total(' + ${course.totalDuration} + ')'"
+                           style="display:inline;color: #5E6E82;" class="mx-1"></p>
+                    </div>
+                    <div>
+                        <div style="display:block;position: absolute;top: 0; bottom: 0; left: 0; right: 0;overflow: auto;"
+                             class="mt-8">
+                            <div class="accordion-item" th:each="module: ${course.getModules()}">
+                                <div class="accordion-header" th:id="'heading' + ${module.id}">
+                                    <div class="accordion-button d-block" type="button"
+                                         th:if="${module.equals(currentModule)}"
+                                         data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${module.id}"
+                                         aria-expanded="false" th:aria-controls="'collapse' + ${module.id}">
+                                        <p th:text="'Module ' + ${moduleStat.index + 1} + ': ' + ${module.name}"
+                                           class="m-0" style="font-size: 20px;"></p>
+                                        <p th:text="${finishedLessonsCount.get(module)} + '/' + ${module.lessons.size()} + ' ' + ${module.duration} + ' min'"
+                                           class="m-0"></p>
+                                    </div>
+                                    <div class="accordion-button collapsed d-block" type="button"
+                                         th:if="${!module.equals(currentModule)}"
+                                         data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${module.id}"
+                                         aria-expanded="true" th:aria-controls="'collapse' + ${module.id}">
+                                        <p th:text="'Module ' + ${moduleStat.index + 1} + ': ' + ${module.name}"
+                                           class="m-0" style="font-size: 20px;"></p>
+                                        <p th:text="${finishedLessonsCount.get(module)} + '/' + ${module.lessons.size()} + ' ' + ${module.duration} + ' min'"
+                                           class="m-0"></p>
+                                    </div>
+                                </div>
+                                <div class="accordion-collapse collapse show" th:id="'collapse' + ${module.id}"
+                                     th:if="${module.equals(currentModule)}"
+                                     th:aria-labelledby="'heading' + ${module.id}"
+                                     data-bs-parent="#accordionExample">
+                                    <div class="accordion-body bg-200" th:each="lesson: ${module.lessons}"
+                                         th:if="${lesson.equals(currentLesson)}">
+                                        <div style="display:inline;"
+                                             th:if="${lessonProgress.get(lesson).isFinished}  or ${lesson.equals(currentLesson)}"
+                                             class="col-sm-12">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <a th:href="@{'/student/course/'+${course.id}+'/lesson/'+${lesson.id}}">
+                                                    <p style="display: inline"
+                                                       th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/unlock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                        <div style="display:inline;"
+                                             th:if="${!lessonProgress.get(lesson).isFinished} and ${!lesson.equals(currentLesson)}">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <p style="display: inline"
+                                                   th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/lock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-body" th:each="lesson: ${module.lessons}"
+                                         th:if="${!lesson.equals(currentLesson)}">
+                                        <div style="display:inline;"
+                                             th:if="${lessonProgress.get(lesson).isFinished}  or ${lesson.equals(currentLesson)}"
+                                             class="col-sm-12">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <a th:href="@{'/student/course/'+${course.id}+'/lesson/'+${lesson.id}}">
+                                                    <p style="display: inline"
+                                                       th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/unlock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                        <div style="display:inline;"
+                                             th:if="${!lessonProgress.get(lesson).isFinished} and ${!lesson.equals(currentLesson)}">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <p style="display: inline"
+                                                   th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/lock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-collapse collapse" th:id="'collapse' + ${module.id}"
+                                     th:if="${!module.equals(currentModule)}"
+                                     th:aria-labelledby="'heading' + ${module.id}"
+                                     data-bs-parent="#accordionExample">
+                                    <div class="accordion-body bg-200" th:each="lesson: ${module.lessons}"
+                                         th:if="${lesson.equals(currentLesson)}">
+                                        <div style="display:inline;"
+                                             th:if="${lessonProgress.get(lesson).isFinished}"
+                                             class="col-sm-12">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <a th:href="@{'/student/course/'+${course.id}+'/lesson/'+${lesson.id}}">
+                                                    <p style="display: inline"
+                                                       th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/unlock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                        <div style="display:inline;"
+                                             th:if="${!lessonProgress.get(lesson).isFinished}">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <p style="display: inline"
+                                                   th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/lock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-body" th:each="lesson: ${module.lessons}"
+                                         th:if="${!lesson.equals(currentLesson)}">
+                                        <div style="display:inline;"
+                                             th:if="${lessonProgress.get(lesson) != null} and ${lessonProgress.get(lesson).isFinished}"
+                                             class="col-sm-12">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <a th:href="@{'/student/course/'+${course.id}+'/lesson/'+${lesson.id}}">
+                                                    <p style="display: inline"
+                                                       th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/unlock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                        <div style="display:inline;"
+                                             th:if="${lessonProgress.get(lesson)} == null or ${!lessonProgress.get(lesson).isFinished}">
+                                            <div class="col-sm-8 d-inline-block">
+                                                <p style="display: inline"
+                                                   th:text=" 'lesson ' + ${lessonStat.index + 1} + ' | ' + ${lesson.name}"></p>
+                                            </div>
+                                            <div class="col-sm-3 d-inline-block" style="text-align: right">
+                                                <img src="/student/img/icons/lock.png">
+                                            </div>
+                                            <div>
+                                                <img src="/student/img/icons/play.png">
+                                                <p style="display: inline"
+                                                   th:text="${lesson.duration} + 'm'"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="student/fragments/student-fragments :: footer"></div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="student/fragments/student-fragments :: js"></div>
+
+</body>
+</html>
+<script>
+    function changeFileIcon(openedSection) {
+        if (openedSection.parentElement.className.includes('collapsed')) {
+            openedSection.src = "/student/img/icons/file.png"
+        } else {
+            openedSection.src = "/student/img/icons/open-file.png"
+        }
+    }
+</script>

@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: P0stGR#11445gnsxx
+    url: jdbc:postgresql://database-itspace.cotuag7nc1cg.eu-central-1.rds.amazonaws.com:5432/itspaceacademy
+  liquibase:
+    enabled: true
+    drop-first: false
+    change-log: classpath:db/changelog/changelog.xml
+    default-schema: public
+
+academy:
+  aws:
+    access:
+      key: AKIAQFNUMZTPHVIHZNR6
+    secret:
+      key: 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
+    bucket:
+      quiz:
+        name: academydevitspace
